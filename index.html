@@ -824,20 +824,12 @@
       if (window.dataSdk) {
         const result = await window.dataSdk.init(dataHandler);
         if (!result.isOk) {
-          console.error('Erro ao inicializar sistema');
+          showToast('⚠️ Erro ao inicializar sistema', 'error');
         }
       }
 
-      // Verificar se existe dados, se não criar padrão
-      if (allData.length === 0) {
-        console.log('Criando missões padrão...');
-        await createDefaultMissions();
-      }
-      
-      console.log('Carregando dados:', allData);
       loadMissions();
       renderCalendar();
-      updateUI();
     }
 
     function loadMissions() {
@@ -860,15 +852,38 @@
     }
 
     async function createDefaultMissions() {
-      const missions = [
-        { type: 'mission', module_id: 'prf', name: 'MISSÃO PRF', icon: '🚔', created_at: new Date().toISOString() },
-        { type: 'mission', module_id: 'tce', name: 'MISSÃO TCE-RN', icon: '⚖️', created_at: new Date().toISOString() },
-        { type: 'mission', module_id: 'pomodoro', name: 'POMODORO', icon: '🍅', created_at: new Date().toISOString() }
-      ];
-      
-      for (const mission of missions) {
-        await window.dataSdk.create(mission);
+      if (allData.length + 3 > 999) {
+        showToast('⚠️ Não foi possível criar missões padrão', 'error');
+        return;
       }
+
+      showLoading(true);
+      
+      await window.dataSdk.create({
+        type: 'mission',
+        module_id: 'prf',
+        name: 'MISSÃO PRF',
+        icon: '🚔',
+        created_at: new Date().toISOString()
+      });
+
+      await window.dataSdk.create({
+        type: 'mission',
+        module_id: 'tce',
+        name: 'MISSÃO TCE-RN',
+        icon: '⚖️',
+        created_at: new Date().toISOString()
+      });
+
+      await window.dataSdk.create({
+        type: 'mission',
+        module_id: 'pomodoro',
+        name: 'POMODORO',
+        icon: '🍅',
+        created_at: new Date().toISOString()
+      });
+
+      showLoading(false);
     }
 
     function renderMissionTabs() {
@@ -2090,7 +2105,7 @@
       if (!content) return;
 
       showLoading(true);
-      const result = await window.dataSdk.delete(content.__backendId);
+      const result = await window.dataSdk.delete(content);
       showLoading(false);
 
       if (result.isOk) {
@@ -2108,10 +2123,10 @@
       
       showLoading(true);
       for (const content of contents) {
-        await window.dataSdk.delete(content.__backendId);
+        await window.dataSdk.delete(content);
       }
       
-      const result = await window.dataSdk.delete(discipline.__backendId);
+      const result = await window.dataSdk.delete(discipline);
       showLoading(false);
 
       if (result.isOk) {
@@ -2191,20 +2206,7 @@
       }, duration);
     }
 
-    // Função para resetar o sistema completamente
-    function resetSystem() {
-      console.log('Resetando sistema...');
-      localStorage.removeItem('concursada_2026_db');
-      allData = [];
-      location.reload();
-    }
-
-    // Esperar o DOM estar pronto antes de inicializar
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
+    init();
   </script>
-</body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bfbaecd258c0b0d',t:'MTc2ODcxNDA0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
