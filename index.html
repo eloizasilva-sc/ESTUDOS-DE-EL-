@@ -2191,6 +2191,14 @@
       }, duration);
     }
 
+    // Função para resetar o sistema completamente
+    function resetSystem() {
+      console.log('Resetando sistema...');
+      localStorage.removeItem('concursada_2026_db');
+      allData = [];
+      location.reload();
+    }
+
     // Esperar o DOM estar pronto antes de inicializar
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', init);
