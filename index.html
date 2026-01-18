@@ -5,106 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Concursada 2026 - Dashboard Profissional</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&amp;family=Open+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <script>
-    // Sistema de armazenamento local
-    const LocalStorage = {
-      DB_KEY: 'concursada_2026_db',
-      
-      getAll() {
-        const stored = localStorage.getItem(this.DB_KEY);
-        return stored ? JSON.parse(stored) : [];
-      },
-      
-      save(data) {
-        localStorage.setItem(this.DB_KEY, JSON.stringify(data));
-      },
-      
-      add(item) {
-        const data = this.getAll();
-        item.__backendId = 'local_' + Date.now() + '_' + Math.random();
-        data.push(item);
-        this.save(data);
-        return item;
-      },
-      
-      update(id, item) {
-        const data = this.getAll();
-        const index = data.findIndex(d => d.__backendId === id);
-        if (index >= 0) {
-          data[index] = { ...data[index], ...item, __backendId: id };
-          this.save(data);
-          return data[index];
-        }
-        return null;
-      },
-      
-      remove(id) {
-        const data = this.getAll();
-        const filtered = data.filter(d => d.__backendId !== id);
-        this.save(filtered);
-        return true;
-      }
-    };
-
-    // SDKs Mock com localStorage
-    let dataHandler = null;
-    
-    window.elementSdk = {
-      init: async (config) => {
-        console.log('ElementSDK initialized');
-        return { isOk: true };
-      }
-    };
-    
-    window.dataSdk = {
-      init: async (handler) => {
-        console.log('DataSDK initialized');
-        dataHandler = handler;
-        // Carregar dados do localStorage e passar para o handler
-        const storedData = LocalStorage.getAll();
-        if (handler && handler.onDataChanged) {
-          handler.onDataChanged(storedData);
-        }
-        return { isOk: true };
-      },
-      
-      create: async (data) => {
-        console.log('DataSDK create:', data);
-        const item = LocalStorage.add(data);
-        // Notificar o handler sobre a mudança
-        if (dataHandler && dataHandler.onDataChanged) {
-          dataHandler.onDataChanged(LocalStorage.getAll());
-        }
-        return { isOk: true, id: item.__backendId };
-      },
-      
-      update: async (id, data) => {
-        console.log('DataSDK update:', id, data);
-        LocalStorage.update(id, data);
-        // Notificar o handler sobre a mudança
-        if (dataHandler && dataHandler.onDataChanged) {
-          dataHandler.onDataChanged(LocalStorage.getAll());
-        }
-        return { isOk: true };
-      },
-      
-      delete: async (id) => {
-        console.log('DataSDK delete:', id);
-        LocalStorage.remove(id);
-        // Notificar o handler sobre a mudança
-        if (dataHandler && dataHandler.onDataChanged) {
-          dataHandler.onDataChanged(LocalStorage.getAll());
-        }
-        return { isOk: true };
-      },
-      
-      query: async (filter) => {
-        console.log('DataSDK query:', filter);
-        return { isOk: true, data: LocalStorage.getAll() };
-      }
-    };
-  </script>
   <style>
     body {
       box-sizing: border-box;
@@ -1038,18 +941,18 @@
       showLoading(true);
       
       for (const content of contents) {
-        await window.dataSdk.delete(content.__backendId);
+        await window.dataSdk.delete(content);
       }
       
       for (const discipline of disciplines) {
-        await window.dataSdk.delete(discipline.__backendId);
+        await window.dataSdk.delete(discipline);
       }
       
       for (const marker of markers) {
-        await window.dataSdk.delete(marker.__backendId);
+        await window.dataSdk.delete(marker);
       }
       
-      await window.dataSdk.delete(mission.__backendId);
+      await window.dataSdk.delete(mission);
       
       showLoading(false);
 
@@ -1688,7 +1591,7 @@
 
       if (existingStudy) {
         showLoading(true);
-        const result = await window.dataSdk.delete(existingStudy.__backendId);
+        const result = await window.dataSdk.delete(existingStudy);
         showLoading(false);
         
         if (result.isOk) {
@@ -1730,7 +1633,7 @@
 
       if (existingStudy) {
         showLoading(true);
-        const result = await window.dataSdk.delete(existingStudy.__backendId);
+        const result = await window.dataSdk.delete(existingStudy);
         showLoading(false);
         
         if (result.isOk) {
@@ -1862,7 +1765,6 @@
       
       showLoading(false);
       closeDisciplineModal();
-      updateUI();
     }
 
     function toggleContentQuestionsFields() {
@@ -2067,7 +1969,8 @@
       const correct = hasQuestions ? parseInt(document.getElementById('method-questions-correct').value) || 0 : 0;
       
       showLoading(true);
-      const result = await window.dataSdk.update(content.__backendId, {
+      const result = await window.dataSdk.update({
+        ...content,
         study_aula: aula,
         study_pdf: pdf,
         study_lei: lei,
@@ -2094,7 +1997,7 @@
         parsedValue = parseInt(value) || 0;
       }
 
-      const result = await window.dataSdk.update(id, { [field]: parsedValue });
+      const result = await window.dataSdk.update({ ...content, [field]: parsedValue });
       if (!result.isOk) {
         showToast('❌ Erro ao atualizar', 'error');
       }
@@ -2105,7 +2008,7 @@
       if (!content) return;
 
       showLoading(true);
-      const result = await window.dataSdk.delete(content.__backendId);
+      const result = await window.dataSdk.delete(content);
       showLoading(false);
 
       if (result.isOk) {
@@ -2123,10 +2026,10 @@
       
       showLoading(true);
       for (const content of contents) {
-        await window.dataSdk.delete(content.__backendId);
+        await window.dataSdk.delete(content);
       }
       
-      const result = await window.dataSdk.delete(discipline.__backendId);
+      const result = await window.dataSdk.delete(discipline);
       showLoading(false);
 
       if (result.isOk) {
@@ -2206,12 +2109,7 @@
       }, duration);
     }
 
-    // Esperar o DOM estar pronto antes de inicializar
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
+    init();
   </script>
-</body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bfbaecd258c0b0d',t:'MTc2ODcxNDA0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
