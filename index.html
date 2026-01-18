@@ -838,7 +838,10 @@
       
       // Se não houver missões, criar as padrões
       if (allMissions.length === 0) {
-        createDefaultMissions();
+        createDefaultMissions().then(() => {
+          // Após criar, recarregar e exibir
+          loadMissions();
+        });
       } else {
         renderMissionTabs();
         // Ativar a primeira missão ou a última usada
