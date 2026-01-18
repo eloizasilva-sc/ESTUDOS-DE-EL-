@@ -10,15 +10,31 @@
     // SDKs Mock - Permite que o app funcione sem dependências externas
     window.elementSdk = {
       init: async (config) => {
-        console.log('ElementSDK initialized', config);
+        console.log('ElementSDK initialized');
         return { isOk: true };
       }
     };
     
     window.dataSdk = {
       init: async (handler) => {
-        console.log('DataSDK initialized', handler);
+        console.log('DataSDK initialized');
         return { isOk: true };
+      },
+      create: async (data) => {
+        console.log('DataSDK create:', data);
+        return { isOk: true, id: data.id || 'local_' + Date.now() };
+      },
+      update: async (id, data) => {
+        console.log('DataSDK update:', id, data);
+        return { isOk: true };
+      },
+      delete: async (id) => {
+        console.log('DataSDK delete:', id);
+        return { isOk: true };
+      },
+      query: async (filter) => {
+        console.log('DataSDK query:', filter);
+        return { isOk: true, data: [] };
       }
     };
   </script>
@@ -2123,7 +2139,12 @@
       }, duration);
     }
 
-    init();
+    // Esperar o DOM estar pronto antes de inicializar
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   </script>
 </body>
 </html>
