@@ -7,7 +7,49 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&amp;family=Open+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <script>
-    // SDKs Mock - Permite que o app funcione sem dependências externas
+    // Sistema de armazenamento local
+    const LocalStorage = {
+      DB_KEY: 'concursada_2026_db',
+      
+      getAll() {
+        const stored = localStorage.getItem(this.DB_KEY);
+        return stored ? JSON.parse(stored) : [];
+      },
+      
+      save(data) {
+        localStorage.setItem(this.DB_KEY, JSON.stringify(data));
+      },
+      
+      add(item) {
+        const data = this.getAll();
+        item.__backendId = 'local_' + Date.now() + '_' + Math.random();
+        data.push(item);
+        this.save(data);
+        return item;
+      },
+      
+      update(id, item) {
+        const data = this.getAll();
+        const index = data.findIndex(d => d.__backendId === id);
+        if (index >= 0) {
+          data[index] = { ...data[index], ...item, __backendId: id };
+          this.save(data);
+          return data[index];
+        }
+        return null;
+      },
+      
+      remove(id) {
+        const data = this.getAll();
+        const filtered = data.filter(d => d.__backendId !== id);
+        this.save(filtered);
+        return true;
+      }
+    };
+
+    // SDKs Mock com localStorage
+    let dataHandler = null;
+    
     window.elementSdk = {
       init: async (config) => {
         console.log('ElementSDK initialized');
@@ -18,23 +60,48 @@
     window.dataSdk = {
       init: async (handler) => {
         console.log('DataSDK initialized');
+        dataHandler = handler;
+        // Carregar dados do localStorage e passar para o handler
+        const storedData = LocalStorage.getAll();
+        if (handler && handler.onDataChanged) {
+          handler.onDataChanged(storedData);
+        }
         return { isOk: true };
       },
+      
       create: async (data) => {
         console.log('DataSDK create:', data);
-        return { isOk: true, id: data.id || 'local_' + Date.now() };
+        const item = LocalStorage.add(data);
+        // Notificar o handler sobre a mudança
+        if (dataHandler && dataHandler.onDataChanged) {
+          dataHandler.onDataChanged(LocalStorage.getAll());
+        }
+        return { isOk: true, id: item.__backendId };
       },
+      
       update: async (id, data) => {
         console.log('DataSDK update:', id, data);
+        LocalStorage.update(id, data);
+        // Notificar o handler sobre a mudança
+        if (dataHandler && dataHandler.onDataChanged) {
+          dataHandler.onDataChanged(LocalStorage.getAll());
+        }
         return { isOk: true };
       },
+      
       delete: async (id) => {
         console.log('DataSDK delete:', id);
+        LocalStorage.remove(id);
+        // Notificar o handler sobre a mudança
+        if (dataHandler && dataHandler.onDataChanged) {
+          dataHandler.onDataChanged(LocalStorage.getAll());
+        }
         return { isOk: true };
       },
+      
       query: async (filter) => {
         console.log('DataSDK query:', filter);
-        return { isOk: true, data: [] };
+        return { isOk: true, data: LocalStorage.getAll() };
       }
     };
   </script>
@@ -971,18 +1038,18 @@
       showLoading(true);
       
       for (const content of contents) {
-        await window.dataSdk.delete(content);
+        await window.dataSdk.delete(content.__backendId);
       }
       
       for (const discipline of disciplines) {
-        await window.dataSdk.delete(discipline);
+        await window.dataSdk.delete(discipline.__backendId);
       }
       
       for (const marker of markers) {
-        await window.dataSdk.delete(marker);
+        await window.dataSdk.delete(marker.__backendId);
       }
       
-      await window.dataSdk.delete(mission);
+      await window.dataSdk.delete(mission.__backendId);
       
       showLoading(false);
 
@@ -1621,7 +1688,7 @@
 
       if (existingStudy) {
         showLoading(true);
-        const result = await window.dataSdk.delete(existingStudy);
+        const result = await window.dataSdk.delete(existingStudy.__backendId);
         showLoading(false);
         
         if (result.isOk) {
@@ -1663,7 +1730,7 @@
 
       if (existingStudy) {
         showLoading(true);
-        const result = await window.dataSdk.delete(existingStudy);
+        const result = await window.dataSdk.delete(existingStudy.__backendId);
         showLoading(false);
         
         if (result.isOk) {
@@ -1795,6 +1862,7 @@
       
       showLoading(false);
       closeDisciplineModal();
+      updateUI();
     }
 
     function toggleContentQuestionsFields() {
@@ -1999,8 +2067,7 @@
       const correct = hasQuestions ? parseInt(document.getElementById('method-questions-correct').value) || 0 : 0;
       
       showLoading(true);
-      const result = await window.dataSdk.update({
-        ...content,
+      const result = await window.dataSdk.update(content.__backendId, {
         study_aula: aula,
         study_pdf: pdf,
         study_lei: lei,
@@ -2027,7 +2094,7 @@
         parsedValue = parseInt(value) || 0;
       }
 
-      const result = await window.dataSdk.update({ ...content, [field]: parsedValue });
+      const result = await window.dataSdk.update(id, { [field]: parsedValue });
       if (!result.isOk) {
         showToast('❌ Erro ao atualizar', 'error');
       }
@@ -2038,7 +2105,7 @@
       if (!content) return;
 
       showLoading(true);
-      const result = await window.dataSdk.delete(content);
+      const result = await window.dataSdk.delete(content.__backendId);
       showLoading(false);
 
       if (result.isOk) {
@@ -2056,10 +2123,10 @@
       
       showLoading(true);
       for (const content of contents) {
-        await window.dataSdk.delete(content);
+        await window.dataSdk.delete(content.__backendId);
       }
       
-      const result = await window.dataSdk.delete(discipline);
+      const result = await window.dataSdk.delete(discipline.__backendId);
       showLoading(false);
 
       if (result.isOk) {
