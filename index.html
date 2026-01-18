@@ -824,12 +824,20 @@
       if (window.dataSdk) {
         const result = await window.dataSdk.init(dataHandler);
         if (!result.isOk) {
-          showToast('⚠️ Erro ao inicializar sistema', 'error');
+          console.error('Erro ao inicializar sistema');
         }
       }
 
+      // Verificar se existe dados, se não criar padrão
+      if (allData.length === 0) {
+        console.log('Criando missões padrão...');
+        await createDefaultMissions();
+      }
+      
+      console.log('Carregando dados:', allData);
       loadMissions();
       renderCalendar();
+      updateUI();
     }
 
     function loadMissions() {
@@ -838,10 +846,7 @@
       
       // Se não houver missões, criar as padrões
       if (allMissions.length === 0) {
-        createDefaultMissions().then(() => {
-          // Após criar, recarregar e exibir
-          loadMissions();
-        });
+        createDefaultMissions();
       } else {
         renderMissionTabs();
         // Ativar a primeira missão ou a última usada
@@ -855,38 +860,15 @@
     }
 
     async function createDefaultMissions() {
-      if (allData.length + 3 > 999) {
-        showToast('⚠️ Não foi possível criar missões padrão', 'error');
-        return;
-      }
-
-      showLoading(true);
+      const missions = [
+        { type: 'mission', module_id: 'prf', name: 'MISSÃO PRF', icon: '🚔', created_at: new Date().toISOString() },
+        { type: 'mission', module_id: 'tce', name: 'MISSÃO TCE-RN', icon: '⚖️', created_at: new Date().toISOString() },
+        { type: 'mission', module_id: 'pomodoro', name: 'POMODORO', icon: '🍅', created_at: new Date().toISOString() }
+      ];
       
-      await window.dataSdk.create({
-        type: 'mission',
-        module_id: 'prf',
-        name: 'MISSÃO PRF',
-        icon: '🚔',
-        created_at: new Date().toISOString()
-      });
-
-      await window.dataSdk.create({
-        type: 'mission',
-        module_id: 'tce',
-        name: 'MISSÃO TCE-RN',
-        icon: '⚖️',
-        created_at: new Date().toISOString()
-      });
-
-      await window.dataSdk.create({
-        type: 'mission',
-        module_id: 'pomodoro',
-        name: 'POMODORO',
-        icon: '🍅',
-        created_at: new Date().toISOString()
-      });
-
-      showLoading(false);
+      for (const mission of missions) {
+        await window.dataSdk.create(mission);
+      }
     }
 
     function renderMissionTabs() {
