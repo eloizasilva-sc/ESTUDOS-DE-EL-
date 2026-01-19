@@ -167,6 +167,15 @@
       height: 20px;
       accent-color: #059669;
     }
+    
+    .revision-cell {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .revision-cell:hover {
+      transform: scale(1.1);
+    }
   </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
@@ -503,6 +512,21 @@
      <div class="flex gap-4"><button onclick="closeContentModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button> <button onclick="saveContent()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">💾 SALVAR E FECHAR</button>
      </div>
     </div>
+   </div><!-- Revision Modal -->
+   <div id="revision-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-8 w-full max-w-md scale-in">
+     <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6">📚 <span id="revision-modal-title">Revisão</span></h3>
+     <div class="space-y-5">
+      <div><label class="block text-sm text-gray-700 mb-2 font-semibold">Data da Revisão</label> <input type="date" id="revision-date" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-900 transition-all text-gray-900">
+      </div>
+      <div><label class="block text-sm text-gray-700 mb-2 font-semibold">Questões Respondidas</label> <input type="number" id="revision-questions-total" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-900 transition-all text-gray-900" placeholder="0" min="0" value="0">
+      </div>
+      <div><label class="block text-sm text-gray-700 mb-2 font-semibold">Acertos</label> <input type="number" id="revision-questions-correct" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-900 transition-all text-gray-900" placeholder="0" min="0" value="0">
+      </div>
+     </div>
+     <div class="flex gap-4 mt-8"><button onclick="closeRevisionModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button> <button onclick="saveRevision()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">CONFIRMAR</button>
+     </div>
+    </div>
    </div><!-- Pomodoro Phrase Modal -->
    <div id="phrase-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-8 w-full max-w-2xl scale-in">
@@ -677,6 +701,8 @@
     let currentDisciplineId = null;
     let selectedMissionIcon = '🚔';
     let allMissions = [];
+    let currentRevisionContentId = null;
+    let currentRevisionType = null;
     
     // Calendar state
     let currentCalendarMonth = 0;
@@ -1156,6 +1182,9 @@
                 <th class="px-3 py-3 text-center font-bold text-gray-700">Q</th>
                 <th class="px-3 py-3 text-center font-bold text-gray-700">A</th>
                 <th class="px-3 py-3 text-center font-bold text-gray-700">%</th>
+                <th class="px-3 py-3 text-center font-bold text-gray-700 bg-blue-50">REV 7</th>
+                <th class="px-3 py-3 text-center font-bold text-gray-700 bg-green-50">REV 15</th>
+                <th class="px-3 py-3 text-center font-bold text-gray-700 bg-purple-50">REV 30</th>
                 <th class="px-3 py-3 text-center font-bold text-gray-700">AÇÕES</th>
               </tr>
             </thead>
@@ -1172,6 +1201,24 @@
         if (c.study_questions > 0) methods.push('❓');
         const methodsText = methods.length > 0 ? methods.join(' ') : '-';
         
+        // REV 7
+        const rev7Icon = c.rev7_done ? '✅' : '⬜';
+        const rev7Percent = c.rev7_questions > 0 ? Math.round((c.rev7_correct / c.rev7_questions) * 100) : 0;
+        const rev7Color = c.rev7_done ? (rev7Percent >= 70 ? 'text-green-600' : rev7Percent >= 50 ? 'text-yellow-600' : 'text-red-600') : 'text-gray-400';
+        const rev7Text = c.rev7_done ? `${rev7Percent}%` : rev7Icon;
+        
+        // REV 15
+        const rev15Icon = c.rev15_done ? '✅' : '⬜';
+        const rev15Percent = c.rev15_questions > 0 ? Math.round((c.rev15_correct / c.rev15_questions) * 100) : 0;
+        const rev15Color = c.rev15_done ? (rev15Percent >= 70 ? 'text-green-600' : rev15Percent >= 50 ? 'text-yellow-600' : 'text-red-600') : 'text-gray-400';
+        const rev15Text = c.rev15_done ? `${rev15Percent}%` : rev15Icon;
+        
+        // REV 30
+        const rev30Icon = c.rev30_done ? '✅' : '⬜';
+        const rev30Percent = c.rev30_questions > 0 ? Math.round((c.rev30_correct / c.rev30_questions) * 100) : 0;
+        const rev30Color = c.rev30_done ? (rev30Percent >= 70 ? 'text-green-600' : rev30Percent >= 50 ? 'text-yellow-600' : 'text-red-600') : 'text-gray-400';
+        const rev30Text = c.rev30_done ? `${rev30Percent}%` : rev30Icon;
+        
         html += `
           <tr class="border-t border-gray-200 hover:bg-gray-50 transition-all">
             <td class="px-4 py-4 font-semibold text-gray-900">${c.content || '-'}</td>
@@ -1186,6 +1233,15 @@
             <td class="px-3 py-4 text-center font-bold text-gray-900">${c.study_correct || 0}</td>
             <td class="px-3 py-4 text-center">
               <span class="px-3 py-1 rounded-full text-xs font-bold ${percentage >= 70 ? 'bg-green-100 text-green-700' : percentage >= 50 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}">${percentage}%</span>
+            </td>
+            <td class="px-3 py-4 text-center revision-cell" onclick="openRevisionModal('${c.__backendId}', 'rev7')">
+              <div class="text-2xl font-bold ${rev7Color}" title="${c.rev7_date ? 'Data: ' + c.rev7_date : 'Clique para revisar'}">${rev7Text}</div>
+            </td>
+            <td class="px-3 py-4 text-center revision-cell" onclick="openRevisionModal('${c.__backendId}', 'rev15')">
+              <div class="text-2xl font-bold ${rev15Color}" title="${c.rev15_date ? 'Data: ' + c.rev15_date : 'Clique para revisar'}">${rev15Text}</div>
+            </td>
+            <td class="px-3 py-4 text-center revision-cell" onclick="openRevisionModal('${c.__backendId}', 'rev30')">
+              <div class="text-2xl font-bold ${rev30Color}" title="${c.rev30_date ? 'Data: ' + c.rev30_date : 'Clique para revisar'}">${rev30Text}</div>
             </td>
             <td class="px-3 py-4 text-center">
               <button onclick="deleteContent('${c.__backendId}')" class="p-2 hover:bg-red-100 rounded-lg text-red-600 transition-all">
@@ -1212,6 +1268,58 @@
       if (element) {
         element.classList.toggle('hidden');
       }
+    }
+
+    // REVISION MODAL
+    function openRevisionModal(contentId, revisionType) {
+      currentRevisionContentId = contentId;
+      currentRevisionType = revisionType;
+      
+      const content = allData.find(c => c.__backendId === contentId);
+      if (!content) return;
+      
+      const revisionTitles = {
+        'rev7': 'Revisão de 7 Dias',
+        'rev15': 'Revisão de 15 Dias',
+        'rev30': 'Revisão de 30 Dias'
+      };
+      
+      document.getElementById('revision-modal-title').textContent = revisionTitles[revisionType];
+      document.getElementById('revision-date').value = content[`${revisionType}_date`] || '';
+      document.getElementById('revision-questions-total').value = content[`${revisionType}_questions`] || 0;
+      document.getElementById('revision-questions-correct').value = content[`${revisionType}_correct`] || 0;
+      
+      document.getElementById('revision-modal').classList.remove('hidden');
+      document.getElementById('revision-modal').classList.add('flex');
+    }
+
+    function closeRevisionModal() {
+      document.getElementById('revision-modal').classList.add('hidden');
+      document.getElementById('revision-modal').classList.remove('flex');
+      currentRevisionContentId = null;
+      currentRevisionType = null;
+    }
+
+    function saveRevision() {
+      if (!currentRevisionContentId || !currentRevisionType) return;
+      
+      const content = allData.find(c => c.__backendId === currentRevisionContentId);
+      if (!content) return;
+      
+      const date = document.getElementById('revision-date').value;
+      const total = parseInt(document.getElementById('revision-questions-total').value) || 0;
+      const correct = parseInt(document.getElementById('revision-questions-correct').value) || 0;
+      
+      updateRecord({
+        ...content,
+        [`${currentRevisionType}_done`]: true,
+        [`${currentRevisionType}_date`]: date,
+        [`${currentRevisionType}_questions`]: total,
+        [`${currentRevisionType}_correct`]: correct
+      });
+      
+      showToast('✅ Revisão registrada com sucesso!', 'success');
+      closeRevisionModal();
     }
 
     // POMODORO
@@ -1956,5 +2064,5 @@
       init();
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c04811943c628f8',t:'MTc2ODgwNjU0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c048d5c319e12fd',t:'MTc2ODgwNzA0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
