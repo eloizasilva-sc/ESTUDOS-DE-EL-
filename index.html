@@ -363,7 +363,7 @@
       <div class="metric-card card-shadow scale-in" style="animation-delay: 0.4s">
        <div class="flex items-center justify-between mb-4">
         <div class="text-3xl">
-         📈
+         🎯
         </div>
         <div class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold">
          META
@@ -391,57 +391,85 @@
        </div>
        <div class="flex-1 overflow-auto scrollbar-thin p-6" id="content-area"><!-- Dynamic content here -->
        </div>
-      </div><!-- Calendar Widget -->
-      <div class="w-96 flex flex-col gap-6"><!-- Calendar Card -->
+      </div><!-- Calendar Widget - FULL SCREEN -->
+      <div class="w-[500px] flex flex-col gap-6"><!-- Calendar Card -->
        <div class="bg-white rounded-2xl card-shadow p-6 slide-in" style="animation-delay: 0.2s">
         <div class="flex items-center justify-between mb-6">
-         <h3 class="text-xl font-heading font-bold text-gray-900">📅 Calendário</h3>
+         <h3 class="text-xl font-heading font-bold text-gray-900">📅 Calendário Completo</h3>
          <div class="flex gap-2"><button onclick="changeCalendarMonth(-1)" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-           </svg></button> <button onclick="changeCalendarMonth(1)" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
+           </svg></button> <button onclick="goToToday()" class="px-4 py-2 bg-blue-100 hover:bg-blue-200 rounded-lg transition-all text-sm font-bold text-blue-900"> HOJE </button> <button onclick="changeCalendarMonth(1)" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
            </svg></button>
          </div>
         </div>
         <div id="calendar-header" class="text-center mb-4">
-         <div class="text-lg font-heading font-bold text-gray-900">
+         <div class="text-2xl font-heading font-bold text-gray-900">
           Janeiro 2025
          </div>
-        </div>
-        <div class="grid grid-cols-7 gap-2 mb-2">
-         <div class="text-center text-xs font-bold text-gray-500 py-2">
+        </div><!-- Cabeçalho dos dias da semana -->
+        <div class="grid grid-cols-7 gap-2 mb-3">
+         <div class="text-center text-xs font-bold text-red-600 py-2">
           DOM
          </div>
-         <div class="text-center text-xs font-bold text-gray-500 py-2">
+         <div class="text-center text-xs font-bold text-gray-700 py-2">
           SEG
          </div>
-         <div class="text-center text-xs font-bold text-gray-500 py-2">
+         <div class="text-center text-xs font-bold text-gray-700 py-2">
           TER
          </div>
-         <div class="text-center text-xs font-bold text-gray-500 py-2">
+         <div class="text-center text-xs font-bold text-gray-700 py-2">
           QUA
          </div>
-         <div class="text-center text-xs font-bold text-gray-500 py-2">
+         <div class="text-center text-xs font-bold text-gray-700 py-2">
           QUI
          </div>
-         <div class="text-center text-xs font-bold text-gray-500 py-2">
+         <div class="text-center text-xs font-bold text-gray-700 py-2">
           SEX
          </div>
-         <div class="text-center text-xs font-bold text-gray-500 py-2">
+         <div class="text-center text-xs font-bold text-blue-600 py-2">
           SÁB
          </div>
-        </div>
-        <div id="calendar-grid" class="grid grid-cols-7 gap-2"><!-- Calendar days will be rendered here -->
-        </div>
+        </div><!-- Grade do calendário -->
+        <div id="calendar-grid" class="grid grid-cols-7 gap-2 mb-4"><!-- Calendar days will be rendered here -->
+        </div><!-- Legenda e ações -->
         <div class="mt-6 pt-6 border-t border-gray-200 space-y-3">
-         <div class="flex items-center gap-3 text-sm">
-          <div class="w-4 h-4 rounded success-gradient flex items-center justify-center text-white font-bold text-xs">
-           ✓
-          </div><span class="text-gray-600">Dia estudado</span>
-         </div>
-         <div class="flex items-center gap-3 text-sm">
-          <div class="w-4 h-4 rounded border-3 border-yellow-500"></div><span class="text-gray-600">Hoje</span>
-         </div><button onclick="toggleStudyToday()" class="w-full mt-3 py-3 success-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all"> ✓ MARCAR HOJE </button>
+         <div class="grid grid-cols-2 gap-4">
+          <div class="flex items-center gap-2 text-sm">
+           <div class="w-6 h-6 rounded-lg success-gradient flex items-center justify-center text-white font-bold text-xs shadow-sm">
+            ✓
+           </div><span class="text-gray-600 font-medium">Dia estudado</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+           <div class="w-6 h-6 rounded-lg border-3 border-yellow-500 bg-yellow-50 shadow-sm"></div><span class="text-gray-600 font-medium">Hoje</span>
+          </div>
+         </div><!-- Estatísticas do mês -->
+         <div class="grid grid-cols-3 gap-2 mt-4">
+          <div class="bg-blue-50 rounded-xl p-3 text-center">
+           <div class="text-2xl font-black text-blue-900" id="calendar-days-studied">
+            0
+           </div>
+           <div class="text-xs text-gray-600 font-semibold">
+            Dias Estudados
+           </div>
+          </div>
+          <div class="bg-green-50 rounded-xl p-3 text-center">
+           <div class="text-2xl font-black text-green-700" id="calendar-streak">
+            0
+           </div>
+           <div class="text-xs text-gray-600 font-semibold">
+            Sequência
+           </div>
+          </div>
+          <div class="bg-purple-50 rounded-xl p-3 text-center">
+           <div class="text-2xl font-black text-purple-700" id="calendar-percentage">
+            0%
+           </div>
+           <div class="text-xs text-gray-600 font-semibold">
+            Meta Mês
+           </div>
+          </div>
+         </div><button onclick="toggleStudyToday()" class="w-full mt-4 py-4 success-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all shadow-lg text-base"> ✓ MARCAR HOJE COMO ESTUDADO </button>
         </div>
        </div><!-- Quick Stats -->
        <div class="bg-white rounded-2xl card-shadow p-6 slide-in" style="animation-delay: 0.3s">
@@ -558,7 +586,7 @@
        </div>
       </div>
      </div>
-     <div class="flex gap-4"><button onclick="closeContentModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button> <button onclick="saveContent()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">✅ SALVAR E FECHAR</button>
+     <div class="flex gap-4"><button onclick="closeContentModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button> <button onclick="saveContent()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">💾 SALVAR E FECHAR</button>
      </div>
     </div>
    </div><!-- Pomodoro Phrase Modal -->
@@ -891,21 +919,25 @@
       const missionId = 'mission_' + Date.now();
 
       showLoading(true);
-      const result = await window.dataSdk.create({
-        type: 'mission',
-        module_id: missionId,
-        name: name.toUpperCase(),
-        icon: selectedMissionIcon,
-        created_at: new Date().toISOString()
-      });
-      showLoading(false);
+      try {
+        const result = await window.dataSdk.create({
+          type: 'mission',
+          module_id: missionId,
+          name: name.toUpperCase(),
+          icon: selectedMissionIcon,
+          created_at: new Date().toISOString()
+        });
+        
+        showLoading(false);
 
-      if (result.isOk) {
-        showToast(`✅ Missão "${name}" criada com sucesso!`, 'success');
-        closeNewMissionModal();
-        renderMissionTabs();
-        setModule(missionId);
-      } else {
+        if (result.isOk) {
+          showToast(`✅ Missão "${name}" criada com sucesso!`, 'success');
+          closeNewMissionModal();
+        } else {
+          showToast('❌ Erro ao criar missão', 'error');
+        }
+      } catch (error) {
+        showLoading(false);
         showToast('❌ Erro ao criar missão', 'error');
       }
     }
@@ -1041,22 +1073,14 @@
     function renderCalendar() {
       if (!currentModule) return;
       
-      const today = new Date();
-      const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1);
-      const lastDay = new Date(currentCalendarYear, currentCalendarMonth + 1, 0);
-      const startDay = firstDay.getDay();
-      const daysInMonth = lastDay.getDate();
-      
       const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
                           'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
       
-      document.getElementById('calendar-header').innerHTML = `
-        <div class="text-lg font-heading font-bold text-gray-900">${monthNames[currentCalendarMonth]} ${currentCalendarYear}</div>
-      `;
+      // Atualizar cabeçalho do calendário
+      const header = document.getElementById('calendar-header');
+      header.innerHTML = `<div class="text-2xl font-heading font-bold text-gray-900">${monthNames[currentCalendarMonth]} ${currentCalendarYear}</div>`;
       
-      const grid = document.getElementById('calendar-grid');
-      grid.innerHTML = '';
-      
+      // Coletar datas estudadas
       const studiedDates = new Set();
       allData.filter(d => d.type === 'content' && d.module === currentModule && d.study_done).forEach(c => {
         if (c.study_date) {
@@ -1070,16 +1094,23 @@
         }
       });
       
+      // Renderizar dias do mês
+      const today = new Date();
+      const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1);
+      const lastDay = new Date(currentCalendarYear, currentCalendarMonth + 1, 0);
+      const startDay = firstDay.getDay(); // Dia da semana do primeiro dia (0 = domingo)
+      const daysInMonth = lastDay.getDate();
+      
+      const grid = document.getElementById('calendar-grid');
+      let html = '';
+      
+      // Adicionar células vazias antes do primeiro dia do mês
       for (let i = 0; i < startDay; i++) {
-        const emptyCell = document.createElement('div');
-        grid.appendChild(emptyCell);
+        html += '<div class="w-12 h-12"></div>';
       }
       
+      // Adicionar os dias do mês
       for (let day = 1; day <= daysInMonth; day++) {
-        const dayCell = document.createElement('div');
-        dayCell.className = 'calendar-day w-10 h-10 flex items-center justify-center rounded-lg text-sm font-semibold cursor-pointer';
-        dayCell.textContent = day;
-        
         const dateStr = `${currentCalendarYear}-${String(currentCalendarMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         
         const isToday = today.getFullYear() === currentCalendarYear && 
@@ -1088,18 +1119,57 @@
         
         const isStudied = studiedDates.has(dateStr);
         
+        let classes = 'calendar-day w-12 h-12 flex items-center justify-center rounded-lg text-sm font-semibold cursor-pointer';
+        
         if (isStudied) {
-          dayCell.classList.add('studied');
+          classes += ' studied';
         }
         
         if (isToday) {
-          dayCell.classList.add('today');
+          classes += ' today';
         }
         
-        dayCell.addEventListener('click', () => toggleStudyDay(dateStr));
-        
-        grid.appendChild(dayCell);
+        html += `<div class="${classes}" onclick="toggleStudyDay('${dateStr}')">${day}</div>`;
       }
+      
+      grid.innerHTML = html;
+      
+      // Atualizar estatísticas do calendário
+      updateCalendarStats(studiedDates);
+    }
+    
+    function updateCalendarStats(studiedDates) {
+      // Filtrar apenas datas do mês atual
+      const datesInMonth = Array.from(studiedDates).filter(dateStr => {
+        const date = new Date(dateStr + 'T00:00:00');
+        return date.getMonth() === currentCalendarMonth && date.getFullYear() === currentCalendarYear;
+      });
+      
+      // Dias estudados no mês
+      const daysStudied = datesInMonth.length;
+      document.getElementById('calendar-days-studied').textContent = daysStudied;
+      
+      // Calcular sequência (streak) - dias consecutivos estudados
+      const today = new Date();
+      let streak = 0;
+      let checkDate = new Date(today);
+      
+      while (true) {
+        const dateStr = checkDate.toISOString().split('T')[0];
+        if (studiedDates.has(dateStr)) {
+          streak++;
+          checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+          break;
+        }
+      }
+      
+      document.getElementById('calendar-streak').textContent = streak;
+      
+      // Percentual do mês (considerando meta de 20 dias por mês)
+      const goalDays = 20;
+      const percentage = Math.min(100, Math.round((daysStudied / goalDays) * 100));
+      document.getElementById('calendar-percentage').textContent = `${percentage}%`;
     }
 
     function changeCalendarMonth(delta) {
@@ -1114,6 +1184,14 @@
       }
       
       renderCalendar();
+    }
+    
+    function goToToday() {
+      const today = new Date();
+      currentCalendarMonth = today.getMonth();
+      currentCalendarYear = today.getFullYear();
+      renderCalendar();
+      showToast('📅 Voltando para o mês atual', 'info', 2000);
     }
 
     function renderContent() {
@@ -2104,5 +2182,5 @@
       init();
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c040557a3e427e5',t:'MTc2ODgwMTQ3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c041bbfc39d9326',t:'MTc2ODgwMjM5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
