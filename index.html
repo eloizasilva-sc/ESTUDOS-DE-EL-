@@ -203,53 +203,8 @@
   </style>
   <style>@view-transition { navigation: auto; }</style>
  </head>
- <body class="h-full bg-gray-50"><!-- Welcome Screen -->
-  <div id="welcome-screen" class="min-h-full w-full flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 relative overflow-hidden"><!-- Animated Background Elements -->
-   <div class="absolute inset-0 overflow-hidden">
-    <div class="absolute top-20 left-20 w-72 h-72 bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
-    <div class="absolute bottom-20 right-20 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s"></div>
-    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-yellow-300/5 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s"></div>
-   </div><!-- Main Content -->
-   <div class="relative z-10 text-center px-8 max-w-4xl"><!-- Logo Shield -->
-    <div class="mb-8 flex justify-center fade-in">
-     <svg class="w-40 h-40 shield-icon drop-shadow-2xl" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M50 5 L10 20 L10 45 C10 70 50 95 50 95 C50 95 90 70 90 45 L90 20 Z" fill="#1e3a8a" stroke="#D4AF37" stroke-width="3" /> <line x1="45" y1="30" x2="45" y2="70" stroke="white" stroke-width="2" /> <line x1="55" y1="30" x2="55" y2="70" stroke="white" stroke-width="2" /> <line x1="40" y1="40" x2="40" y2="50" stroke="#D4AF37" stroke-width="2" /> <line x1="40" y1="60" x2="40" y2="70" stroke="#D4AF37" stroke-width="2" /> <line x1="60" y1="40" x2="60" y2="50" stroke="#D4AF37" stroke-width="2" /> <line x1="60" y1="60" x2="60" y2="70" stroke="#D4AF37" stroke-width="2" /> <circle cx="50" cy="35" r="3" fill="#D4AF37" /> <line x1="50" y1="35" x2="50" y2="45" stroke="#D4AF37" stroke-width="2" /> <line x1="40" y1="45" x2="60" y2="45" stroke="#D4AF37" stroke-width="2" /> <path d="M38 45 L35 50 L41 50 Z" fill="#D4AF37" /> <path d="M62 45 L59 50 L65 50 Z" fill="#D4AF37" />
-     </svg>
-    </div><!-- Title -->
-    <h1 class="text-7xl font-heading font-black text-white mb-4 tracking-tight slide-in" style="text-shadow: 0 4px 20px rgba(0,0,0,0.3)">CONCURSADA 2026</h1><!-- Subtitle -->
-    <div class="gold-gradient text-transparent bg-clip-text mb-8 slide-in" style="animation-delay: 0.2s">
-     <p class="text-3xl font-heading font-bold">Seu Sistema Completo de Estudos</p>
-    </div><!-- Description -->
-    <p class="text-xl text-blue-100 mb-12 max-w-2xl mx-auto leading-relaxed fade-in" style="animation-delay: 0.4s">Organize suas disciplinas, acompanhe seu progresso e conquiste a aprovação com método e disciplina.</p><!-- Features Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 scale-in" style="animation-delay: 0.6s">
-     <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all">
-      <div class="text-5xl mb-3">
-       📚
-      </div>
-      <h3 class="text-lg font-bold text-white mb-2">Múltiplas Missões</h3>
-      <p class="text-sm text-blue-200">Organize estudos para diferentes concursos</p>
-     </div>
-     <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all">
-      <div class="text-5xl mb-3">
-       🍅
-      </div>
-      <h3 class="text-lg font-bold text-white mb-2">Pomodoro Timer</h3>
-      <p class="text-sm text-blue-200">Técnica comprovada de produtividade</p>
-     </div>
-     <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all">
-      <div class="text-5xl mb-3">
-       📊
-      </div>
-      <h3 class="text-lg font-bold text-white mb-2">Acompanhamento</h3>
-      <p class="text-sm text-blue-200">Métricas completas do seu desempenho</p>
-     </div>
-    </div><!-- CTA Button --> <button onclick="enterApp()" class="group relative px-16 py-6 bg-gradient-to-r from-yellow-400 to-yellow-500 text-blue-900 rounded-2xl text-2xl font-heading font-black hover:from-yellow-300 hover:to-yellow-400 transition-all shadow-2xl hover:scale-105 scale-in" style="animation-delay: 0.8s"> <span class="relative z-10">COMEÇAR AGORA</span>
-     <div class="absolute inset-0 bg-white/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all"></div></button> <!-- Bottom Quote -->
-    <div class="mt-12 fade-in" style="animation-delay: 1s">
-     <p class="text-lg text-blue-200 italic font-semibold">"A disciplina é a ponte entre metas e conquistas"</p>
-    </div>
-   </div>
-  </div>
-  <div id="app" class="hidden min-h-full w-full flex flex-col scrollbar-thin"><!-- Professional Header -->
+ <body class="h-full bg-gray-50">
+  <div id="app" class="min-h-full w-full flex flex-col scrollbar-thin"><!-- Professional Header -->
    <header class="flex-shrink-0 bg-white border-b-2 border-gray-200 px-8 py-6 fade-in">
     <div class="flex items-center justify-between">
      <div class="flex items-center gap-6"><!-- Logo Badge -->
@@ -2159,31 +2114,8 @@
       }, duration);
     }
 
-    function enterApp() {
-      const welcomeScreen = document.getElementById('welcome-screen');
-      const appScreen = document.getElementById('app');
-      
-      // Fade out welcome screen
-      welcomeScreen.style.opacity = '0';
-      welcomeScreen.style.transition = 'opacity 0.5s ease-out';
-      
-      setTimeout(() => {
-        welcomeScreen.classList.add('hidden');
-        appScreen.classList.remove('hidden');
-        
-        // Fade in app
-        appScreen.style.opacity = '0';
-        setTimeout(() => {
-          appScreen.style.transition = 'opacity 0.5s ease-in';
-          appScreen.style.opacity = '1';
-        }, 50);
-        
-        // Inicializar o app
-        init();
-      }, 500);
-    }
-
-    // Não inicializar automaticamente, aguardar o usuário clicar em "Começar"
+    // Inicializar automaticamente quando a página carregar
+    document.addEventListener('DOMContentLoaded', init);
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c03ec31e00c28f8',t:'MTc2ODgwMDQ0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c03f112e2bf5ad2',t:'MTc2ODgwMDY0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
