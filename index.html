@@ -86,37 +86,6 @@
       background: linear-gradient(135deg, #059669 0%, #10b981 100%);
     }
     
-    .calendar-day {
-      transition: all 0.2s ease;
-    }
-    
-    .calendar-day:hover {
-      background: #f1f5f9;
-      transform: scale(1.05);
-    }
-    
-    .calendar-day.studied {
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      color: white;
-      font-weight: 700;
-      position: relative;
-    }
-    
-    .calendar-day.studied::after {
-      content: '✓';
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      font-size: 10px;
-      font-weight: bold;
-    }
-    
-    .calendar-day.today {
-      border: 3px solid #D4AF37;
-      font-weight: 700;
-      color: #1e3a8a;
-    }
-    
     input[type="checkbox"] {
       width: 20px;
       height: 20px;
@@ -262,7 +231,7 @@
           0h
          </div>
          <div class="text-sm text-gray-600 font-semibold">
-          ⏱️ Tempo Foco
+          🕐 Tempo Foco
          </div>
         </div>
         <div class="bg-white rounded-2xl p-6 card-shadow">
@@ -351,36 +320,73 @@
         </div>
        </div>
        <div class="text-gray-600 text-sm font-semibold mb-2">
-        Ranking Atual
+        Patente Atual
        </div>
        <div id="current-rank" class="text-4xl font-heading font-black text-gray-900 mb-1">
-        🔴
+        🎖️
        </div>
        <div class="text-xs text-gray-500">
-        Baseado no desempenho
+        Dias verdes + % acertos
        </div>
-      </div><!-- Next Mission Card -->
+      </div><!-- Pomodoro Button Card -->
       <div class="metric-card card-shadow scale-in" style="animation-delay: 0.4s">
        <div class="flex items-center justify-between mb-4">
         <div class="text-3xl">
-         🎯
+         🍅
         </div>
-        <div class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold">
-         META
+        <div class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold">
+         TIMER
         </div>
        </div>
        <div class="text-gray-600 text-sm font-semibold mb-2">
-        Próxima Missão
+        Pomodoro
        </div>
-       <div id="next-mission" class="text-4xl font-heading font-black text-gray-900 mb-1">
-        -
-       </div>
-       <div class="text-xs text-gray-500">
-        Simulado agendado
-       </div>
+       <div id="pomodoro-count" class="text-4xl font-heading font-black text-gray-900 mb-3">
+        0
+       </div><button onclick="setModule('pomodoro')" class="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-bold hover:opacity-90 transition-all shadow-lg text-sm"> ABRIR TIMER </button>
       </div>
-     </div><!-- Calendar and Content Area -->
-     <div class="flex-1 flex gap-6 overflow-hidden"><!-- Main Data Table -->
+     </div><!-- Main Content with Sidebar -->
+     <div class="flex-1 flex gap-6 overflow-hidden"><!-- Calendar Sidebar -->
+      <div class="w-80 flex-shrink-0 bg-white rounded-2xl card-shadow flex flex-col overflow-hidden">
+       <div class="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-900 to-blue-800 text-white">
+        <div class="flex items-center justify-between mb-3"><button onclick="changeCalendarMonth(-1)" class="p-2 hover:bg-white/20 rounded-lg transition-all">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg></button>
+         <h3 id="calendar-month-year" class="text-xl font-heading font-bold">Janeiro 2026</h3><button onclick="changeCalendarMonth(1)" class="p-2 hover:bg-white/20 rounded-lg transition-all">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg></button>
+        </div>
+        <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold">
+         <div class="text-red-300">
+          D
+         </div>
+         <div>
+          S
+         </div>
+         <div>
+          T
+         </div>
+         <div>
+          Q
+         </div>
+         <div>
+          Q
+         </div>
+         <div>
+          S
+         </div>
+         <div class="text-red-300">
+          S
+         </div>
+        </div>
+       </div>
+       <div class="flex-1 overflow-auto scrollbar-thin p-4">
+        <div id="calendar-grid" class="grid grid-cols-7 gap-1"><!-- Calendar days will be rendered here -->
+        </div>
+       </div>
+       <div class="p-4 border-t border-gray-200 bg-gray-50"><button onclick="goToToday()" class="w-full py-2 bg-blue-900 text-white rounded-lg font-bold hover:bg-blue-800 transition-all text-sm"> 📅 HOJE </button>
+       </div>
+      </div><!-- Main Data Table -->
       <div class="flex-1 bg-white rounded-2xl card-shadow flex flex-col overflow-hidden slide-in">
        <div class="p-6 border-b border-gray-200">
         <div class="flex items-center justify-between">
@@ -391,103 +397,11 @@
        </div>
        <div class="flex-1 overflow-auto scrollbar-thin p-6" id="content-area"><!-- Dynamic content here -->
        </div>
-      </div><!-- Calendar Widget - FULL SCREEN -->
-      <div class="w-[500px] flex flex-col gap-6"><!-- Calendar Card -->
-       <div class="bg-white rounded-2xl card-shadow p-6 slide-in" style="animation-delay: 0.2s">
-        <div class="flex items-center justify-between mb-6">
-         <h3 class="text-xl font-heading font-bold text-gray-900">📅 Calendário Completo</h3>
-         <div class="flex gap-2"><button onclick="changeCalendarMonth(-1)" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
-           <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-           </svg></button> <button onclick="goToToday()" class="px-4 py-2 bg-blue-100 hover:bg-blue-200 rounded-lg transition-all text-sm font-bold text-blue-900"> HOJE </button> <button onclick="changeCalendarMonth(1)" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
-           <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-           </svg></button>
-         </div>
-        </div>
-        <div id="calendar-header" class="text-center mb-4">
-         <div class="text-2xl font-heading font-bold text-gray-900">
-          Janeiro 2025
-         </div>
-        </div><!-- Cabeçalho dos dias da semana -->
-        <div class="grid grid-cols-7 gap-2 mb-3">
-         <div class="text-center text-xs font-bold text-red-600 py-2">
-          DOM
-         </div>
-         <div class="text-center text-xs font-bold text-gray-700 py-2">
-          SEG
-         </div>
-         <div class="text-center text-xs font-bold text-gray-700 py-2">
-          TER
-         </div>
-         <div class="text-center text-xs font-bold text-gray-700 py-2">
-          QUA
-         </div>
-         <div class="text-center text-xs font-bold text-gray-700 py-2">
-          QUI
-         </div>
-         <div class="text-center text-xs font-bold text-gray-700 py-2">
-          SEX
-         </div>
-         <div class="text-center text-xs font-bold text-blue-600 py-2">
-          SÁB
-         </div>
-        </div><!-- Grade do calendário -->
-        <div id="calendar-grid" class="grid grid-cols-7 gap-2 mb-4"><!-- Calendar days will be rendered here -->
-        </div><!-- Legenda e ações -->
-        <div class="mt-6 pt-6 border-t border-gray-200 space-y-3">
-         <div class="grid grid-cols-2 gap-4">
-          <div class="flex items-center gap-2 text-sm">
-           <div class="w-6 h-6 rounded-lg success-gradient flex items-center justify-center text-white font-bold text-xs shadow-sm">
-            ✓
-           </div><span class="text-gray-600 font-medium">Dia estudado</span>
-          </div>
-          <div class="flex items-center gap-2 text-sm">
-           <div class="w-6 h-6 rounded-lg border-3 border-yellow-500 bg-yellow-50 shadow-sm"></div><span class="text-gray-600 font-medium">Hoje</span>
-          </div>
-         </div><!-- Estatísticas do mês -->
-         <div class="grid grid-cols-3 gap-2 mt-4">
-          <div class="bg-blue-50 rounded-xl p-3 text-center">
-           <div class="text-2xl font-black text-blue-900" id="calendar-days-studied">
-            0
-           </div>
-           <div class="text-xs text-gray-600 font-semibold">
-            Dias Estudados
-           </div>
-          </div>
-          <div class="bg-green-50 rounded-xl p-3 text-center">
-           <div class="text-2xl font-black text-green-700" id="calendar-streak">
-            0
-           </div>
-           <div class="text-xs text-gray-600 font-semibold">
-            Sequência
-           </div>
-          </div>
-          <div class="bg-purple-50 rounded-xl p-3 text-center">
-           <div class="text-2xl font-black text-purple-700" id="calendar-percentage">
-            0%
-           </div>
-           <div class="text-xs text-gray-600 font-semibold">
-            Meta Mês
-           </div>
-          </div>
-         </div><button onclick="toggleStudyToday()" class="w-full mt-4 py-4 success-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all shadow-lg text-base"> ✓ MARCAR HOJE COMO ESTUDADO </button>
-        </div>
-       </div><!-- Quick Stats -->
-       <div class="bg-white rounded-2xl card-shadow p-6 slide-in" style="animation-delay: 0.3s">
-        <h3 class="text-xl font-heading font-bold text-gray-900 mb-4">📊 Estatísticas</h3>
-        <div class="space-y-4">
-         <div class="flex items-center justify-between p-3 bg-blue-50 rounded-xl"><span class="text-sm font-semibold text-gray-700">🍅 Pomodoros Hoje</span> <span class="text-2xl font-black text-blue-900" id="stats-pomodoros">0</span>
-         </div>
-         <div class="flex items-center justify-between p-3 bg-green-50 rounded-xl"><span class="text-sm font-semibold text-gray-700">📅 Dias Estudados</span> <span class="text-2xl font-black text-green-600" id="stats-days">0</span>
-         </div>
-         <div class="flex items-center justify-between p-3 bg-purple-50 rounded-xl"><span class="text-sm font-semibold text-gray-700">✅ Taxa Sucesso</span> <span class="text-2xl font-black text-purple-600" id="stats-success">0%</span>
-         </div>
-        </div><button onclick="setModule('pomodoro')" class="w-full mt-6 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-bold hover:opacity-90 transition-all shadow-lg"> 🍅 ABRIR POMODORO </button>
-       </div>
       </div>
      </div>
     </main><!-- Footer -->
     <footer class="flex-shrink-0 bg-gray-900 text-white py-4 px-8 text-center">
-     <p class="text-sm font-semibold">💻 Desenvolvido por <span class="text-yellow-400 font-bold">Eloiza Silva</span></p>
+     <p class="text-sm font-semibold">💛 Desenvolvido por <span class="text-yellow-400 font-bold">Eloiza Silva</span></p>
     </footer>
    </div><!-- All Modals --> <!-- New Mission Modal -->
    <div id="new-mission-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
@@ -596,7 +510,7 @@
      <div class="space-y-5">
       <div><label class="block text-sm text-gray-700 mb-2 font-semibold">Digite sua frase de motivação</label> <textarea id="phrase-input" rows="4" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-900 transition-all text-gray-900 text-lg" placeholder="Ex: A disciplina é a ponte entre metas e conquistas"></textarea>
       </div>
-      <div class="grid grid-cols-2 gap-3"><button onclick="setQuickPhrase('A disciplina é a ponte entre metas e conquistas')" class="p-3 bg-blue-50 hover:bg-blue-100 rounded-xl text-sm font-semibold text-blue-900 transition-all"> 💪 Disciplina </button> <button onclick="setQuickPhrase('Cada esforço me aproxima da aprovação')" class="p-3 bg-green-50 hover:bg-green-100 rounded-xl text-sm font-semibold text-green-900 transition-all"> 🎯 Esforço </button> <button onclick="setQuickPhrase('O sucesso é a soma de pequenos esforços repetidos')" class="p-3 bg-purple-50 hover:bg-purple-100 rounded-xl text-sm font-semibold text-purple-900 transition-all"> 🌟 Sucesso </button> <button onclick="setQuickPhrase('Foco, força e fé - minha aprovação está chegando!')" class="p-3 bg-orange-50 hover:bg-orange-100 rounded-xl text-sm font-semibold text-orange-900 transition-all"> 🔥 Foco </button>
+      <div class="grid grid-cols-2 gap-3"><button onclick="setQuickPhrase('A disciplina é a ponte entre metas e conquistas')" class="p-3 bg-blue-50 hover:bg-blue-100 rounded-xl text-sm font-semibold text-blue-900 transition-all"> 💪 Disciplina </button> <button onclick="setQuickPhrase('Cada esforço me aproxima da aprovação')" class="p-3 bg-green-50 hover:bg-green-100 rounded-xl text-sm font-semibold text-green-900 transition-all"> 🎯 Esforço </button> <button onclick="setQuickPhrase('O sucesso é a soma de pequenos esforços repetidos')" class="p-3 bg-purple-50 hover:bg-purple-100 rounded-xl text-sm font-semibold text-purple-900 transition-all"> 🔥 Sucesso </button> <button onclick="setQuickPhrase('Foco, força e fé - minha aprovação está chegando!')" class="p-3 bg-orange-50 hover:bg-orange-100 rounded-xl text-sm font-semibold text-orange-900 transition-all"> ⚡ Foco </button>
       </div>
      </div>
      <div class="flex gap-4 mt-8"><button onclick="closePhraseModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button> <button onclick="savePomodoroPhrase()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">SALVAR</button>
@@ -700,13 +614,15 @@
     let selectedColor = '#1e3a8a';
     let isLoading = false;
     let currentModule = null;
-    let currentCalendarMonth = new Date().getMonth();
-    let currentCalendarYear = new Date().getFullYear();
     let currentMethodContentId = null;
     let currentDisciplineId = null;
     let selectedMissionIcon = '🚔';
     let allMissions = [];
     let sdkInitialized = false;
+    
+    // Calendar state
+    let currentCalendarMonth = 0; // 0 = January 2026
+    let currentCalendarYear = 2026;
     
     // Pomodoro state
     let pomodoroInterval = null;
@@ -765,7 +681,6 @@
           if (result.isOk) {
             sdkInitialized = true;
             loadMissions();
-            renderCalendar();
           } else {
             showToast('❌ Erro ao inicializar banco de dados', 'error');
           }
@@ -875,6 +790,225 @@
       renderCalendar();
     }
 
+    // Calendar Functions
+    function renderCalendar() {
+      const monthNames = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+      ];
+      
+      document.getElementById('calendar-month-year').textContent = 
+        `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
+      
+      const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1);
+      const lastDay = new Date(currentCalendarYear, currentCalendarMonth + 1, 0);
+      const daysInMonth = lastDay.getDate();
+      const startingDayOfWeek = firstDay.getDay(); // 0 = Sunday
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const isCurrentMonth = today.getFullYear() === currentCalendarYear && 
+                            today.getMonth() === currentCalendarMonth;
+      const todayDate = today.getDate();
+      
+      let html = '';
+      
+      // Empty cells before first day
+      for (let i = 0; i < startingDayOfWeek; i++) {
+        html += '<div class="aspect-square"></div>';
+      }
+      
+      // Days of month
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(currentCalendarYear, currentCalendarMonth, day);
+        date.setHours(0, 0, 0, 0);
+        const dayOfWeek = date.getDay();
+        const isSunday = dayOfWeek === 0;
+        const isSaturday = dayOfWeek === 6;
+        const isToday = isCurrentMonth && day === todayDate;
+        
+        const dateStr = `${currentCalendarYear}-${String(currentCalendarMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        
+        // Verifica se o dia foi marcado manualmente como estudado
+        const hasStudyMark = allData.some(d => d.type === 'study_mark' && d.study_date === dateStr && d.module === currentModule);
+        
+        // Verifica se o dia pode ser clicado (não é futuro)
+        const isFuture = date > today;
+        
+        // SISTEMA DE PRIORIDADE VISUAL:
+        // 1º - VERDE VIBRANTE (bg-green-500) = Dia marcado como estudado ✅
+        // 2º - AZUL ESCURO (bg-blue-900) = Dia de hoje
+        // 3º - BRANCO = Dias passados normais
+        // 4º - CINZA CLARO = Dias futuros (desabilitados)
+        
+        let bgClass = 'bg-white hover:bg-blue-50';
+        let textClass = 'text-gray-700 font-semibold';
+        let cursorClass = 'cursor-pointer';
+        let extraClass = '';
+        
+        if (isFuture) {
+          // Dias futuros: cinza claro, desabilitado
+          bgClass = 'bg-gray-100';
+          textClass = 'text-gray-400';
+          cursorClass = 'cursor-not-allowed';
+        } else if (hasStudyMark) {
+          // PRIORIDADE 1: Dia estudado = VERDE VIBRANTE
+          bgClass = 'bg-green-500 hover:bg-green-600';
+          textClass = 'text-white font-black';
+          extraClass = 'shadow-lg';
+        } else if (isToday) {
+          // PRIORIDADE 2: Hoje = AZUL ESCURO
+          bgClass = 'bg-blue-900 hover:bg-blue-800';
+          textClass = 'text-white font-black';
+          extraClass = 'ring-4 ring-blue-300';
+        } else if (isSunday || isSaturday) {
+          // Final de semana tem texto vermelho
+          textClass = 'text-red-500 font-semibold';
+        }
+        
+        // Verifica se o checkbox está marcado
+        const hasCheckbox = allData.some(d => d.type === 'calendar_check' && d.check_date === dateStr && d.module === currentModule);
+        
+        html += `
+          <div class="aspect-square flex flex-col gap-0.5">
+            <button onclick="selectCalendarDate('${dateStr}')" ${isFuture ? 'disabled' : ''}
+                    class="w-full flex-1 ${bgClass} ${textClass} ${cursorClass} ${extraClass} rounded-lg text-sm transition-all duration-200 flex items-center justify-center relative transform ${isFuture ? '' : 'hover:scale-110 active:scale-95'}">
+              <span>${day}</span>
+              ${hasStudyMark ? '<span class="absolute top-0.5 right-0.5 text-xs leading-none">✅</span>' : ''}
+            </button>
+            ${!isFuture ? `
+              <div class="flex items-center justify-center">
+                <input type="checkbox" ${hasCheckbox ? 'checked' : ''} 
+                       onclick="event.stopPropagation(); toggleCalendarCheck('${dateStr}')"
+                       class="w-4 h-4 rounded accent-green-600 cursor-pointer hover:scale-110 transition-transform">
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+      
+      document.getElementById('calendar-grid').innerHTML = html;
+    }
+
+    function changeCalendarMonth(delta) {
+      currentCalendarMonth += delta;
+      
+      if (currentCalendarMonth < 0) {
+        currentCalendarMonth = 11;
+        currentCalendarYear--;
+      } else if (currentCalendarMonth > 11) {
+        currentCalendarMonth = 0;
+        currentCalendarYear++;
+      }
+      
+      renderCalendar();
+    }
+
+    function goToToday() {
+      const today = new Date();
+      currentCalendarYear = today.getFullYear();
+      currentCalendarMonth = today.getMonth();
+      renderCalendar();
+      showToast('📅 Voltou para hoje!', 'info', 2000);
+    }
+
+    async function selectCalendarDate(dateStr) {
+      // Cria objeto de data no meio-dia para evitar problemas de timezone
+      const clickedDate = new Date(dateStr + 'T12:00:00');
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      // Não permite marcar dias futuros
+      if (clickedDate > today) {
+        showToast('⚠️ Não pode marcar dias futuros!', 'error', 2000);
+        return;
+      }
+      
+      // Verifica se já existe uma marcação para este dia nesta missão
+      const existingMark = allData.find(d => 
+        d.type === 'study_mark' && 
+        d.study_date === dateStr && 
+        d.module === currentModule
+      );
+      
+      if (existingMark) {
+        // DESMARCAR: Remove o dia estudado
+        showLoading(true);
+        const result = await window.dataSdk.delete(existingMark);
+        showLoading(false);
+        
+        if (result.isOk) {
+          showToast('❌ Dia desmarcado! Clique novamente para marcar', 'info', 2500);
+        } else {
+          showToast('❌ Erro ao desmarcar', 'error');
+        }
+      } else {
+        // MARCAR: Adiciona o dia como estudado
+        if (allData.length >= 999) {
+          showToast('⚠️ Limite de 999 registros atingido!', 'error');
+          return;
+        }
+        
+        showLoading(true);
+        const result = await window.dataSdk.create({
+          type: 'study_mark',
+          study_date: dateStr,
+          module: currentModule,
+          created_at: new Date().toISOString()
+        });
+        showLoading(false);
+        
+        if (result.isOk) {
+          showToast('✅ DIA MARCADO! Agora está VERDE e salvo! 💚', 'success', 3000);
+        } else {
+          showToast('❌ Erro ao marcar dia', 'error');
+        }
+      }
+    }
+
+    async function toggleCalendarCheck(dateStr) {
+      // Verifica se já existe um checkbox marcado para este dia
+      const existingCheck = allData.find(d => 
+        d.type === 'calendar_check' && 
+        d.check_date === dateStr && 
+        d.module === currentModule
+      );
+      
+      if (existingCheck) {
+        // DESMARCAR: Remove o checkbox
+        showLoading(true);
+        const result = await window.dataSdk.delete(existingCheck);
+        showLoading(false);
+        
+        if (result.isOk) {
+          showToast('☑️ Checkbox desmarcado!', 'info', 2000);
+        } else {
+          showToast('❌ Erro ao desmarcar checkbox', 'error');
+        }
+      } else {
+        // MARCAR: Adiciona o checkbox
+        if (allData.length >= 999) {
+          showToast('⚠️ Limite de 999 registros atingido!', 'error');
+          return;
+        }
+        
+        showLoading(true);
+        const result = await window.dataSdk.create({
+          type: 'calendar_check',
+          check_date: dateStr,
+          module: currentModule,
+          created_at: new Date().toISOString()
+        });
+        showLoading(false);
+        
+        if (result.isOk) {
+          showToast('✅ Checkbox marcado!', 'success', 2000);
+        } else {
+          showToast('❌ Erro ao marcar checkbox', 'error');
+        }
+      }
+    }
+
     function openNewMissionModal() {
       document.getElementById('new-mission-name').value = '';
       selectedMissionIcon = '🚔';
@@ -919,25 +1053,25 @@
       const missionId = 'mission_' + Date.now();
 
       showLoading(true);
-      try {
-        const result = await window.dataSdk.create({
-          type: 'mission',
-          module_id: missionId,
-          name: name.toUpperCase(),
-          icon: selectedMissionIcon,
-          created_at: new Date().toISOString()
-        });
-        
-        showLoading(false);
+      const result = await window.dataSdk.create({
+        type: 'mission',
+        module_id: missionId,
+        name: name.toUpperCase(),
+        icon: selectedMissionIcon,
+        created_at: new Date().toISOString()
+      });
+      
+      showLoading(false);
 
-        if (result.isOk) {
-          showToast(`✅ Missão "${name}" criada com sucesso!`, 'success');
-          closeNewMissionModal();
-        } else {
-          showToast('❌ Erro ao criar missão', 'error');
-        }
-      } catch (error) {
-        showLoading(false);
+      if (result.isOk) {
+        showToast(`✅ Missão "${name}" criada com sucesso!`, 'success');
+        closeNewMissionModal();
+        
+        // Aguarda um pouco para o banco atualizar e então ativa a nova missão
+        setTimeout(() => {
+          setModule(missionId);
+        }, 300);
+      } else {
         showToast('❌ Erro ao criar missão', 'error');
       }
     }
@@ -974,7 +1108,6 @@
 
       const disciplines = allData.filter(d => d.type === 'discipline' && d.module === mission.module_id);
       const contents = allData.filter(d => d.type === 'content' && d.module === mission.module_id);
-      const markers = allData.filter(d => d.type === 'study_marker' && d.module === mission.module_id);
 
       showLoading(true);
       
@@ -984,10 +1117,6 @@
       
       for (const discipline of disciplines) {
         await window.dataSdk.delete(discipline);
-      }
-      
-      for (const marker of markers) {
-        await window.dataSdk.delete(marker);
       }
       
       await window.dataSdk.delete(mission);
@@ -1016,49 +1145,53 @@
       let totalQuestions = 0;
       let totalCorrect = 0;
       
-      const studiedDates = new Set();
+      // Conta dias com marcação verde no calendário
+      const studyMarks = allData.filter(d => d.type === 'study_mark' && d.module === currentModule);
+      const totalStudyDays = studyMarks.length;
       
+      // Soma questões dos conteúdos
       contents.forEach(c => {
         if (c.study_done) {
           totalQuestions += c.study_questions || 0;
           totalCorrect += c.study_correct || 0;
-          
-          if (c.study_date) {
-            studiedDates.add(c.study_date);
-          }
         }
       });
       
-      allData.filter(d => d.type === 'study_marker' && d.module === currentModule).forEach(m => {
-        if (m.study_date) {
-          studiedDates.add(m.study_date);
-        }
-      });
-      
-      const totalStudyDays = studiedDates.size;
       const successRate = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
       const studyHours = totalStudyDays * 2;
       
       document.getElementById('success-rate').textContent = `${successRate}%`;
       document.getElementById('study-hours').textContent = `${studyHours}h`;
       
-      let rankEmoji = '🔴';
+      // NOVO SISTEMA DE RANKING
+      let rankEmoji = '🎖️';
       let rankText = 'RECRUTA';
       let rankColor = 'bg-gray-100 text-gray-700';
       
-      const rankScore = (successRate * 0.7) + (Math.min(totalStudyDays, 30) * 3.33 * 0.3);
+      // Critério 1: Dias de estudo (0-50 pontos)
+      const daysScore = Math.min(totalStudyDays * 2, 50);
       
-      if (rankScore >= 85) {
-        rankEmoji = '🔵';
+      // Critério 2: Taxa de acerto (0-50 pontos)
+      const successScore = totalQuestions > 0 ? (successRate * 0.5) : 0;
+      
+      // Pontuação total (0-100)
+      const rankScore = daysScore + successScore;
+      
+      if (rankScore >= 80) {
+        rankEmoji = '👑';
         rankText = 'COMANDANTE';
-        rankColor = 'bg-blue-100 text-blue-700';
-      } else if (rankScore >= 65) {
-        rankEmoji = '🟢';
+        rankColor = 'bg-purple-100 text-purple-700';
+      } else if (rankScore >= 60) {
+        rankEmoji = '⭐';
         rankText = 'INSPETOR';
-        rankColor = 'bg-green-100 text-green-700';
+        rankColor = 'bg-blue-100 text-blue-700';
       } else if (rankScore >= 40) {
-        rankEmoji = '🟡';
+        rankEmoji = '🏅';
         rankText = 'AGENTE';
+        rankColor = 'bg-green-100 text-green-700';
+      } else if (rankScore >= 20) {
+        rankEmoji = '🎯';
+        rankText = 'CADETE';
         rankColor = 'bg-yellow-100 text-yellow-700';
       }
       
@@ -1067,131 +1200,8 @@
       rankBadge.textContent = rankText;
       rankBadge.className = `px-3 py-1 rounded-full text-xs font-bold ${rankColor}`;
       
-      document.getElementById('next-mission').textContent = '-';
-    }
-
-    function renderCalendar() {
-      if (!currentModule) return;
-      
-      const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
-                          'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-      
-      // Atualizar cabeçalho do calendário
-      const header = document.getElementById('calendar-header');
-      header.innerHTML = `<div class="text-2xl font-heading font-bold text-gray-900">${monthNames[currentCalendarMonth]} ${currentCalendarYear}</div>`;
-      
-      // Coletar datas estudadas
-      const studiedDates = new Set();
-      allData.filter(d => d.type === 'content' && d.module === currentModule && d.study_done).forEach(c => {
-        if (c.study_date) {
-          studiedDates.add(c.study_date);
-        }
-      });
-      
-      allData.filter(d => d.type === 'study_marker' && d.module === currentModule).forEach(m => {
-        if (m.study_date) {
-          studiedDates.add(m.study_date);
-        }
-      });
-      
-      // Renderizar dias do mês
-      const today = new Date();
-      const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1);
-      const lastDay = new Date(currentCalendarYear, currentCalendarMonth + 1, 0);
-      const startDay = firstDay.getDay(); // Dia da semana do primeiro dia (0 = domingo)
-      const daysInMonth = lastDay.getDate();
-      
-      const grid = document.getElementById('calendar-grid');
-      let html = '';
-      
-      // Adicionar células vazias antes do primeiro dia do mês
-      for (let i = 0; i < startDay; i++) {
-        html += '<div class="w-12 h-12"></div>';
-      }
-      
-      // Adicionar os dias do mês
-      for (let day = 1; day <= daysInMonth; day++) {
-        const dateStr = `${currentCalendarYear}-${String(currentCalendarMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        
-        const isToday = today.getFullYear() === currentCalendarYear && 
-                        today.getMonth() === currentCalendarMonth && 
-                        today.getDate() === day;
-        
-        const isStudied = studiedDates.has(dateStr);
-        
-        let classes = 'calendar-day w-12 h-12 flex items-center justify-center rounded-lg text-sm font-semibold cursor-pointer';
-        
-        if (isStudied) {
-          classes += ' studied';
-        }
-        
-        if (isToday) {
-          classes += ' today';
-        }
-        
-        html += `<div class="${classes}" onclick="toggleStudyDay('${dateStr}')">${day}</div>`;
-      }
-      
-      grid.innerHTML = html;
-      
-      // Atualizar estatísticas do calendário
-      updateCalendarStats(studiedDates);
-    }
-    
-    function updateCalendarStats(studiedDates) {
-      // Filtrar apenas datas do mês atual
-      const datesInMonth = Array.from(studiedDates).filter(dateStr => {
-        const date = new Date(dateStr + 'T00:00:00');
-        return date.getMonth() === currentCalendarMonth && date.getFullYear() === currentCalendarYear;
-      });
-      
-      // Dias estudados no mês
-      const daysStudied = datesInMonth.length;
-      document.getElementById('calendar-days-studied').textContent = daysStudied;
-      
-      // Calcular sequência (streak) - dias consecutivos estudados
-      const today = new Date();
-      let streak = 0;
-      let checkDate = new Date(today);
-      
-      while (true) {
-        const dateStr = checkDate.toISOString().split('T')[0];
-        if (studiedDates.has(dateStr)) {
-          streak++;
-          checkDate.setDate(checkDate.getDate() - 1);
-        } else {
-          break;
-        }
-      }
-      
-      document.getElementById('calendar-streak').textContent = streak;
-      
-      // Percentual do mês (considerando meta de 20 dias por mês)
-      const goalDays = 20;
-      const percentage = Math.min(100, Math.round((daysStudied / goalDays) * 100));
-      document.getElementById('calendar-percentage').textContent = `${percentage}%`;
-    }
-
-    function changeCalendarMonth(delta) {
-      currentCalendarMonth += delta;
-      
-      if (currentCalendarMonth > 11) {
-        currentCalendarMonth = 0;
-        currentCalendarYear++;
-      } else if (currentCalendarMonth < 0) {
-        currentCalendarMonth = 11;
-        currentCalendarYear--;
-      }
-      
-      renderCalendar();
-    }
-    
-    function goToToday() {
-      const today = new Date();
-      currentCalendarMonth = today.getMonth();
-      currentCalendarYear = today.getFullYear();
-      renderCalendar();
-      showToast('📅 Voltando para o mês atual', 'info', 2000);
+      // Update pomodoro count
+      document.getElementById('pomodoro-count').textContent = pomodoroCyclesCompleted;
     }
 
     function renderContent() {
@@ -1366,12 +1376,14 @@
       if (module === 'pomodoro') {
         document.getElementById('pomodoro-screen').classList.remove('hidden');
         document.getElementById('pomodoro-screen').classList.add('flex');
-        document.querySelector('.flex.gap-6.overflow-hidden').classList.add('hidden');
+        document.querySelector('main > .flex-shrink-0').classList.add('hidden');
+        document.querySelector('main > .flex-1.bg-white').classList.add('hidden');
         updatePomodoroStats();
       } else {
         document.getElementById('pomodoro-screen').classList.add('hidden');
         document.getElementById('pomodoro-screen').classList.remove('flex');
-        document.querySelector('.flex.gap-6.overflow-hidden').classList.remove('hidden');
+        document.querySelector('main > .flex-shrink-0').classList.remove('hidden');
+        document.querySelector('main > .flex-1.bg-white').classList.remove('hidden');
         updateUI();
         
         const missionData = allData.find(d => d.type === 'mission' && d.module_id === module);
@@ -1509,34 +1521,8 @@
       document.getElementById('pomodoro-break-time').textContent = formatMinutesToHours(pomodoroTotalBreakTime);
       document.getElementById('pomodoro-total-time').textContent = formatMinutesToHours(pomodoroTotalFocusTime + pomodoroTotalBreakTime);
       
-      document.getElementById('stats-pomodoros').textContent = pomodoroCyclesCompleted;
-      
-      const contents = allData.filter(d => d.type === 'content');
-      const studiedDates = new Set();
-      contents.forEach(c => {
-        if (c.study_done && c.study_date) {
-          studiedDates.add(c.study_date);
-        }
-      });
-      allData.filter(d => d.type === 'study_marker').forEach(m => {
-        if (m.study_date) {
-          studiedDates.add(m.study_date);
-        }
-      });
-      
-      document.getElementById('stats-days').textContent = studiedDates.size;
-      
-      let totalQuestions = 0;
-      let totalCorrect = 0;
-      contents.forEach(c => {
-        if (c.study_done) {
-          totalQuestions += c.study_questions || 0;
-          totalCorrect += c.study_correct || 0;
-        }
-      });
-      
-      const successRate = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
-      document.getElementById('stats-success').textContent = `${successRate}%`;
+      // Update metric card
+      document.getElementById('pomodoro-count').textContent = pomodoroCyclesCompleted;
     }
 
     function formatMinutesToHours(minutes) {
@@ -1651,88 +1637,6 @@
       
       showToast(`✅ Tempo ajustado para ${minutes}:${String(seconds).padStart(2, '0')}`, 'success');
       closeTimeEditModal();
-    }
-
-    async function toggleStudyDay(dateStr) {
-      const existingStudy = allData.find(d => 
-        d.type === 'study_marker' && 
-        d.study_date === dateStr && 
-        d.module === currentModule
-      );
-
-      if (existingStudy) {
-        showLoading(true);
-        const result = await window.dataSdk.delete(existingStudy);
-        showLoading(false);
-        
-        if (result.isOk) {
-          showToast('❌ Marcação removida', 'info');
-        } else {
-          showToast('❌ Erro ao remover marcação', 'error');
-        }
-      } else {
-        if (allData.length >= 999) {
-          showToast('⚠️ Limite de 999 registros atingido', 'error');
-          return;
-        }
-
-        showLoading(true);
-        const result = await window.dataSdk.create({
-          type: 'study_marker',
-          study_date: dateStr,
-          module: currentModule,
-          created_at: new Date().toISOString()
-        });
-        showLoading(false);
-
-        if (result.isOk) {
-          const formattedDate = new Date(dateStr + 'T00:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
-          showToast(`✅ ${formattedDate} marcado como estudado!`, 'success');
-        } else {
-          showToast('❌ Erro ao marcar dia', 'error');
-        }
-      }
-    }
-
-    async function toggleStudyToday() {
-      const today = new Date().toISOString().split('T')[0];
-      const existingStudy = allData.find(d => 
-        d.type === 'study_marker' && 
-        d.study_date === today && 
-        d.module === currentModule
-      );
-
-      if (existingStudy) {
-        showLoading(true);
-        const result = await window.dataSdk.delete(existingStudy);
-        showLoading(false);
-        
-        if (result.isOk) {
-          showToast('❌ Marcação de hoje removida', 'info');
-        } else {
-          showToast('❌ Erro ao remover marcação', 'error');
-        }
-      } else {
-        if (allData.length >= 999) {
-          showToast('⚠️ Limite de 999 registros atingido', 'error');
-          return;
-        }
-
-        showLoading(true);
-        const result = await window.dataSdk.create({
-          type: 'study_marker',
-          study_date: today,
-          module: currentModule,
-          created_at: new Date().toISOString()
-        });
-        showLoading(false);
-
-        if (result.isOk) {
-          showToast('✅ Dia de hoje marcado como estudado!', 'success');
-        } else {
-          showToast('❌ Erro ao marcar dia', 'error');
-        }
-      }
     }
 
     async function savePomodoroSession() {
@@ -2175,6 +2079,8 @@
       }, duration);
     }
 
+
+
     // Inicializar
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', init);
@@ -2182,5 +2088,5 @@
       init();
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c041bbfc39d9326',t:'MTc2ODgwMjM5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c04669171fc0b0d',t:'MTc2ODgwNTQ1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
