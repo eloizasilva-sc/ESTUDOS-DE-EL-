@@ -510,7 +510,7 @@
      <div class="space-y-5">
       <div><label class="block text-sm text-gray-700 mb-2 font-semibold">Digite sua frase de motivação</label> <textarea id="phrase-input" rows="4" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-900 transition-all text-gray-900 text-lg" placeholder="Ex: A disciplina é a ponte entre metas e conquistas"></textarea>
       </div>
-      <div class="grid grid-cols-2 gap-3"><button onclick="setQuickPhrase('A disciplina é a ponte entre metas e conquistas')" class="p-3 bg-blue-50 hover:bg-blue-100 rounded-xl text-sm font-semibold text-blue-900 transition-all"> 💪 Disciplina </button> <button onclick="setQuickPhrase('Cada esforço me aproxima da aprovação')" class="p-3 bg-green-50 hover:bg-green-100 rounded-xl text-sm font-semibold text-green-900 transition-all"> 🎯 Esforço </button> <button onclick="setQuickPhrase('O sucesso é a soma de pequenos esforços repetidos')" class="p-3 bg-purple-50 hover:bg-purple-100 rounded-xl text-sm font-semibold text-purple-900 transition-all"> 🔥 Sucesso </button> <button onclick="setQuickPhrase('Foco, força e fé - minha aprovação está chegando!')" class="p-3 bg-orange-50 hover:bg-orange-100 rounded-xl text-sm font-semibold text-orange-900 transition-all"> ⚡ Foco </button>
+      <div class="grid grid-cols-2 gap-3"><button onclick="setQuickPhrase('A disciplina é a ponte entre metas e conquistas')" class="p-3 bg-blue-50 hover:bg-blue-100 rounded-xl text-sm font-semibold text-blue-900 transition-all"> 💪 Disciplina </button> <button onclick="setQuickPhrase('Cada esforço me aproxima da aprovação')" class="p-3 bg-green-50 hover:bg-green-100 rounded-xl text-sm font-semibold text-green-900 transition-all"> 🎯 Esforço </button> <button onclick="setQuickPhrase('O sucesso é a soma de pequenos esforços repetidos')" class="p-3 bg-purple-50 hover:bg-purple-100 rounded-xl text-sm font-semibold text-purple-900 transition-all"> 🔥 Sucesso </button> <button onclick="setQuickPhrase('Foco, força e f�� - minha aprovação está chegando!')" class="p-3 bg-orange-50 hover:bg-orange-100 rounded-xl text-sm font-semibold text-orange-900 transition-all"> ⚡ Foco </button>
       </div>
      </div>
      <div class="flex gap-4 mt-8"><button onclick="closePhraseModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button> <button onclick="savePomodoroPhrase()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">SALVAR</button>
@@ -555,7 +555,7 @@
    </div><!-- Method Modal -->
    <div id="method-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-8 w-full max-w-md scale-in">
-     <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6">📚 Métodos de Estudo</h3>
+     <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6">📚 M����todos de Estudo</h3>
      <div class="space-y-4"><label class="method-checkbox" id="method-aula-label"> <input type="checkbox" id="method-aula" class="rounded">
        <div>
         <div class="font-semibold text-gray-900">
@@ -709,7 +709,7 @@
 
     async function createDefaultMissions() {
       if (allData.length + 3 > 999) {
-        showToast('⚠️ Não foi possível criar missões padrão', 'error');
+        showToast('���️ Não foi poss��vel criar missões padrão', 'error');
         return;
       }
 
@@ -1015,6 +1015,11 @@
       updateMissionIconSelection();
       document.getElementById('new-mission-modal').classList.remove('hidden');
       document.getElementById('new-mission-modal').classList.add('flex');
+      
+      // Foca no campo de texto para facilitar digitação
+      setTimeout(() => {
+        document.getElementById('new-mission-name').focus();
+      }, 100);
     }
 
     function closeNewMissionModal() {
@@ -1045,12 +1050,23 @@
         return;
       }
 
+      // Valida se já existe uma missão com o mesmo nome
+      const existingMission = allData.find(d => 
+        d.type === 'mission' && 
+        d.name.toLowerCase() === name.toUpperCase().toLowerCase()
+      );
+      
+      if (existingMission) {
+        showToast('⚠️ Já existe uma missão com este nome!', 'error');
+        return;
+      }
+
       if (allData.length >= 999) {
         showToast('⚠️ Limite de 999 registros atingido', 'error');
         return;
       }
 
-      const missionId = 'mission_' + Date.now();
+      const missionId = 'mission_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
       showLoading(true);
       const result = await window.dataSdk.create({
@@ -1064,13 +1080,17 @@
       showLoading(false);
 
       if (result.isOk) {
-        showToast(`✅ Missão "${name}" criada com sucesso!`, 'success');
+        showToast(`✅ Missão "${name}" criada com sucesso!`, 'success', 3000);
         closeNewMissionModal();
         
         // Aguarda um pouco para o banco atualizar e então ativa a nova missão
         setTimeout(() => {
-          setModule(missionId);
-        }, 300);
+          const missions = allData.filter(d => d.type === 'mission');
+          const newMission = missions.find(m => m.module_id === missionId);
+          if (newMission) {
+            setModule(missionId);
+          }
+        }, 500);
       } else {
         showToast('❌ Erro ao criar missão', 'error');
       }
@@ -2088,5 +2108,5 @@
       init();
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c04669171fc0b0d',t:'MTc2ODgwNTQ1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c046ae731f968cd',t:'MTc2ODgwNTYzMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
