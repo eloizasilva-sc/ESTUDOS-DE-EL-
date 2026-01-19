@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Concursada 2026 - Dashboard Profissional</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <script src="/_sdk/data_sdk.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&amp;family=Open+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
     body {
@@ -171,6 +169,8 @@
     }
   </style>
   <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
  </head>
  <body class="h-full bg-gray-50">
   <div id="app" class="min-h-full w-full flex flex-col scrollbar-thin"><!-- Professional Header -->
@@ -215,7 +215,7 @@
          "A disciplina é a ponte entre metas e conquistas"
         </div><button onclick="editPomodoroPhrase()" class="text-sm text-blue-600 hover:text-blue-800 font-semibold underline"> ✏️ Editar Frase </button>
        </div><!-- Controls -->
-       <div class="flex gap-6 justify-center mb-10"><button onclick="startPomodoro()" id="pomodoro-start-btn" class="px-16 py-6 bg-green-600 text-white rounded-2xl text-3xl font-bold hover:bg-green-700 transition-all shadow-xl hover:scale-105"> ▶️ INICIAR </button> <button onclick="pausePomodoro()" id="pomodoro-pause-btn" class="hidden px-16 py-6 bg-yellow-500 text-white rounded-2xl text-3xl font-bold hover:bg-yellow-600 transition-all shadow-xl hover:scale-105"> ⏸️ PAUSAR </button> <button onclick="resetPomodoro()" class="px-16 py-6 bg-red-600 text-white rounded-2xl text-3xl font-bold hover:bg-red-700 transition-all shadow-xl hover:scale-105"> ����� RESETAR </button>
+       <div class="flex gap-6 justify-center mb-10"><button onclick="startPomodoro()" id="pomodoro-start-btn" class="px-16 py-6 bg-green-600 text-white rounded-2xl text-3xl font-bold hover:bg-green-700 transition-all shadow-xl hover:scale-105"> ▶️ INICIAR </button> <button onclick="pausePomodoro()" id="pomodoro-pause-btn" class="hidden px-16 py-6 bg-yellow-500 text-white rounded-2xl text-3xl font-bold hover:bg-yellow-600 transition-all shadow-xl hover:scale-105"> ⏸️ PAUSAR </button> <button onclick="resetPomodoro()" class="px-16 py-6 bg-red-600 text-white rounded-2xl text-3xl font-bold hover:bg-red-700 transition-all shadow-xl hover:scale-105"> 🔄 RESETAR </button>
        </div><!-- Stats Cards -->
        <div class="grid grid-cols-4 gap-6 max-w-4xl mx-auto mb-8">
         <div class="bg-white rounded-2xl p-6 card-shadow">
@@ -390,7 +390,7 @@
       <div class="flex-1 bg-white rounded-2xl card-shadow flex flex-col overflow-hidden slide-in">
        <div class="p-6 border-b border-gray-200">
         <div class="flex items-center justify-between">
-         <h2 class="text-2xl font-heading font-bold text-gray-900">�� Centro de Estudos</h2>
+         <h2 class="text-2xl font-heading font-bold text-gray-900">📚 Centro de Estudos</h2>
          <div class="flex gap-3"><button onclick="openDisciplineModal()" class="px-6 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all"> + DISCIPLINA </button>
          </div>
         </div>
@@ -411,7 +411,7 @@
       <div><label class="block text-sm text-gray-700 mb-2 font-semibold">Nome da Missão/Concurso</label> <input type="text" id="new-mission-name" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-900 transition-all text-gray-900" placeholder="Ex: PC-RN, TJ-RN, PF">
       </div>
       <div><label class="block text-sm text-gray-700 mb-3 font-semibold">Escolha um ícone</label>
-       <div class="grid grid-cols-5 gap-3"><button onclick="selectMissionIcon('🚔')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🚔">🚔</button> <button onclick="selectMissionIcon('⚖️')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="⚖️">⚖️</button> <button onclick="selectMissionIcon('🏛️')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🏛️">🏛️</button> <button onclick="selectMissionIcon('📚')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="📚">📚</button> <button onclick="selectMissionIcon('🎓')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🎓">🎓</button> <button onclick="selectMissionIcon('👮')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="👮">👮</button> <button onclick="selectMissionIcon('🔒')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🔒">🔒</button> <button onclick="selectMissionIcon('🏅')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="����">🏅</button> <button onclick="selectMissionIcon('🎯')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🎯">🎯</button> <button onclick="selectMissionIcon('📖')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="📖">📖</button>
+       <div class="grid grid-cols-5 gap-3"><button onclick="selectMissionIcon('🚔')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🚔">🚔</button> <button onclick="selectMissionIcon('⚖️')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="⚖️">⚖️</button> <button onclick="selectMissionIcon('🏛️')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🏛️">🏛️</button> <button onclick="selectMissionIcon('📚')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="📚">📚</button> <button onclick="selectMissionIcon('🎓')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🎓">🎓</button> <button onclick="selectMissionIcon('👮')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="👮">👮</button> <button onclick="selectMissionIcon('🔒')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🔒">🔒</button> <button onclick="selectMissionIcon('🏅')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🏅">🏅</button> <button onclick="selectMissionIcon('🎯')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🎯">🎯</button> <button onclick="selectMissionIcon('📖')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="📖">📖</button>
        </div>
       </div>
      </div>
@@ -510,7 +510,7 @@
      <div class="space-y-5">
       <div><label class="block text-sm text-gray-700 mb-2 font-semibold">Digite sua frase de motivação</label> <textarea id="phrase-input" rows="4" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-900 transition-all text-gray-900 text-lg" placeholder="Ex: A disciplina é a ponte entre metas e conquistas"></textarea>
       </div>
-      <div class="grid grid-cols-2 gap-3"><button onclick="setQuickPhrase('A disciplina é a ponte entre metas e conquistas')" class="p-3 bg-blue-50 hover:bg-blue-100 rounded-xl text-sm font-semibold text-blue-900 transition-all"> 💪 Disciplina </button> <button onclick="setQuickPhrase('Cada esforço me aproxima da aprovação')" class="p-3 bg-green-50 hover:bg-green-100 rounded-xl text-sm font-semibold text-green-900 transition-all"> 🎯 Esforço </button> <button onclick="setQuickPhrase('O sucesso é a soma de pequenos esforços repetidos')" class="p-3 bg-purple-50 hover:bg-purple-100 rounded-xl text-sm font-semibold text-purple-900 transition-all"> 🔥 Sucesso </button> <button onclick="setQuickPhrase('Foco, força e f�� - minha aprovação está chegando!')" class="p-3 bg-orange-50 hover:bg-orange-100 rounded-xl text-sm font-semibold text-orange-900 transition-all"> ⚡ Foco </button>
+      <div class="grid grid-cols-2 gap-3"><button onclick="setQuickPhrase('A disciplina é a ponte entre metas e conquistas')" class="p-3 bg-blue-50 hover:bg-blue-100 rounded-xl text-sm font-semibold text-blue-900 transition-all"> 💪 Disciplina </button> <button onclick="setQuickPhrase('Cada esforço me aproxima da aprovação')" class="p-3 bg-green-50 hover:bg-green-100 rounded-xl text-sm font-semibold text-green-900 transition-all"> 🎯 Esforço </button> <button onclick="setQuickPhrase('O sucesso é a soma de pequenos esforços repetidos')" class="p-3 bg-purple-50 hover:bg-purple-100 rounded-xl text-sm font-semibold text-purple-900 transition-all"> 🔥 Sucesso </button> <button onclick="setQuickPhrase('Foco, força e fé - minha aprovação está chegando!')" class="p-3 bg-orange-50 hover:bg-orange-100 rounded-xl text-sm font-semibold text-orange-900 transition-all"> ⚡ Foco </button>
       </div>
      </div>
      <div class="flex gap-4 mt-8"><button onclick="closePhraseModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button> <button onclick="savePomodoroPhrase()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">SALVAR</button>
@@ -555,7 +555,7 @@
    </div><!-- Method Modal -->
    <div id="method-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-8 w-full max-w-md scale-in">
-     <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6">📚 M����todos de Estudo</h3>
+     <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6">📚 Métodos de Estudo</h3>
      <div class="space-y-4"><label class="method-checkbox" id="method-aula-label"> <input type="checkbox" id="method-aula" class="rounded">
        <div>
         <div class="font-semibold text-gray-900">
@@ -608,7 +608,66 @@
    <div id="toast-container" class="fixed bottom-6 right-6 z-[100] space-y-3"></div>
   </div>
   <script>
-    // Global state
+    // ========================================
+    // SISTEMA DE ARMAZENAMENTO LOCAL
+    // ========================================
+    const STORAGE_KEY = 'concursada2026_data';
+
+    function saveToLocalStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
+      } catch (error) {
+        console.error('Erro ao salvar no LocalStorage:', error);
+        showToast('⚠️ Erro ao salvar dados', 'error');
+      }
+    }
+
+    function loadFromLocalStorage() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          allData = JSON.parse(stored);
+          console.log('✅ Dados carregados do LocalStorage:', allData.length, 'registros');
+        } else {
+          allData = [];
+          console.log('🆕 Iniciando com dados vazios');
+        }
+      } catch (error) {
+        console.error('Erro ao carregar do LocalStorage:', error);
+        allData = [];
+      }
+    }
+
+    function createRecord(record) {
+      if (!record.__backendId) {
+        record.__backendId = 'record_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      }
+      allData.push(record);
+      saveToLocalStorage();
+      updateUI();
+    }
+
+    function updateRecord(record) {
+      const index = allData.findIndex(r => r.__backendId === record.__backendId);
+      if (index !== -1) {
+        allData[index] = { ...allData[index], ...record };
+        saveToLocalStorage();
+        updateUI();
+      }
+    }
+
+    function deleteRecord(record) {
+      const index = allData.findIndex(r => r.__backendId === record.__backendId);
+      if (index !== -1) {
+        allData.splice(index, 1);
+        saveToLocalStorage();
+        updateUI();
+      }
+    }
+
+    // ========================================
+    // GLOBAL STATE
+    // ========================================
     let allData = [];
     let currentWeek = 1;
     let selectedColor = '#1e3a8a';
@@ -618,10 +677,9 @@
     let currentDisciplineId = null;
     let selectedMissionIcon = '🚔';
     let allMissions = [];
-    let sdkInitialized = false;
     
     // Calendar state
-    let currentCalendarMonth = 0; // 0 = January 2026
+    let currentCalendarMonth = 0;
     let currentCalendarYear = 2026;
     
     // Pomodoro state
@@ -636,65 +694,21 @@
     let audioContext = null;
     let alarmOscillator = null;
 
-    const defaultConfig = {
-      mission_title: 'CONCURSADA 2026',
-      motto: 'Rumo à Aprovação'
-    };
-
-    const dataHandler = {
-      onDataChanged(data) {
-        allData = data;
-        if (sdkInitialized) {
-          updateUI();
-        }
-      }
-    };
-
-    async function init() {
-      try {
-        // Inicializar Element SDK
-        if (window.elementSdk) {
-          await window.elementSdk.init({
-            defaultConfig,
-            onConfigChange: async (config) => {
-              const titleEl = document.getElementById('mission-title');
-              const mottoEl = document.getElementById('mission-motto');
-              if (titleEl) titleEl.textContent = config.mission_title || defaultConfig.mission_title;
-              if (mottoEl) mottoEl.textContent = '🎯 ' + (config.motto || defaultConfig.motto);
-            },
-            mapToCapabilities: () => ({
-              recolorables: [],
-              borderables: [],
-              fontEditable: undefined,
-              fontSizeable: undefined
-            }),
-            mapToEditPanelValues: (config) => new Map([
-              ['mission_title', config.mission_title || defaultConfig.mission_title],
-              ['motto', config.motto || defaultConfig.motto]
-            ])
-          });
-        }
-
-        // Inicializar Data SDK
-        if (window.dataSdk) {
-          const result = await window.dataSdk.init(dataHandler);
-          if (result.isOk) {
-            sdkInitialized = true;
-            loadMissions();
-          } else {
-            showToast('❌ Erro ao inicializar banco de dados', 'error');
-          }
-        }
-      } catch (error) {
-        console.error('Init error:', error);
-        showToast('❌ Erro ao inicializar aplicação', 'error');
-      }
+    // ========================================
+    // INICIALIZAÇÃO
+    // ========================================
+    function init() {
+      console.log('🚀 Iniciando aplicação...');
+      loadFromLocalStorage();
+      loadMissions();
     }
 
     function loadMissions() {
       allMissions = allData.filter(d => d.type === 'mission');
+      console.log('📋 Missões encontradas:', allMissions.length);
       
       if (allMissions.length === 0) {
+        console.log('✨ Criando missões padrão (PRF e TCE-RN)...');
         createDefaultMissions();
       } else {
         renderMissionTabs();
@@ -707,82 +721,49 @@
       }
     }
 
-    async function createDefaultMissions() {
-      if (allData.length + 3 > 999) {
-        showToast('���️ Não foi poss��vel criar missões padrão', 'error');
-        return;
-      }
-
-      showLoading(true);
+    function createDefaultMissions() {
+      const timestamp = Date.now();
       
-      await window.dataSdk.create({
-        type: 'mission',
-        module_id: 'prf',
-        name: 'MISSÃO PRF',
-        icon: '🚔',
-        created_at: new Date().toISOString()
-      });
+      const missions = [
+        {
+          type: 'mission',
+          module_id: 'prf',
+          name: 'MISSÃO PRF',
+          icon: '🚔',
+          created_at: new Date().toISOString(),
+          __backendId: 'mission_prf_' + timestamp
+        },
+        {
+          type: 'mission',
+          module_id: 'tce',
+          name: 'MISSÃO TCE-RN',
+          icon: '⚖️',
+          created_at: new Date().toISOString(),
+          __backendId: 'mission_tce_' + (timestamp + 1)
+        },
+        {
+          type: 'mission',
+          module_id: 'pomodoro',
+          name: 'POMODORO',
+          icon: '🍅',
+          created_at: new Date().toISOString(),
+          __backendId: 'mission_pomodoro_' + (timestamp + 2)
+        }
+      ];
 
-      await window.dataSdk.create({
-        type: 'mission',
-        module_id: 'tce',
-        name: 'MISSÃO TCE-RN',
-        icon: '⚖️',
-        created_at: new Date().toISOString()
-      });
-
-      await window.dataSdk.create({
-        type: 'mission',
-        module_id: 'pomodoro',
-        name: 'POMODORO',
-        icon: '🍅',
-        created_at: new Date().toISOString()
-      });
-
-      showLoading(false);
-    }
-
-    function renderMissionTabs() {
-      const container = document.getElementById('mission-tabs-container');
-      allMissions = allData.filter(d => d.type === 'mission');
-      
-      const pomodoroMission = allMissions.find(m => m.module_id === 'pomodoro');
-      const otherMissions = allMissions.filter(m => m.module_id !== 'pomodoro');
-      
-      let html = '';
-      
-      otherMissions.forEach(mission => {
-        const isActive = mission.module_id === currentModule;
-        const activeClasses = isActive ? 'bg-gray-900 text-white' : 'text-gray-600 hover:text-gray-900';
-        
-        html += `
-          <div class="relative group">
-            <button onclick="setModule('${mission.module_id}')" id="module-${mission.module_id}" class="tab-btn px-8 py-4 rounded-lg text-sm font-bold transition-all ${activeClasses}">
-              ${mission.icon} ${mission.name}
-            </button>
-            <button onclick="deleteMission('${mission.__backendId}')" class="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white rounded-full text-xs opacity-0 group-hover:opacity-100 transition-all hover:bg-red-700 flex items-center justify-center">
-              ×
-            </button>
-          </div>
-        `;
+      missions.forEach(mission => {
+        createRecord(mission);
       });
       
-      if (pomodoroMission) {
-        const isActive = currentModule === 'pomodoro';
-        const activeClasses = isActive ? 'active bg-gray-900 text-white' : 'text-gray-600 hover:text-gray-900';
-        
-        html += `
-          <button onclick="setModule('pomodoro')" id="module-pomodoro" class="tab-btn px-8 py-4 rounded-lg text-sm font-bold transition-all ${activeClasses}">
-            🍅 POMODORO
-          </button>
-        `;
-      }
+      console.log('✅ Missões PRF, TCE-RN e POMODORO criadas!');
+      showToast('✅ Bem-vinda! Missões PRF e TCE-RN criadas! 🚔⚖️', 'success', 4000);
       
-      container.innerHTML = html;
+      // Recarrega após criar
+      loadMissions();
     }
 
     function updateUI() {
-      if (!sdkInitialized || !currentModule) return;
+      if (!currentModule) return;
       
       renderMissionTabs();
       updateMetrics();
@@ -803,7 +784,7 @@
       const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1);
       const lastDay = new Date(currentCalendarYear, currentCalendarMonth + 1, 0);
       const daysInMonth = lastDay.getDate();
-      const startingDayOfWeek = firstDay.getDay(); // 0 = Sunday
+      const startingDayOfWeek = firstDay.getDay();
       
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -813,12 +794,10 @@
       
       let html = '';
       
-      // Empty cells before first day
       for (let i = 0; i < startingDayOfWeek; i++) {
         html += '<div class="aspect-square"></div>';
       }
       
-      // Days of month
       for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(currentCalendarYear, currentCalendarMonth, day);
         date.setHours(0, 0, 0, 0);
@@ -829,17 +808,8 @@
         
         const dateStr = `${currentCalendarYear}-${String(currentCalendarMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         
-        // Verifica se o dia foi marcado manualmente como estudado
         const hasStudyMark = allData.some(d => d.type === 'study_mark' && d.study_date === dateStr && d.module === currentModule);
-        
-        // Verifica se o dia pode ser clicado (não é futuro)
         const isFuture = date > today;
-        
-        // SISTEMA DE PRIORIDADE VISUAL:
-        // 1º - VERDE VIBRANTE (bg-green-500) = Dia marcado como estudado ��
-        // 2º - AZUL ESCURO (bg-blue-900) = Dia de hoje
-        // 3º - BRANCO = Dias passados normais
-        // 4º - CINZA CLARO = Dias futuros (desabilitados)
         
         let bgClass = 'bg-white hover:bg-blue-50';
         let textClass = 'text-gray-700 font-semibold';
@@ -847,26 +817,21 @@
         let extraClass = '';
         
         if (isFuture) {
-          // Dias futuros: cinza claro, desabilitado
           bgClass = 'bg-gray-100';
           textClass = 'text-gray-400';
           cursorClass = 'cursor-not-allowed';
         } else if (hasStudyMark) {
-          // PRIORIDADE 1: Dia estudado = VERDE VIBRANTE
           bgClass = 'bg-green-500 hover:bg-green-600';
           textClass = 'text-white font-black';
           extraClass = 'shadow-lg';
         } else if (isToday) {
-          // PRIORIDADE 2: Hoje = AZUL ESCURO
           bgClass = 'bg-blue-900 hover:bg-blue-800';
           textClass = 'text-white font-black';
           extraClass = 'ring-4 ring-blue-300';
         } else if (isSunday || isSaturday) {
-          // Final de semana tem texto vermelho
           textClass = 'text-red-500 font-semibold';
         }
         
-        // Verifica se o checkbox está marcado
         const hasCheckbox = allData.some(d => d.type === 'calendar_check' && d.check_date === dateStr && d.module === currentModule);
         
         html += `
@@ -912,19 +877,16 @@
       showToast('📅 Voltou para hoje!', 'info', 2000);
     }
 
-    async function selectCalendarDate(dateStr) {
-      // Cria objeto de data no meio-dia para evitar problemas de timezone
+    function selectCalendarDate(dateStr) {
       const clickedDate = new Date(dateStr + 'T12:00:00');
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       
-      // Não permite marcar dias futuros
       if (clickedDate > today) {
         showToast('⚠️ Não pode marcar dias futuros!', 'error', 2000);
         return;
       }
       
-      // Verifica se já existe uma marcação para este dia nesta missão
       const existingMark = allData.find(d => 
         d.type === 'study_mark' && 
         d.study_date === dateStr && 
@@ -932,11 +894,9 @@
       );
       
       if (existingMark) {
-        // DESMARCAR: Remove o dia estudado
         deleteRecord(existingMark);
         showToast('❌ Dia desmarcado! Clique novamente para marcar', 'info', 2500);
       } else {
-        // MARCAR: Adiciona o dia como estudado
         createRecord({
           type: 'study_mark',
           study_date: dateStr,
@@ -947,8 +907,7 @@
       }
     }
 
-    async function toggleCalendarCheck(dateStr) {
-      // Verifica se já existe um checkbox marcado para este dia
+    function toggleCalendarCheck(dateStr) {
       const existingCheck = allData.find(d => 
         d.type === 'calendar_check' && 
         d.check_date === dateStr && 
@@ -956,184 +915,88 @@
       );
       
       if (existingCheck) {
-        // DESMARCAR: Remove o checkbox
-        showLoading(true);
-        const result = await window.dataSdk.delete(existingCheck);
-        showLoading(false);
-        
-        if (result.isOk) {
-          showToast('☑️ Checkbox desmarcado!', 'info', 2000);
-        } else {
-          showToast('❌ Erro ao desmarcar checkbox', 'error');
-        }
+        deleteRecord(existingCheck);
+        showToast('☑️ Checkbox desmarcado!', 'info', 2000);
       } else {
-        // MARCAR: Adiciona o checkbox
-        if (allData.length >= 999) {
-          showToast('⚠️ Limite de 999 registros atingido!', 'error');
-          return;
-        }
-        
-        showLoading(true);
-        const result = await window.dataSdk.create({
+        createRecord({
           type: 'calendar_check',
           check_date: dateStr,
           module: currentModule,
           created_at: new Date().toISOString()
         });
-        showLoading(false);
+        showToast('✅ Checkbox marcado!', 'success', 2000);
+      }
+    }
+
+    function renderMissionTabs() {
+      const container = document.getElementById('mission-tabs-container');
+      allMissions = allData.filter(d => d.type === 'mission');
+      
+      const pomodoroMission = allMissions.find(m => m.module_id === 'pomodoro');
+      const otherMissions = allMissions.filter(m => m.module_id !== 'pomodoro');
+      
+      let html = '';
+      
+      otherMissions.forEach(mission => {
+        const isActive = mission.module_id === currentModule;
+        const activeClasses = isActive ? 'bg-gray-900 text-white' : 'text-gray-600 hover:text-gray-900';
         
-        if (result.isOk) {
-          showToast('✅ Checkbox marcado!', 'success', 2000);
-        } else {
-          showToast('❌ Erro ao marcar checkbox', 'error');
-        }
-      }
-    }
-
-    function openNewMissionModal() {
-      document.getElementById('new-mission-name').value = '';
-      selectedMissionIcon = '🚔';
-      updateMissionIconSelection();
-      document.getElementById('new-mission-modal').classList.remove('hidden');
-      document.getElementById('new-mission-modal').classList.add('flex');
-      
-      // Foca no campo de texto para facilitar digitação
-      setTimeout(() => {
-        document.getElementById('new-mission-name').focus();
-      }, 100);
-    }
-
-    function closeNewMissionModal() {
-      document.getElementById('new-mission-modal').classList.add('hidden');
-      document.getElementById('new-mission-modal').classList.remove('flex');
-    }
-
-    function selectMissionIcon(icon) {
-      selectedMissionIcon = icon;
-      updateMissionIconSelection();
-    }
-
-    function updateMissionIconSelection() {
-      document.querySelectorAll('.mission-icon-btn').forEach(btn => {
-        if (btn.dataset.icon === selectedMissionIcon) {
-          btn.classList.add('bg-blue-100', 'border-blue-900', 'scale-110');
-        } else {
-          btn.classList.remove('bg-blue-100', 'border-blue-900', 'scale-110');
-        }
-      });
-    }
-
-    async function saveNewMission() {
-      const name = document.getElementById('new-mission-name').value.trim();
-      
-      if (!name) {
-        showToast('⚠️ Digite o nome da missão', 'error');
-        return;
-      }
-
-      // Valida se já existe uma missão com o mesmo nome
-      const existingMission = allData.find(d => 
-        d.type === 'mission' && 
-        d.name.toLowerCase() === name.toUpperCase().toLowerCase()
-      );
-      
-      if (existingMission) {
-        showToast('⚠️ Já existe uma missão com este nome!', 'error');
-        return;
-      }
-
-      if (allData.length >= 999) {
-        showToast('⚠️ Limite de 999 registros atingido', 'error');
-        return;
-      }
-
-      const missionId = 'mission_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-
-      showLoading(true);
-      const result = await window.dataSdk.create({
-        type: 'mission',
-        module_id: missionId,
-        name: name.toUpperCase(),
-        icon: selectedMissionIcon,
-        created_at: new Date().toISOString()
-      });
-      
-      showLoading(false);
-
-      if (result.isOk) {
-        showToast(`✅ Missão "${name}" criada com sucesso!`, 'success', 3000);
-        closeNewMissionModal();
-        
-        // Aguarda um pouco para o banco atualizar e então ativa a nova missão
-        setTimeout(() => {
-          const missions = allData.filter(d => d.type === 'mission');
-          const newMission = missions.find(m => m.module_id === missionId);
-          if (newMission) {
-            setModule(missionId);
-          }
-        }, 500);
-      } else {
-        showToast('❌ Erro ao criar missão', 'error');
-      }
-    }
-
-    async function deleteMission(missionId) {
-      const mission = allData.find(d => d.__backendId === missionId);
-      if (!mission) return;
-
-      const tempConfirmBtn = document.createElement('div');
-      tempConfirmBtn.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4';
-      tempConfirmBtn.innerHTML = `
-        <div class="bg-white rounded-2xl p-8 max-w-md scale-in">
-          <h3 class="text-2xl font-heading font-bold text-gray-900 mb-4">⚠️ Excluir Missão?</h3>
-          <p class="text-gray-700 mb-2">Tem certeza que deseja excluir a missão <strong>"${mission.name}"</strong>?</p>
-          <p class="text-sm text-red-600 mb-6">⚠️ Todas as disciplinas e conteúdos desta missão serão perdidos!</p>
-          <div class="flex gap-4">
-            <button onclick="this.closest('.fixed').remove()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button>
-            <button onclick="confirmDeleteMission('${missionId}')" class="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition-all">EXCLUIR</button>
+        html += `
+          <div class="relative group">
+            <button onclick="setModule('${mission.module_id}')" id="module-${mission.module_id}" class="tab-btn px-8 py-4 rounded-lg text-sm font-bold transition-all ${activeClasses}">
+              ${mission.icon} ${mission.name}
+            </button>
+            <button onclick="deleteMission('${mission.__backendId}')" class="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white rounded-full text-xs opacity-0 group-hover:opacity-100 transition-all hover:bg-red-700 flex items-center justify-center">
+              ×
+            </button>
           </div>
-        </div>
-      `;
-      document.body.appendChild(tempConfirmBtn);
+        `;
+      });
+      
+      if (pomodoroMission) {
+        const isActive = currentModule === 'pomodoro';
+        const activeClasses = isActive ? 'active bg-gray-900 text-white' : 'text-gray-600 hover:text-gray-900';
+        
+        html += `
+          <button onclick="setModule('pomodoro')" id="module-pomodoro" class="tab-btn px-8 py-4 rounded-lg text-sm font-bold transition-all ${activeClasses}">
+            🍅 POMODORO
+          </button>
+        `;
+      }
+      
+      container.innerHTML = html;
     }
 
-    async function confirmDeleteMission(missionId) {
-      const mission = allData.find(d => d.__backendId === missionId);
-      if (!mission) return;
-
-      document.querySelectorAll('.fixed').forEach(el => {
-        if (el.innerHTML.includes('Excluir Missão?')) {
-          el.remove();
-        }
+    function setModule(module) {
+      currentModule = module;
+      
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-gray-900', 'text-white');
+        btn.classList.add('text-gray-600');
       });
-
-      const disciplines = allData.filter(d => d.type === 'discipline' && d.module === mission.module_id);
-      const contents = allData.filter(d => d.type === 'content' && d.module === mission.module_id);
-
-      showLoading(true);
       
-      for (const content of contents) {
-        await window.dataSdk.delete(content);
+      const activeBtn = document.getElementById(`module-${module}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-gray-900', 'text-white');
+        activeBtn.classList.remove('text-gray-600');
       }
       
-      for (const discipline of disciplines) {
-        await window.dataSdk.delete(discipline);
-      }
-      
-      await window.dataSdk.delete(mission);
-      
-      showLoading(false);
-
-      showToast(`✅ Missão "${mission.name}" excluída`, 'success');
-      
-      renderMissionTabs();
-      
-      if (currentModule === mission.module_id) {
-        const remainingMissions = allData.filter(d => d.type === 'mission' && d.__backendId !== missionId && d.module_id !== 'pomodoro');
-        if (remainingMissions.length > 0) {
-          setModule(remainingMissions[0].module_id);
-        } else {
-          setModule('pomodoro');
+      if (module === 'pomodoro') {
+        document.getElementById('pomodoro-screen').classList.remove('hidden');
+        document.getElementById('pomodoro-screen').classList.add('flex');
+        document.querySelector('main > .flex-shrink-0').classList.add('hidden');
+        document.querySelector('main > .flex-1.flex.gap-6').classList.add('hidden');
+        updatePomodoroStats();
+      } else {
+        document.getElementById('pomodoro-screen').classList.add('hidden');
+        document.getElementById('pomodoro-screen').classList.remove('flex');
+        document.querySelector('main > .flex-shrink-0').classList.remove('hidden');
+        document.querySelector('main > .flex-1.flex.gap-6').classList.remove('hidden');
+        updateUI();
+        
+        const missionData = allData.find(d => d.type === 'mission' && d.module_id === module);
+        if (missionData) {
+          showToast(`🎯 ${missionData.name} ativada!`, 'success', 2000);
         }
       }
     }
@@ -1146,11 +1009,9 @@
       let totalQuestions = 0;
       let totalCorrect = 0;
       
-      // Conta dias com marcação verde no calendário
       const studyMarks = allData.filter(d => d.type === 'study_mark' && d.module === currentModule);
       const totalStudyDays = studyMarks.length;
       
-      // Soma questões dos conteúdos
       contents.forEach(c => {
         if (c.study_done) {
           totalQuestions += c.study_questions || 0;
@@ -1164,18 +1025,12 @@
       document.getElementById('success-rate').textContent = `${successRate}%`;
       document.getElementById('study-hours').textContent = `${studyHours}h`;
       
-      // NOVO SISTEMA DE RANKING
       let rankEmoji = '🎖️';
       let rankText = 'RECRUTA';
       let rankColor = 'bg-gray-100 text-gray-700';
       
-      // Critério 1: Dias de estudo (0-50 pontos)
       const daysScore = Math.min(totalStudyDays * 2, 50);
-      
-      // Critério 2: Taxa de acerto (0-50 pontos)
       const successScore = totalQuestions > 0 ? (successRate * 0.5) : 0;
-      
-      // Pontuação total (0-100)
       const rankScore = daysScore + successScore;
       
       if (rankScore >= 80) {
@@ -1201,7 +1056,6 @@
       rankBadge.textContent = rankText;
       rankBadge.className = `px-3 py-1 rounded-full text-xs font-bold ${rankColor}`;
       
-      // Update pomodoro count
       document.getElementById('pomodoro-count').textContent = pomodoroCyclesCompleted;
     }
 
@@ -1360,41 +1214,7 @@
       }
     }
 
-    function setModule(module) {
-      currentModule = module;
-      
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active', 'bg-gray-900', 'text-white');
-        btn.classList.add('text-gray-600');
-      });
-      
-      const activeBtn = document.getElementById(`module-${module}`);
-      if (activeBtn) {
-        activeBtn.classList.add('active', 'bg-gray-900', 'text-white');
-        activeBtn.classList.remove('text-gray-600');
-      }
-      
-      if (module === 'pomodoro') {
-        document.getElementById('pomodoro-screen').classList.remove('hidden');
-        document.getElementById('pomodoro-screen').classList.add('flex');
-        document.querySelector('main > .flex-shrink-0').classList.add('hidden');
-        document.querySelector('main > .flex-1.bg-white').classList.add('hidden');
-        updatePomodoroStats();
-      } else {
-        document.getElementById('pomodoro-screen').classList.add('hidden');
-        document.getElementById('pomodoro-screen').classList.remove('flex');
-        document.querySelector('main > .flex-shrink-0').classList.remove('hidden');
-        document.querySelector('main > .flex-1.bg-white').classList.remove('hidden');
-        updateUI();
-        
-        const missionData = allData.find(d => d.type === 'mission' && d.module_id === module);
-        if (missionData) {
-          showToast(`🎯 ${missionData.name} ativada!`, 'success');
-        }
-      }
-    }
-
-    // Pomodoro Functions
+    // POMODORO
     function adjustTimer(minutes) {
       const newSeconds = Math.max(60, pomodoroSeconds + (minutes * 60));
       pomodoroSeconds = newSeconds;
@@ -1522,7 +1342,6 @@
       document.getElementById('pomodoro-break-time').textContent = formatMinutesToHours(pomodoroTotalBreakTime);
       document.getElementById('pomodoro-total-time').textContent = formatMinutesToHours(pomodoroTotalFocusTime + pomodoroTotalBreakTime);
       
-      // Update metric card
       document.getElementById('pomodoro-count').textContent = pomodoroCyclesCompleted;
     }
 
@@ -1640,15 +1459,10 @@
       closeTimeEditModal();
     }
 
-    async function savePomodoroSession() {
-      if (allData.length >= 999) {
-        showToast('⚠️ Limite de registros atingido', 'error');
-        return;
-      }
-
+    function savePomodoroSession() {
       const today = new Date().toISOString().split('T')[0];
       
-      const result = await window.dataSdk.create({
+      createRecord({
         type: 'pomodoro_session',
         session_date: today,
         cycles_completed: 1,
@@ -1657,9 +1471,123 @@
         total_time: parseInt(document.getElementById('pomodoro-focus-duration').value) || 25,
         created_at: new Date().toISOString()
       });
+    }
 
-      if (!result.isOk) {
-        console.log('Failed to save pomodoro session');
+    // MODALS
+    function openNewMissionModal() {
+      document.getElementById('new-mission-name').value = '';
+      selectedMissionIcon = '🚔';
+      updateMissionIconSelection();
+      document.getElementById('new-mission-modal').classList.remove('hidden');
+      document.getElementById('new-mission-modal').classList.add('flex');
+      
+      setTimeout(() => {
+        document.getElementById('new-mission-name').focus();
+      }, 100);
+    }
+
+    function closeNewMissionModal() {
+      document.getElementById('new-mission-modal').classList.add('hidden');
+      document.getElementById('new-mission-modal').classList.remove('flex');
+    }
+
+    function selectMissionIcon(icon) {
+      selectedMissionIcon = icon;
+      updateMissionIconSelection();
+    }
+
+    function updateMissionIconSelection() {
+      document.querySelectorAll('.mission-icon-btn').forEach(btn => {
+        if (btn.dataset.icon === selectedMissionIcon) {
+          btn.classList.add('bg-blue-100', 'border-blue-900', 'scale-110');
+        } else {
+          btn.classList.remove('bg-blue-100', 'border-blue-900', 'scale-110');
+        }
+      });
+    }
+
+    function saveNewMission() {
+      const name = document.getElementById('new-mission-name').value.trim();
+      
+      if (!name) {
+        showToast('⚠️ Digite o nome da missão', 'error');
+        return;
+      }
+
+      const existingMission = allData.find(d => 
+        d.type === 'mission' && 
+        d.name.toLowerCase() === name.toUpperCase().toLowerCase()
+      );
+      
+      if (existingMission) {
+        showToast('⚠️ Já existe uma missão com este nome!', 'error');
+        return;
+      }
+
+      const missionId = 'mission_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      createRecord({
+        type: 'mission',
+        module_id: missionId,
+        name: name.toUpperCase(),
+        icon: selectedMissionIcon,
+        created_at: new Date().toISOString()
+      });
+
+      showToast(`✅ Missão "${name}" criada com sucesso!`, 'success', 3000);
+      closeNewMissionModal();
+      
+      setTimeout(() => {
+        setModule(missionId);
+      }, 500);
+    }
+
+    function deleteMission(missionId) {
+      const mission = allData.find(d => d.__backendId === missionId);
+      if (!mission) return;
+
+      const tempConfirmBtn = document.createElement('div');
+      tempConfirmBtn.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4';
+      tempConfirmBtn.innerHTML = `
+        <div class="bg-white rounded-2xl p-8 max-w-md scale-in">
+          <h3 class="text-2xl font-heading font-bold text-gray-900 mb-4">⚠️ Excluir Missão?</h3>
+          <p class="text-gray-700 mb-2">Tem certeza que deseja excluir a missão <strong>"${mission.name}"</strong>?</p>
+          <p class="text-sm text-red-600 mb-6">⚠️ Todas as disciplinas e conteúdos desta missão serão perdidos!</p>
+          <div class="flex gap-4">
+            <button onclick="this.closest('.fixed').remove()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button>
+            <button onclick="confirmDeleteMission('${missionId}')" class="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition-all">EXCLUIR</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(tempConfirmBtn);
+    }
+
+    function confirmDeleteMission(missionId) {
+      const mission = allData.find(d => d.__backendId === missionId);
+      if (!mission) return;
+
+      document.querySelectorAll('.fixed').forEach(el => {
+        if (el.innerHTML.includes('Excluir Missão?')) {
+          el.remove();
+        }
+      });
+
+      const disciplines = allData.filter(d => d.type === 'discipline' && d.module === mission.module_id);
+      const contents = allData.filter(d => d.type === 'content' && d.module === mission.module_id);
+
+      contents.forEach(content => deleteRecord(content));
+      disciplines.forEach(discipline => deleteRecord(discipline));
+      deleteRecord(mission);
+
+      showToast(`✅ Missão "${mission.name}" excluída`, 'success');
+      
+      if (currentModule === mission.module_id) {
+        const remainingMissions = allData.filter(d => d.type === 'mission' && d.__backendId !== missionId && d.module_id !== 'pomodoro');
+        if (remainingMissions.length > 0) {
+          setModule(remainingMissions[0].module_id);
+        } else {
+          setModule('pomodoro');
+        }
       }
     }
 
@@ -1691,7 +1619,7 @@
       });
     }
 
-    async function saveDiscipline() {
+    function saveDiscipline() {
       const name = document.getElementById('discipline-name').value.trim();
       const copyToOther = document.getElementById('copy-to-other-mission').checked;
       
@@ -1700,44 +1628,29 @@
         return;
       }
 
-      const otherMissions = allData.filter(d => d.type === 'mission' && d.module_id !== 'pomodoro');
-      const recordsNeeded = copyToOther ? otherMissions.length : 1;
-      
-      if (allData.length + recordsNeeded > 999) {
-        showToast('⚠️ Limite de 999 registros atingido', 'error');
-        return;
-      }
-
-      showLoading(true);
-      
       if (copyToOther) {
-        for (const mission of otherMissions) {
-          await window.dataSdk.create({
+        const otherMissions = allData.filter(d => d.type === 'mission' && d.module_id !== 'pomodoro');
+        otherMissions.forEach(mission => {
+          createRecord({
             type: 'discipline',
             name: name,
             color: selectedColor,
             module: mission.module_id,
             created_at: new Date().toISOString()
           });
-        }
+        });
         showToast(`✅ Disciplina criada em todas as missões!`, 'success');
       } else {
-        const result = await window.dataSdk.create({
+        createRecord({
           type: 'discipline',
           name: name,
           color: selectedColor,
           module: currentModule,
           created_at: new Date().toISOString()
         });
-        
-        if (result.isOk) {
-          showToast('✅ Disciplina criada com sucesso!', 'success');
-        } else {
-          showToast('❌ Erro ao criar disciplina', 'error');
-        }
+        showToast('✅ Disciplina criada com sucesso!', 'success');
       }
       
-      showLoading(false);
       closeDisciplineModal();
     }
 
@@ -1801,7 +1714,7 @@
       currentDisciplineId = null;
     }
 
-    async function saveContent() {
+    function saveContent() {
       const name = document.getElementById('content-name').value.trim();
       const date = document.getElementById('content-date').value;
 
@@ -1815,11 +1728,6 @@
         return;
       }
 
-      if (allData.length >= 999) {
-        showToast('⚠️ Limite de 999 registros atingido', 'error');
-        return;
-      }
-
       const aula = document.getElementById('content-method-aula').checked;
       const pdf = document.getElementById('content-method-pdf').checked;
       const lei = document.getElementById('content-method-lei').checked;
@@ -1827,8 +1735,7 @@
       const questions = hasQuestions ? parseInt(document.getElementById('content-questions-total').value) || 0 : 0;
       const correct = hasQuestions ? parseInt(document.getElementById('content-questions-correct').value) || 0 : 0;
 
-      showLoading(true);
-      const result = await window.dataSdk.create({
+      createRecord({
         type: 'content',
         content: name,
         date: date,
@@ -1857,14 +1764,9 @@
         rev30_correct: 0,
         created_at: new Date().toISOString()
       });
-      showLoading(false);
 
-      if (result.isOk) {
-        showToast('✅ Conteúdo adicionado com sucesso!', 'success');
-        closeContentModal();
-      } else {
-        showToast('❌ Erro ao adicionar conteúdo', 'error');
-      }
+      showToast('✅ Conteúdo adicionado com sucesso!', 'success');
+      closeContentModal();
     }
 
     function openMethodModal(contentId) {
@@ -1926,7 +1828,7 @@
       });
     }
 
-    async function saveMethod() {
+    function saveMethod() {
       if (!currentMethodContentId) return;
       
       const content = allData.find(c => c.__backendId === currentMethodContentId);
@@ -1939,8 +1841,7 @@
       const questions = hasQuestions ? parseInt(document.getElementById('method-questions-total').value) || 0 : 0;
       const correct = hasQuestions ? parseInt(document.getElementById('method-questions-correct').value) || 0 : 0;
       
-      showLoading(true);
-      const result = await window.dataSdk.update({
+      updateRecord({
         ...content,
         study_aula: aula,
         study_pdf: pdf,
@@ -1949,17 +1850,12 @@
         study_correct: correct,
         study_done: aula || pdf || lei || hasQuestions
       });
-      showLoading(false);
       
-      if (result.isOk) {
-        showToast('✅ Métodos atualizados!', 'success');
-        closeMethodModal();
-      } else {
-        showToast('❌ Erro ao atualizar', 'error');
-      }
+      showToast('✅ Métodos atualizados!', 'success');
+      closeMethodModal();
     }
 
-    async function updateContentField(id, field, value) {
+    function updateContentField(id, field, value) {
       const content = allData.find(c => c.__backendId === id);
       if (!content) return;
 
@@ -1968,46 +1864,27 @@
         parsedValue = parseInt(value) || 0;
       }
 
-      const result = await window.dataSdk.update({ ...content, [field]: parsedValue });
-      if (!result.isOk) {
-        showToast('❌ Erro ao atualizar', 'error');
-      }
+      updateRecord({ ...content, [field]: parsedValue });
     }
 
-    async function deleteContent(id) {
+    function deleteContent(id) {
       const content = allData.find(c => c.__backendId === id);
       if (!content) return;
 
-      showLoading(true);
-      const result = await window.dataSdk.delete(content);
-      showLoading(false);
-
-      if (result.isOk) {
-        showToast('✅ Conteúdo excluído', 'success');
-      } else {
-        showToast('❌ Erro ao excluir', 'error');
-      }
+      deleteRecord(content);
+      showToast('✅ Conteúdo excluído', 'success');
     }
 
-    async function deleteDiscipline(id) {
+    function deleteDiscipline(id) {
       const discipline = allData.find(d => d.__backendId === id);
       if (!discipline) return;
 
       const contents = allData.filter(c => c.type === 'content' && c.discipline_id === id);
       
-      showLoading(true);
-      for (const content of contents) {
-        await window.dataSdk.delete(content);
-      }
-      
-      const result = await window.dataSdk.delete(discipline);
-      showLoading(false);
+      contents.forEach(content => deleteRecord(content));
+      deleteRecord(discipline);
 
-      if (result.isOk) {
-        showToast('✅ Disciplina excluída', 'success');
-      } else {
-        showToast('❌ Erro ao excluir', 'error');
-      }
+      showToast('✅ Disciplina excluída', 'success');
     }
 
     function showLoading(show) {
@@ -2023,9 +1900,8 @@
     }
 
     function openHeaderEditModal() {
-      const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
-      document.getElementById('header-title-input').value = config.mission_title || defaultConfig.mission_title;
-      document.getElementById('header-motto-input').value = config.motto || defaultConfig.motto;
+      document.getElementById('header-title-input').value = document.getElementById('mission-title').textContent;
+      document.getElementById('header-motto-input').value = document.getElementById('mission-motto').textContent.replace('🎯 ', '');
       
       document.getElementById('header-edit-modal').classList.remove('hidden');
       document.getElementById('header-edit-modal').classList.add('flex');
@@ -2036,20 +1912,13 @@
       document.getElementById('header-edit-modal').classList.remove('flex');
     }
 
-    async function saveHeaderEdit() {
+    function saveHeaderEdit() {
       const newTitle = document.getElementById('header-title-input').value.trim();
       const newMotto = document.getElementById('header-motto-input').value.trim();
       
       if (!newTitle) {
         showToast('⚠️ Digite um título', 'error');
         return;
-      }
-      
-      if (window.elementSdk) {
-        await window.elementSdk.setConfig({
-          mission_title: newTitle,
-          motto: newMotto
-        });
       }
       
       document.getElementById('mission-title').textContent = newTitle;
@@ -2080,14 +1949,12 @@
       }, duration);
     }
 
-
-
-    // Inicializar
+    // INICIALIZAR
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', init);
     } else {
       init();
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c04766104ccb8fb',t:'MTc2ODgwNjEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c04811943c628f8',t:'MTc2ODgwNjU0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
