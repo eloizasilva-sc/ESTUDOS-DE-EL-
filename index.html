@@ -28,7 +28,9 @@
     .card-shadow { box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: all 0.3s ease; }
     .card-shadow:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
 
+    .gold-gradient { background: linear-gradient(135deg, #D4AF37 0%, #F4E4A6 50%, #D4AF37 100%); }
     .navy-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); }
+    .success-gradient { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
 
     input[type="checkbox"] { width: 20px; height: 20px; accent-color: #1e3a8a; cursor: pointer; transition: all 0.2s ease; }
     input[type="checkbox"]:hover { transform: scale(1.15); }
@@ -39,6 +41,10 @@
     .tab-btn { transition: all 0.3s ease; position: relative; }
     .tab-btn::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: linear-gradient(90deg, #D4AF37 0%, #F4E4A6 100%); transition: width 0.3s ease; }
     .tab-btn.active::after { width: 100%; }
+
+    .pomodoro-timer { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); border-radius: 20px; padding: 32px; color: white; box-shadow: 0 8px 24px rgba(30,58,138,0.3); }
+
+    .shield-icon { filter: drop-shadow(0 4px 6px rgba(212,175,55,0.3)); }
 
     .method-checkbox {
       display: flex; align-items: center; gap: 12px; padding: 12px 16px;
@@ -52,36 +58,54 @@
     .revision-cell { cursor: pointer; transition: all 0.2s ease; }
     .revision-cell:hover { transform: scale(1.05); }
 
+    /* Folder Modal (Conteúdo como "pasta") */
     .folder-tab { transition: all 0.2s ease; }
     .folder-tab.active { background: #111827; color: #fff; }
     .folder-item-row:hover { background: #f8fafc; }
     .soft-ring:focus { outline: none; box-shadow: 0 0 0 4px rgba(30,58,138,0.18); border-color: #1e3a8a; }
-
-    .mini-badge {
-      display:inline-flex; align-items:center; gap:.35rem;
-      padding:.15rem .5rem; border-radius:999px;
-      font-weight:800; font-size:11px;
-      background:#eef2ff; color:#3730a3;
-    }
   </style>
 </head>
 
 <body class="h-full bg-gray-50">
   <div id="app" class="min-h-full w-full flex flex-col scrollbar-thin">
 
+    <!-- Header -->
     <header class="flex-shrink-0 bg-white border-b-2 border-gray-200 px-8 py-6 fade-in">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-6">
+          <div class="relative shield-icon">
+            <svg class="w-20 h-20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 5 L10 20 L10 45 C10 70 50 95 50 95 C50 95 90 70 90 45 L90 20 Z" fill="#1e3a8a" stroke="#D4AF37" stroke-width="3" />
+              <line x1="45" y1="30" x2="45" y2="70" stroke="white" stroke-width="2" />
+              <line x1="55" y1="30" x2="55" y2="70" stroke="white" stroke-width="2" />
+              <line x1="40" y1="40" x2="40" y2="50" stroke="#D4AF37" stroke-width="2" />
+              <line x1="40" y1="60" x2="40" y2="70" stroke="#D4AF37" stroke-width="2" />
+              <line x1="60" y1="40" x2="60" y2="50" stroke="#D4AF37" stroke-width="2" />
+              <line x1="60" y1="60" x2="60" y2="70" stroke="#D4AF37" stroke-width="2" />
+              <circle cx="50" cy="35" r="3" fill="#D4AF37" />
+              <line x1="50" y1="35" x2="50" y2="45" stroke="#D4AF37" stroke-width="2" />
+              <line x1="40" y1="45" x2="60" y2="45" stroke="#D4AF37" stroke-width="2" />
+              <path d="M38 45 L35 50 L41 50 Z" fill="#D4AF37" />
+              <path d="M62 45 L59 50 L65 50 Z" fill="#D4AF37" />
+            </svg>
+          </div>
+
           <div class="flex-1">
             <h1 id="mission-title" class="text-4xl font-heading font-black text-gray-900 tracking-tight">CONCURSADA 2026</h1>
             <p id="mission-motto" class="text-base text-gray-600 font-semibold mt-1">🎯 Rumo à Aprovação</p>
           </div>
+
+          <button onclick="openHeaderEditModal()" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-bold text-gray-700 transition-all flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+            EDITAR
+          </button>
         </div>
 
         <div class="flex gap-3 bg-gray-100 rounded-xl p-2 flex-wrap">
           <div id="mission-tabs-container" class="flex gap-3 flex-wrap"></div>
           <button onclick="openNewMissionModal()" class="px-6 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg text-sm font-bold transition-all hover:opacity-90 shadow-md flex items-center gap-2">
-            + NOVA MISSÃO
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+            NOVA MISSÃO
           </button>
         </div>
       </div>
@@ -90,26 +114,124 @@
     <div class="flex-1 flex flex-col overflow-hidden">
       <main class="flex-1 flex flex-col overflow-hidden p-8">
 
+        <!-- Pomodoro Full Screen -->
+        <div id="pomodoro-screen" class="hidden flex-1 flex items-center justify-center p-8">
+          <div class="text-center max-w-6xl w-full">
+            <div class="mb-10">
+              <div id="pomodoro-display" class="text-[180px] font-heading font-black text-gray-900 leading-none mb-6" style="text-shadow: 0 4px 20px rgba(0,0,0,0.1)">25:00</div>
+              <div id="pomodoro-phase" class="text-4xl font-bold text-gray-600 mb-6">🍅 FOCO TOTAL</div>
+
+              <div class="flex items-center justify-center gap-3 mb-6">
+                <button onclick="adjustTimer(-5)" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-bold text-gray-700 transition-all text-lg">-5 min</button>
+                <button onclick="adjustTimer(-1)" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-bold text-gray-700 transition-all text-lg">-1 min</button>
+                <button onclick="editPomodoroTime()" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-all text-lg shadow-lg">⚙️ AJUSTAR TEMPO</button>
+                <button onclick="adjustTimer(1)" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-bold text-gray-700 transition-all text-lg">+1 min</button>
+                <button onclick="adjustTimer(5)" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-bold text-gray-700 transition-all text-lg">+5 min</button>
+              </div>
+            </div>
+
+            <div class="mb-10">
+              <div id="pomodoro-phrase-display" class="text-3xl font-semibold text-blue-900 italic mb-3 cursor-pointer hover:bg-blue-50 p-4 rounded-xl transition-all" onclick="editPomodoroPhrase()">
+                "A disciplina é a ponte entre metas e conquistas"
+              </div>
+              <button onclick="editPomodoroPhrase()" class="text-sm text-blue-600 hover:text-blue-800 font-semibold underline">✏️ Editar Frase</button>
+            </div>
+
+            <div class="flex gap-6 justify-center mb-10">
+              <button onclick="startPomodoro()" id="pomodoro-start-btn" class="px-16 py-6 bg-green-600 text-white rounded-2xl text-3xl font-bold hover:bg-green-700 transition-all shadow-xl hover:scale-105">▶️ INICIAR</button>
+              <button onclick="pausePomodoro()" id="pomodoro-pause-btn" class="hidden px-16 py-6 bg-yellow-500 text-white rounded-2xl text-3xl font-bold hover:bg-yellow-600 transition-all shadow-xl hover:scale-105">⏸️ PAUSAR</button>
+              <button onclick="resetPomodoro()" class="px-16 py-6 bg-red-600 text-white rounded-2xl text-3xl font-bold hover:bg-red-700 transition-all shadow-xl hover:scale-105">🔄 RESETAR</button>
+            </div>
+
+            <div class="grid grid-cols-4 gap-6 max-w-4xl mx-auto mb-8">
+              <div class="bg-white rounded-2xl p-6 card-shadow">
+                <div class="text-5xl font-black text-blue-900 mb-2" id="pomodoro-cycles">0</div>
+                <div class="text-sm text-gray-600 font-semibold">🍅 Ciclos Hoje</div>
+              </div>
+              <div class="bg-white rounded-2xl p-6 card-shadow">
+                <div class="text-5xl font-black text-green-600 mb-2" id="pomodoro-focus-time">0h</div>
+                <div class="text-sm text-gray-600 font-semibold">🕐 Tempo Foco</div>
+              </div>
+              <div class="bg-white rounded-2xl p-6 card-shadow">
+                <div class="text-5xl font-black text-orange-500 mb-2" id="pomodoro-break-time">0h</div>
+                <div class="text-sm text-gray-600 font-semibold">☕ Pausas</div>
+              </div>
+              <div class="bg-white rounded-2xl p-6 card-shadow">
+                <div class="text-5xl font-black text-purple-600 mb-2" id="pomodoro-total-time">0h</div>
+                <div class="text-sm text-gray-600 font-semibold">📊 Total</div>
+              </div>
+            </div>
+
+            <div class="max-w-3xl mx-auto">
+              <button onclick="togglePomodoroSettings()" class="w-full p-4 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold text-gray-700 transition-all flex items-center justify-between">
+                <span>⚙️ Configurações Avançadas</span>
+                <svg id="settings-arrow" class="w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </button>
+
+              <div id="pomodoro-settings" class="hidden mt-4 p-6 bg-white rounded-2xl card-shadow">
+                <h4 class="text-lg font-bold text-gray-900 mb-6">⏲️ Duração dos Períodos</h4>
+                <div class="grid grid-cols-3 gap-6">
+                  <div>
+                    <label class="block text-sm text-gray-700 mb-3 font-semibold">🍅 Período de Foco</label>
+                    <input type="number" id="pomodoro-focus-duration" class="w-full px-4 py-4 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring text-gray-900 font-bold text-center text-xl" value="25" min="1" max="60">
+                    <span class="text-xs text-gray-500 mt-2 block">minutos</span>
+                  </div>
+                  <div>
+                    <label class="block text-sm text-gray-700 mb-3 font-semibold">☕ Pausa Curta</label>
+                    <input type="number" id="pomodoro-break-duration" class="w-full px-4 py-4 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring text-gray-900 font-bold text-center text-xl" value="5" min="1" max="30">
+                    <span class="text-xs text-gray-500 mt-2 block">minutos</span>
+                  </div>
+                  <div>
+                    <label class="block text-sm text-gray-700 mb-3 font-semibold">🎯 Pausa Longa</label>
+                    <input type="number" id="pomodoro-long-break" class="w-full px-4 py-4 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring text-gray-900 font-bold text-center text-xl" value="15" min="1" max="60">
+                    <span class="text-xs text-gray-500 mt-2 block">minutos</span>
+                  </div>
+                </div>
+                <div class="mt-6 p-4 bg-blue-50 rounded-xl">
+                  <p class="text-sm text-blue-900"><strong>💡 Dica:</strong> A pausa longa acontece automaticamente a cada 4 ciclos completos de foco.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Cards Grid -->
         <div class="flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div class="metric-card card-shadow scale-in">
+          <div class="metric-card card-shadow scale-in" style="animation-delay: 0.1s">
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-3xl">📊</div>
+              <div class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">ATIVO</div>
+            </div>
             <div class="text-gray-600 text-sm font-semibold mb-2">Taxa de Sucesso</div>
             <div id="success-rate" class="text-4xl font-heading font-black text-gray-900 mb-1">0%</div>
             <div class="text-xs text-gray-500">Acertos / Total</div>
           </div>
 
-          <div class="metric-card card-shadow scale-in">
+          <div class="metric-card card-shadow scale-in" style="animation-delay: 0.2s">
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-3xl">⏱️</div>
+              <div class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">TEMPO</div>
+            </div>
             <div class="text-gray-600 text-sm font-semibold mb-2">Horas de Estudo</div>
             <div id="study-hours" class="text-4xl font-heading font-black text-gray-900 mb-1">0h</div>
-            <div class="text-xs text-gray-500">Últimos 7 dias (tempo registrado)</div>
+            <div class="text-xs text-gray-500">Esta semana</div>
           </div>
 
-          <div class="metric-card card-shadow scale-in">
+          <div class="metric-card card-shadow scale-in" style="animation-delay: 0.3s">
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-3xl">🏆</div>
+              <div id="rank-badge" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-bold">RECRUTA</div>
+            </div>
             <div class="text-gray-600 text-sm font-semibold mb-2">Patente Atual</div>
             <div id="current-rank" class="text-4xl font-heading font-black text-gray-900 mb-1">🎖️</div>
-            <div class="text-xs text-gray-500">Dias verdes + % acertos + tempo</div>
+            <div class="text-xs text-gray-500">Dias verdes + % acertos</div>
           </div>
 
-          <div class="metric-card card-shadow scale-in">
+          <div class="metric-card card-shadow scale-in" style="animation-delay: 0.4s">
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-3xl">🍅</div>
+              <div class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold">TIMER</div>
+            </div>
             <div class="text-gray-600 text-sm font-semibold mb-2">Pomodoro</div>
             <div id="pomodoro-count" class="text-4xl font-heading font-black text-gray-900 mb-3">0</div>
             <button onclick="setModule('pomodoro')" class="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-bold hover:opacity-90 transition-all shadow-lg text-sm">
@@ -118,30 +240,48 @@
           </div>
         </div>
 
+        <!-- Main Content with Sidebar -->
         <div class="flex-1 flex gap-6 overflow-hidden">
+          <!-- Calendar Sidebar -->
           <div class="w-80 flex-shrink-0 bg-white rounded-2xl card-shadow flex flex-col overflow-hidden">
             <div class="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-900 to-blue-800 text-white">
               <div class="flex items-center justify-between mb-3">
-                <button onclick="changeCalendarMonth(-1)" class="p-2 hover:bg-white/20 rounded-lg transition-all">‹</button>
+                <button onclick="changeCalendarMonth(-1)" class="p-2 hover:bg-white/20 rounded-lg transition-all" aria-label="Mês anterior">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                </button>
+
                 <div class="flex flex-col items-center">
                   <h3 id="calendar-month-year" class="text-xl font-heading font-bold">Janeiro 2026</h3>
                   <div class="text-xs text-white/80 font-semibold" id="calendar-subtitle">Dias verdes: 0</div>
                 </div>
-                <button onclick="changeCalendarMonth(1)" class="p-2 hover:bg-white/20 rounded-lg transition-all">›</button>
+
+                <button onclick="changeCalendarMonth(1)" class="p-2 hover:bg-white/20 rounded-lg transition-all" aria-label="Próximo mês">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                </button>
               </div>
+
               <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold">
-                <div class="text-red-300">D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div class="text-red-300">S</div>
+                <div class="text-red-300">D</div>
+                <div>S</div>
+                <div>T</div>
+                <div>Q</div>
+                <div>Q</div>
+                <div>S</div>
+                <div class="text-red-300">S</div>
               </div>
             </div>
+
             <div class="flex-1 overflow-auto scrollbar-thin p-4">
               <div id="calendar-grid" class="grid grid-cols-7 gap-1"></div>
             </div>
+
             <div class="p-4 border-t border-gray-200 bg-gray-50 flex gap-3">
               <button onclick="goToToday()" class="flex-1 py-2 bg-blue-900 text-white rounded-lg font-bold hover:bg-blue-800 transition-all text-sm">📅 HOJE</button>
               <button onclick="quickToggleCalendarLegend()" class="px-4 py-2 bg-white border-2 border-gray-200 rounded-lg font-bold text-gray-700 hover:bg-gray-100 transition-all text-sm">ℹ️</button>
             </div>
           </div>
 
+          <!-- Main Data Table -->
           <div class="flex-1 bg-white rounded-2xl card-shadow flex flex-col overflow-hidden slide-in">
             <div class="p-6 border-b border-gray-200">
               <div class="flex items-center justify-between">
@@ -151,7 +291,7 @@
                 </div>
               </div>
               <div class="text-xs text-gray-500 mt-2">
-                Agora cada pasta tem um campo de tempo (min). Isso alimenta o painel e sincroniza se o conteúdo for sincronizado.
+                Dica: marque a disciplina como sincronizada para espelhar conteúdos, avaliações, revisões e o caderno de bizu entre missões.
               </div>
             </div>
 
@@ -161,8 +301,44 @@
       </main>
 
       <footer class="flex-shrink-0 bg-gray-900 text-white py-4 px-8 text-center">
-        <p class="text-sm font-semibold">Desenvolvido por <span class="text-yellow-400 font-bold">Eloiza Silva</span></p>
+        <p class="text-sm font-semibold">💛 Desenvolvido por <span class="text-yellow-400 font-bold">Eloiza Silva</span></p>
       </footer>
+    </div>
+
+    <!-- ===================== MODAIS ===================== -->
+
+    <!-- New Mission Modal -->
+    <div id="new-mission-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+      <div class="bg-white rounded-2xl p-8 w-full max-w-md scale-in">
+        <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6">🎯 Nova Missão</h3>
+        <div class="space-y-5">
+          <div>
+            <label class="block text-sm text-gray-700 mb-2 font-semibold">Nome da Missão/Concurso</label>
+            <input type="text" id="new-mission-name" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" placeholder="Ex: TJ-RN, PF, MP">
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-700 mb-3 font-semibold">Escolha um ícone</label>
+            <div class="grid grid-cols-5 gap-3">
+              <button onclick="selectMissionIcon('🚔')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🚔">🚔</button>
+              <button onclick="selectMissionIcon('⚖️')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="⚖️">⚖️</button>
+              <button onclick="selectMissionIcon('🏛️')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🏛️">🏛️</button>
+              <button onclick="selectMissionIcon('📚')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="📚">📚</button>
+              <button onclick="selectMissionIcon('🎓')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🎓">🎓</button>
+              <button onclick="selectMissionIcon('👮')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="👮">👮</button>
+              <button onclick="selectMissionIcon('🔒')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🔒">🔒</button>
+              <button onclick="selectMissionIcon('🏅')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🏅">🏅</button>
+              <button onclick="selectMissionIcon('🎯')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="🎯">🎯</button>
+              <button onclick="selectMissionIcon('📖')" class="mission-icon-btn p-3 text-3xl hover:bg-blue-100 rounded-xl transition-all border-2 border-transparent" data-icon="📖">📖</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-4 mt-8">
+          <button onclick="closeNewMissionModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button>
+          <button onclick="saveNewMission()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">CRIAR MISSÃO</button>
+        </div>
+      </div>
     </div>
 
     <!-- Discipline Modal -->
@@ -176,12 +352,26 @@
             <input type="text" id="discipline-name" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" placeholder="Ex: Direito Constitucional">
           </div>
 
+          <div>
+            <label class="block text-sm text-gray-700 mb-3 font-semibold">Escolha uma Cor</label>
+            <div class="flex gap-3 flex-wrap">
+              <button onclick="selectColor('#1e3a8a')" class="w-12 h-12 rounded-full bg-blue-900 color-btn hover:scale-110 transition-transform border-2 border-transparent" data-color="#1e3a8a"></button>
+              <button onclick="selectColor('#059669')" class="w-12 h-12 rounded-full bg-green-600 color-btn hover:scale-110 transition-transform border-2 border-transparent" data-color="#059669"></button>
+              <button onclick="selectColor('#dc2626')" class="w-12 h-12 rounded-full bg-red-600 color-btn hover:scale-110 transition-transform border-2 border-transparent" data-color="#dc2626"></button>
+              <button onclick="selectColor('#d97706')" class="w-12 h-12 rounded-full bg-amber-600 color-btn hover:scale-110 transition-transform border-2 border-transparent" data-color="#d97706"></button>
+              <button onclick="selectColor('#0891b2')" class="w-12 h-12 rounded-full bg-cyan-600 color-btn hover:scale-110 transition-transform border-2 border-transparent" data-color="#0891b2"></button>
+              <button onclick="selectColor('#7c3aed')" class="w-12 h-12 rounded-full bg-violet-600 color-btn hover:scale-110 transition-transform border-2 border-transparent" data-color="#7c3aed"></button>
+              <button onclick="selectColor('#db2777')" class="w-12 h-12 rounded-full bg-pink-600 color-btn hover:scale-110 transition-transform border-2 border-transparent" data-color="#db2777"></button>
+              <button onclick="selectColor('#65a30d')" class="w-12 h-12 rounded-full bg-lime-600 color-btn hover:scale-110 transition-transform border-2 border-transparent" data-color="#65a30d"></button>
+            </div>
+          </div>
+
           <div class="pt-4 border-t border-gray-200">
             <label class="flex items-center gap-3 cursor-pointer p-3 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all">
               <input type="checkbox" id="copy-to-other-mission" class="w-5 h-5 rounded accent-color-blue-900">
               <div>
                 <div class="text-sm font-bold text-gray-900">🔄 Sincronizar entre missões</div>
-                <div class="text-xs text-gray-600">Espelha conteúdos, avaliações e tempo</div>
+                <div class="text-xs text-gray-600">Cria e mantém espelhado nas outras missões (disciplina + conteúdos + avaliações + bizus)</div>
               </div>
             </label>
           </div>
@@ -198,8 +388,10 @@
     <div id="content-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
       <div class="bg-white rounded-2xl p-8 w-full max-w-2xl scale-in max-h-[90%] overflow-auto scrollbar-thin">
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-2xl font-heading font-bold text-gray-900">📝 Nova Pasta (Conteúdo)</h3>
-          <button onclick="closeContentModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-all" aria-label="Fechar">✕</button>
+          <h3 class="text-2xl font-heading font-bold text-gray-900">📝 Novo Conteúdo</h3>
+          <button onclick="closeContentModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-all" aria-label="Fechar">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
         </div>
 
         <div class="grid grid-cols-2 gap-5 mb-6">
@@ -213,38 +405,313 @@
             <input type="date" id="content-date" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900">
           </div>
 
-          <!-- NOVO CAMPO: TEMPO -->
-          <div>
-            <label class="block text-sm text-gray-700 mb-2 font-semibold">Tempo estudado (min)</label>
-            <input type="number" id="content-time-min" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" min="0" value="0" placeholder="Ex: 60">
+          <div class="flex items-end">
+            <div class="w-full p-3 bg-blue-50 rounded-xl">
+              <div class="text-xs text-blue-900 font-semibold">📁 Este conteúdo vira uma pasta com:</div>
+              <div class="text-xs text-blue-900">Itens internos + Caderno de Bizu</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-6 p-5 bg-gray-50 rounded-xl">
+          <h4 class="text-lg font-bold text-gray-900 mb-4">📚 Métodos de Estudo Utilizados</h4>
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <label class="method-checkbox" id="content-method-aula-label">
+              <input type="checkbox" id="content-method-aula" class="rounded">
+              <div>
+                <div class="font-semibold text-gray-900">📺 Videoaula</div>
+                <div class="text-xs text-gray-500">Assistiu aula sobre o tema</div>
+              </div>
+            </label>
+
+            <label class="method-checkbox" id="content-method-pdf-label">
+              <input type="checkbox" id="content-method-pdf" class="rounded">
+              <div>
+                <div class="font-semibold text-gray-900">📄 PDF/Resumo</div>
+                <div class="text-xs text-gray-500">Leu material em PDF</div>
+              </div>
+            </label>
+
+            <label class="method-checkbox" id="content-method-lei-label">
+              <input type="checkbox" id="content-method-lei" class="rounded">
+              <div>
+                <div class="font-semibold text-gray-900">⚖️ Lei Seca</div>
+                <div class="text-xs text-gray-500">Estudou legislação pura</div>
+              </div>
+            </label>
+
+            <label class="method-checkbox" id="content-method-quest-label">
+              <input type="checkbox" id="content-method-quest" class="rounded" onchange="toggleContentQuestionsFields()">
+              <div>
+                <div class="font-semibold text-gray-900">❓ Questões</div>
+                <div class="text-xs text-gray-500">Resolveu exercícios</div>
+              </div>
+            </label>
+          </div>
+
+          <div id="content-questions-fields" class="hidden grid grid-cols-2 gap-4 pt-4 border-t border-gray-300">
+            <div>
+              <label class="block text-sm text-gray-700 mb-2 font-semibold">Questões Respondidas</label>
+              <input type="number" id="content-questions-total" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" placeholder="0" min="0" value="0">
+            </div>
+            <div>
+              <label class="block text-sm text-gray-700 mb-2 font-semibold">Acertos</label>
+              <input type="number" id="content-questions-correct" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" placeholder="0" min="0" value="0">
+            </div>
           </div>
         </div>
 
         <div class="flex gap-4">
           <button onclick="closeContentModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button>
-          <button onclick="saveContent()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">💾 SALVAR</button>
+          <button onclick="saveContent()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">💾 SALVAR E FECHAR</button>
         </div>
       </div>
     </div>
 
-    <!-- New Mission Modal (simplificado) -->
-    <div id="new-mission-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <!-- Revision Modal -->
+    <div id="revision-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
       <div class="bg-white rounded-2xl p-8 w-full max-w-md scale-in">
-        <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6">🎯 Nova Missão</h3>
+        <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6">📚 <span id="revision-modal-title">Revisão</span></h3>
         <div class="space-y-5">
           <div>
-            <label class="block text-sm text-gray-700 mb-2 font-semibold">Nome da Missão</label>
-            <input type="text" id="new-mission-name" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" placeholder="Ex: TJ-RN">
+            <label class="block text-sm text-gray-700 mb-2 font-semibold">Data da Revisão</label>
+            <input type="date" id="revision-date" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-700 mb-2 font-semibold">Questões Respondidas</label>
+            <input type="number" id="revision-questions-total" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" placeholder="0" min="0" value="0">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-700 mb-2 font-semibold">Acertos</label>
+            <input type="number" id="revision-questions-correct" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" placeholder="0" min="0" value="0">
           </div>
         </div>
         <div class="flex gap-4 mt-8">
-          <button onclick="closeNewMissionModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button>
-          <button onclick="saveNewMission()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">CRIAR</button>
+          <button onclick="closeRevisionModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button>
+          <button onclick="saveRevision()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">CONFIRMAR</button>
         </div>
       </div>
     </div>
 
+    <!-- Pomodoro Phrase Modal -->
+    <div id="phrase-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+      <div class="bg-white rounded-2xl p-8 w-full max-w-2xl scale-in">
+        <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6">✏️ Editar Frase Motivacional</h3>
+        <div class="space-y-5">
+          <div>
+            <label class="block text-sm text-gray-700 mb-2 font-semibold">Digite sua frase de motivação</label>
+            <textarea id="phrase-input" rows="4" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900 text-lg" placeholder="Ex: A disciplina é a ponte entre metas e conquistas"></textarea>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="setQuickPhrase('A disciplina é a ponte entre metas e conquistas')" class="p-3 bg-blue-50 hover:bg-blue-100 rounded-xl text-sm font-semibold text-blue-900 transition-all">💪 Disciplina</button>
+            <button onclick="setQuickPhrase('Cada esforço me aproxima da aprovação')" class="p-3 bg-green-50 hover:bg-green-100 rounded-xl text-sm font-semibold text-green-900 transition-all">🎯 Esforço</button>
+            <button onclick="setQuickPhrase('O sucesso é a soma de pequenos esforços repetidos')" class="p-3 bg-purple-50 hover:bg-purple-100 rounded-xl text-sm font-semibold text-purple-900 transition-all">🔥 Sucesso</button>
+            <button onclick="setQuickPhrase('Foco, força e fé. Minha aprovação está chegando.')" class="p-3 bg-orange-50 hover:bg-orange-100 rounded-xl text-sm font-semibold text-orange-900 transition-all">⚡ Foco</button>
+          </div>
+        </div>
+        <div class="flex gap-4 mt-8">
+          <button onclick="closePhraseModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button>
+          <button onclick="savePomodoroPhrase()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">SALVAR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header Edit Modal -->
+    <div id="header-edit-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+      <div class="bg-white rounded-2xl p-8 w-full max-w-md scale-in">
+        <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6">✏️ Editar Cabeçalho</h3>
+        <div class="space-y-5">
+          <div>
+            <label class="block text-sm text-gray-700 mb-2 font-semibold">Título</label>
+            <input type="text" id="header-title-input" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" placeholder="Ex: CONCURSADA 2026">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-700 mb-2 font-semibold">Lema</label>
+            <input type="text" id="header-motto-input" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" placeholder="Ex: Rumo à Aprovação">
+          </div>
+        </div>
+        <div class="flex gap-4 mt-8">
+          <button onclick="closeHeaderEditModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button>
+          <button onclick="saveHeaderEdit()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">SALVAR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pomodoro Time Edit Modal -->
+    <div id="time-edit-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+      <div class="bg-white rounded-2xl p-8 w-full max-w-md scale-in">
+        <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6">⏱️ Editar Cronômetro</h3>
+        <div class="space-y-5">
+          <div class="text-center mb-6">
+            <p class="text-sm text-gray-600 mb-2">Defina o tempo manualmente</p>
+            <div class="text-gray-500 text-xs">Isso pausa o cronômetro atual</div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm text-gray-700 mb-2 font-semibold">Minutos</label>
+              <input type="number" id="time-edit-minutes" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900 text-center font-bold text-2xl" placeholder="25" min="0" max="120" value="25">
+            </div>
+            <div>
+              <label class="block text-sm text-gray-700 mb-2 font-semibold">Segundos</label>
+              <input type="number" id="time-edit-seconds" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900 text-center font-bold text-2xl" placeholder="0" min="0" max="59" value="0">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 mt-4">
+            <button onclick="setQuickTime(25, 0)" class="p-3 bg-blue-50 hover:bg-blue-100 rounded-xl text-sm font-semibold text-blue-900 transition-all">25:00</button>
+            <button onclick="setQuickTime(15, 0)" class="p-3 bg-green-50 hover:bg-green-100 rounded-xl text-sm font-semibold text-green-900 transition-all">15:00</button>
+            <button onclick="setQuickTime(5, 0)" class="p-3 bg-orange-50 hover:bg-orange-100 rounded-xl text-sm font-semibold text-orange-900 transition-all">05:00</button>
+            <button onclick="setQuickTime(10, 0)" class="p-3 bg-purple-50 hover:bg-purple-100 rounded-xl text-sm font-semibold text-purple-900 transition-all">10:00</button>
+            <button onclick="setQuickTime(30, 0)" class="p-3 bg-red-50 hover:bg-red-100 rounded-xl text-sm font-semibold text-red-900 transition-all">30:00</button>
+            <button onclick="setQuickTime(1, 0)" class="p-3 bg-gray-50 hover:bg-gray-100 rounded-xl text-sm font-semibold text-gray-900 transition-all">01:00</button>
+          </div>
+        </div>
+
+        <div class="flex gap-4 mt-8">
+          <button onclick="closeTimeEditModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button>
+          <button onclick="savePomodoroTime()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">APLICAR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Method Modal -->
+    <div id="method-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+      <div class="bg-white rounded-2xl p-8 w-full max-w-md scale-in">
+        <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6">📚 Métodos de Estudo</h3>
+        <div class="space-y-4">
+          <label class="method-checkbox" id="method-aula-label">
+            <input type="checkbox" id="method-aula" class="rounded">
+            <div>
+              <div class="font-semibold text-gray-900">📺 Videoaula</div>
+              <div class="text-xs text-gray-500">Assistiu aula sobre o tema</div>
+            </div>
+          </label>
+
+          <label class="method-checkbox" id="method-pdf-label">
+            <input type="checkbox" id="method-pdf" class="rounded">
+            <div>
+              <div class="font-semibold text-gray-900">📄 PDF/Resumo</div>
+              <div class="text-xs text-gray-500">Leu material em PDF</div>
+            </div>
+          </label>
+
+          <label class="method-checkbox" id="method-lei-label">
+            <input type="checkbox" id="method-lei" class="rounded">
+            <div>
+              <div class="font-semibold text-gray-900">⚖️ Lei Seca</div>
+              <div class="text-xs text-gray-500">Estudou legislação pura</div>
+            </div>
+          </label>
+
+          <label class="method-checkbox" id="method-quest-label">
+            <input type="checkbox" id="method-quest" class="rounded" onchange="toggleQuestionsFields()">
+            <div>
+              <div class="font-semibold text-gray-900">❓ Questões</div>
+              <div class="text-xs text-gray-500">Resolveu exercícios</div>
+            </div>
+          </label>
+
+          <div id="questions-fields" class="hidden pl-8 pt-2 space-y-3">
+            <div>
+              <label class="block text-sm text-gray-700 mb-2 font-semibold">Questões Respondidas</label>
+              <input type="number" id="method-questions-total" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" placeholder="0" min="0">
+            </div>
+            <div>
+              <label class="block text-sm text-gray-700 mb-2 font-semibold">Acertos</label>
+              <input type="number" id="method-questions-correct" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" placeholder="0" min="0">
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-4 mt-8">
+          <button onclick="closeMethodModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700">CANCELAR</button>
+          <button onclick="saveMethod()" class="flex-1 py-3 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">CONFIRMAR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Folder Modal (Pasta + Caderno de Bizu) -->
+    <div id="folder-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+      <div class="bg-white rounded-2xl w-full max-w-4xl scale-in max-h-[92%] overflow-hidden flex flex-col">
+        <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+          <div>
+            <div class="text-xs text-gray-500 font-semibold" id="folder-modal-subtitle">Pasta</div>
+            <h3 class="text-2xl font-heading font-black text-gray-900" id="folder-modal-title">Conteúdo</h3>
+          </div>
+
+          <button onclick="closeFolderModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-all" aria-label="Fechar">
+            <svg class="w-7 h-7 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        <div class="px-6 pt-4">
+          <div class="flex gap-2 bg-gray-100 rounded-xl p-2 w-fit">
+            <button id="folder-tab-items" class="folder-tab active px-5 py-2 rounded-lg font-bold text-sm" onclick="setFolderTab('items')">📁 Itens</button>
+            <button id="folder-tab-bizu" class="folder-tab px-5 py-2 rounded-lg font-bold text-sm text-gray-700" onclick="setFolderTab('bizu')">📓 Bizu</button>
+          </div>
+        </div>
+
+        <!-- Items Tab -->
+        <div id="folder-panel-items" class="flex-1 overflow-auto scrollbar-thin p-6">
+          <div class="flex items-center gap-3 mb-5">
+            <input id="folder-new-item-title" type="text" class="flex-1 px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring font-semibold text-gray-900" placeholder="Novo item dentro desta pasta (ex: mapa mental, artigo, resumo, jurisprudência)">
+            <button onclick="addFolderItem()" class="px-5 py-3 bg-blue-900 hover:bg-blue-800 text-white rounded-xl font-bold transition-all">+ ADICIONAR</button>
+          </div>
+
+          <div class="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden">
+            <div class="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+              <div class="text-sm font-bold text-gray-900">Itens da Pasta</div>
+              <div class="text-xs text-gray-600 font-semibold" id="folder-items-count">0 itens</div>
+            </div>
+
+            <div id="folder-items-list" class="divide-y divide-gray-200"></div>
+          </div>
+
+          <div class="mt-5 p-4 bg-blue-50 rounded-xl text-sm text-blue-900">
+            Dica: você pode usar itens para organizar subassuntos, tarefas, resumos, jurisprudências e o que quiser. Se esta disciplina estiver sincronizada, os itens também são sincronizados.
+          </div>
+        </div>
+
+        <!-- Bizu Tab -->
+        <div id="folder-panel-bizu" class="hidden flex-1 overflow-auto scrollbar-thin p-6">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-bold text-gray-700 text-sm transition-all" onclick="bizuInsert('**', '**')">Negrito</button>
+            <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-bold text-gray-700 text-sm transition-all" onclick="bizuInsert('*', '*')">Itálico</button>
+            <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-bold text-gray-700 text-sm transition-all" onclick="bizuInsert('\n- ', '')">Lista</button>
+            <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-bold text-gray-700 text-sm transition-all" onclick="bizuInsert('\n> ', '')">Citação</button>
+            <button class="px-4 py-2 bg-green-100 hover:bg-green-200 rounded-lg font-bold text-green-800 text-sm transition-all" onclick="saveBizuNow()">Salvar</button>
+          </div>
+
+          <textarea id="folder-bizu-text" rows="14" class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-200 rounded-2xl soft-ring text-gray-900 font-semibold" placeholder="Escreva aqui seus bizus e pontos principais. Isto fica salvo dentro desta pasta e, se sincronizado, aparece nas outras missões também."></textarea>
+
+          <div class="mt-3 flex items-center justify-between text-xs text-gray-500 font-semibold">
+            <div id="folder-bizu-status">Pronto</div>
+            <div id="folder-bizu-count">0 caracteres</div>
+          </div>
+
+          <div class="mt-5 p-4 bg-purple-50 rounded-xl text-sm text-purple-900">
+            Sugestão de estrutura: conceito, pegadinhas, artigos-chave, exceções, jurisprudência, mapa mental em texto, perguntas que você errou e como não errar de novo.
+          </div>
+        </div>
+
+        <div class="p-5 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
+          <div class="text-xs text-gray-600 font-semibold" id="folder-sync-badge">Sincronização: não</div>
+          <button onclick="closeFolderModal()" class="px-5 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-bold text-gray-700 transition-all">FECHAR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[100] hidden items-center justify-center">
+      <div class="bg-white rounded-2xl p-6 shadow-2xl">
+        <div class="w-12 h-12 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto"></div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-[100] space-y-3"></div>
+
   </div>
 
 <script>
@@ -254,39 +721,109 @@
    STORAGE + STATE
 ========================================================= */
 const STORAGE_KEY = "concursada2026_data";
+const MIGRATION_KEY = "concursada2026_migrated_sync_v1";
+
 let allData = [];
+let currentWeek = 1;
+let selectedColor = "#1e3a8a";
 let currentModule = null;
+
 let currentDisciplineId = null;
+let currentMethodContentId = null;
+let currentRevisionContentId = null;
+let currentRevisionType = null;
+
+let selectedMissionIcon = "🚔";
+let allMissions = [];
 
 // Calendar
 let currentCalendarMonth = 0;
 let currentCalendarYear = 2026;
 let calendarMutationLock = false;
 
-// UI
+// Pomodoro
+let pomodoroInterval = null;
+let pomodoroSeconds = 0;
+let pomodoroRunning = false;
+let pomodoroPhase = "focus";
+let pomodoroCyclesCompleted = 0;
+let pomodoroTotalFocusTime = 0;
+let pomodoroTotalBreakTime = 0;
+let pomodoroPhrase = "A disciplina é a ponte entre metas e conquistas";
+let audioContext = null;
+
+// Folder modal (conteúdo como pasta)
+let currentFolderContentId = null;
+let folderTab = "items";
+let bizuDebounceTimer = null;
 let uiScheduled = false;
 
-function genId(prefix){ return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2,10)}`; }
-function normKey(s){ return (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase(); }
-
-function saveToLocalStorage(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(allData)); }
-function loadFromLocalStorage(){
-  try { allData = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
-  catch { allData = []; }
+/* =========================================================
+   UTIL
+========================================================= */
+function genId(prefix) {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
-function scheduleUI(){
+
+function normKey(s) {
+  return (s || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+function safeISODate(d = new Date()) {
+  const x = new Date(d);
+  const tzOff = x.getTimezoneOffset() * 60000;
+  return new Date(x.getTime() - tzOff).toISOString().slice(0, 10);
+}
+
+/* =========================================================
+   LOCAL STORAGE
+========================================================= */
+function saveToLocalStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
+  } catch (error) {
+    console.error("Erro ao salvar no LocalStorage:", error);
+    showToast("⚠️ Erro ao salvar dados", "error");
+  }
+}
+
+function loadFromLocalStorage() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      allData = Array.isArray(parsed) ? parsed : [];
+    } else {
+      allData = [];
+    }
+  } catch (error) {
+    console.error("Erro ao carregar do LocalStorage:", error);
+    allData = [];
+  }
+}
+
+function scheduleUI() {
   if (uiScheduled) return;
   uiScheduled = true;
-  requestAnimationFrame(() => { uiScheduled = false; updateUI(); });
+  requestAnimationFrame(() => {
+    uiScheduled = false;
+    updateUI();
+  });
 }
-function createRecord(record){
-  if(!record.__backendId) record.__backendId = genId("record");
+
+function createRecord(record) {
+  if (!record.__backendId) record.__backendId = genId("record");
   allData.push(record);
   saveToLocalStorage();
   scheduleUI();
   return record;
 }
-function updateRecord(record){
+
+function updateRecord(record) {
   const idx = allData.findIndex(r => r.__backendId === record.__backendId);
   if (idx !== -1) {
     allData[idx] = { ...allData[idx], ...record };
@@ -294,7 +831,8 @@ function updateRecord(record){
     scheduleUI();
   }
 }
-function deleteRecord(record){
+
+function deleteRecord(record) {
   const idx = allData.findIndex(r => r.__backendId === record.__backendId);
   if (idx !== -1) {
     allData.splice(idx, 1);
@@ -304,27 +842,303 @@ function deleteRecord(record){
 }
 
 /* =========================================================
+   SYNC HELPERS
+========================================================= */
+function getAllNonPomodoroMissionIds() {
+  return allData
+    .filter(d => d.type === "mission" && d.module_id !== "pomodoro")
+    .map(m => m.module_id);
+}
+
+function findDisciplineByModuleAndSync(moduleId, disciplineSyncId) {
+  return allData.find(d =>
+    d.type === "discipline" &&
+    d.module === moduleId &&
+    d.discipline_sync_id === disciplineSyncId
+  );
+}
+
+function findDisciplinesBySync(disciplineSyncId) {
+  return allData.filter(d => d.type === "discipline" && d.discipline_sync_id === disciplineSyncId);
+}
+
+function findContentsBySync(contentSyncId) {
+  return allData.filter(c => c.type === "content" && c.content_sync_id === contentSyncId);
+}
+
+function propagateContentPatch(contentSyncId, patch) {
+  const clones = findContentsBySync(contentSyncId);
+  if (!clones.length) return;
+
+  clones.forEach(c => Object.assign(c, patch));
+  saveToLocalStorage();
+  scheduleUI();
+}
+
+function propagateContentDelete(contentSyncId) {
+  const clones = findContentsBySync(contentSyncId);
+  if (!clones.length) return;
+
+  clones.forEach(c => {
+    const idx = allData.findIndex(r => r.__backendId === c.__backendId);
+    if (idx !== -1) allData.splice(idx, 1);
+  });
+
+  // Também remove itens da pasta vinculados aos clones
+  const cloneIds = new Set(clones.map(c => c.__backendId));
+  allData = allData.filter(r => !(r.type === "content_item" && cloneIds.has(r.content_id)));
+
+  saveToLocalStorage();
+  scheduleUI();
+}
+
+function ensureSyncedDisciplineEverywhere(baseDiscipline, targetMissionIds) {
+  targetMissionIds.forEach(moduleId => {
+    if (moduleId === baseDiscipline.module) return;
+
+    let existing = findDisciplineByModuleAndSync(moduleId, baseDiscipline.discipline_sync_id);
+
+    if (!existing) {
+      existing = allData.find(d =>
+        d.type === "discipline" &&
+        d.module === moduleId &&
+        normKey(d.name) === normKey(baseDiscipline.name)
+      );
+    }
+
+    if (existing) {
+      existing.discipline_sync_id = baseDiscipline.discipline_sync_id;
+      existing.name = baseDiscipline.name;
+      existing.color = baseDiscipline.color;
+      updateRecord(existing);
+    } else {
+      createRecord({
+        type: "discipline",
+        name: baseDiscipline.name,
+        color: baseDiscipline.color,
+        module: moduleId,
+        discipline_sync_id: baseDiscipline.discipline_sync_id,
+        created_at: new Date().toISOString()
+      });
+    }
+  });
+}
+
+function ensureSyncedContentEverywhere(contentTemplate, targetMissionIds) {
+  targetMissionIds.forEach(moduleId => {
+    // disciplina equivalente
+    const disc = findDisciplineByModuleAndSync(moduleId, contentTemplate.discipline_sync_id);
+    if (!disc) return;
+
+    let existing = allData.find(c =>
+      c.type === "content" &&
+      c.module === moduleId &&
+      c.content_sync_id === contentTemplate.content_sync_id
+    );
+
+    if (existing) {
+      Object.assign(existing, contentTemplate, {
+        module: moduleId,
+        discipline_id: disc.__backendId
+      });
+      updateRecord(existing);
+    } else {
+      createRecord({
+        ...contentTemplate,
+        module: moduleId,
+        discipline_id: disc.__backendId
+      });
+    }
+  });
+}
+
+/* =========================================================
+   FOLDER (CONTENT ITEMS) SYNC
+========================================================= */
+function findItemsByItemSync(itemSyncId) {
+  return allData.filter(x => x.type === "content_item" && x.item_sync_id === itemSyncId);
+}
+
+function propagateItemPatch(itemSyncId, patch) {
+  const items = findItemsByItemSync(itemSyncId);
+  if (!items.length) return;
+
+  items.forEach(i => Object.assign(i, patch));
+  saveToLocalStorage();
+  scheduleUI();
+}
+
+function propagateItemDelete(itemSyncId) {
+  const items = findItemsByItemSync(itemSyncId);
+  if (!items.length) return;
+
+  items.forEach(i => {
+    const idx = allData.findIndex(r => r.__backendId === i.__backendId);
+    if (idx !== -1) allData.splice(idx, 1);
+  });
+
+  saveToLocalStorage();
+  scheduleUI();
+}
+
+function createFolderItemForContent(content, title) {
+  const itemSyncId = content.content_sync_id ? genId("isync") : null;
+
+  if (!content.content_sync_id) {
+    createRecord({
+      type: "content_item",
+      module: content.module,
+      content_id: content.__backendId,
+      content_sync_id: null,
+      item_sync_id: null,
+      title,
+      done: false,
+      created_at: new Date().toISOString()
+    });
+    return;
+  }
+
+  // se o conteúdo é sincronizado, cria item em todas as missões do mesmo content_sync_id
+  const clones = findContentsBySync(content.content_sync_id);
+  clones.forEach(clone => {
+    createRecord({
+      type: "content_item",
+      module: clone.module,
+      content_id: clone.__backendId,
+      content_sync_id: clone.content_sync_id,
+      item_sync_id: itemSyncId,
+      title,
+      done: false,
+      created_at: new Date().toISOString()
+    });
+  });
+}
+
+/* =========================================================
+   MIGRATION: sincroniza legado por nome (uma vez)
+========================================================= */
+function migrateLegacyIfNeeded() {
+  const migrated = localStorage.getItem(MIGRATION_KEY);
+  if (migrated === "1") return;
+
+  try {
+    const missions = getAllNonPomodoroMissionIds();
+    if (missions.length < 2) {
+      localStorage.setItem(MIGRATION_KEY, "1");
+      return;
+    }
+
+    // 1) Agrupa disciplinas por nome
+    const byDiscName = new Map(); // key -> disciplines[]
+    allData.filter(d => d.type === "discipline").forEach(d => {
+      const key = normKey(d.name);
+      if (!byDiscName.has(key)) byDiscName.set(key, []);
+      byDiscName.get(key).push(d);
+    });
+
+    byDiscName.forEach(list => {
+      // se aparece em 2+ missões, cria sync id (se ainda não tem)
+      const modules = new Set(list.map(x => x.module));
+      if (modules.size >= 2) {
+        let syncId = list.find(x => x.discipline_sync_id)?.discipline_sync_id;
+        if (!syncId) syncId = genId("dsync");
+        list.forEach(x => x.discipline_sync_id = syncId);
+      }
+    });
+
+    // 2) Para cada grupo de disciplina sincronizada, agrupa conteúdos por nome e cria content_sync_id
+    const syncedDisciplines = allData.filter(d => d.type === "discipline" && d.discipline_sync_id);
+    const discBySync = new Map();
+    syncedDisciplines.forEach(d => {
+      if (!discBySync.has(d.discipline_sync_id)) discBySync.set(d.discipline_sync_id, []);
+      discBySync.get(d.discipline_sync_id).push(d);
+    });
+
+    discBySync.forEach((discList, dsync) => {
+      const contentList = allData.filter(c =>
+        c.type === "content" &&
+        c.discipline_id &&
+        discList.some(d => d.__backendId === c.discipline_id)
+      );
+
+      const byContentName = new Map();
+      contentList.forEach(c => {
+        c.discipline_sync_id = dsync;
+        const key = normKey(c.content);
+        if (!byContentName.has(key)) byContentName.set(key, []);
+        byContentName.get(key).push(c);
+      });
+
+      byContentName.forEach(group => {
+        if (group.length >= 2) {
+          let csync = group.find(x => x.content_sync_id)?.content_sync_id;
+          if (!csync) csync = genId("csync");
+          group.forEach(x => x.content_sync_id = csync);
+        }
+      });
+    });
+
+    saveToLocalStorage();
+    localStorage.setItem(MIGRATION_KEY, "1");
+  } catch (e) {
+    console.warn("Migração falhou:", e);
+    localStorage.setItem(MIGRATION_KEY, "1");
+  }
+}
+
+/* =========================================================
    INIT
 ========================================================= */
-function init(){
+function init() {
   loadFromLocalStorage();
+  migrateLegacyIfNeeded();
 
+  // Calendar inicia no mês atual
   const today = new Date();
   currentCalendarYear = today.getFullYear();
   currentCalendarMonth = today.getMonth();
 
-  const missions = allData.filter(d => d.type === "mission");
-  if (missions.length === 0) {
-    createRecord({ type:"mission", module_id:"tce", name:"MISSÃO TCE-RN", icon:"⚖️", created_at:new Date().toISOString() });
-    createRecord({ type:"mission", module_id:"prf", name:"MISSÃO PRF", icon:"🚔", created_at:new Date().toISOString() });
+  loadMissions();
+  // frase pomodoro
+  document.getElementById("pomodoro-phrase-display").textContent = `"${pomodoroPhrase}"`;
+}
+
+function loadMissions() {
+  allMissions = allData.filter(d => d.type === "mission");
+
+  if (allMissions.length === 0) {
+    createDefaultMissions();
+    return;
   }
 
   renderMissionTabs();
-  const first = allData.find(d => d.type === "mission");
-  setModule(first.module_id);
+
+  const nonPomodoro = allMissions.filter(m => m.module_id !== "pomodoro");
+  if (nonPomodoro.length > 0) {
+    setModule(nonPomodoro[0].module_id);
+  } else {
+    setModule("pomodoro");
+  }
 }
 
-function updateUI(){
+function createDefaultMissions() {
+  const ts = Date.now();
+
+  const missions = [
+    { type: "mission", module_id: "prf", name: "MISSÃO PRF", icon: "🚔", created_at: new Date().toISOString(), __backendId: "mission_prf_" + ts },
+    { type: "mission", module_id: "tce", name: "MISSÃO TCE-RN", icon: "⚖️", created_at: new Date().toISOString(), __backendId: "mission_tce_" + (ts + 1) },
+    { type: "mission", module_id: "pomodoro", name: "POMODORO", icon: "🍅", created_at: new Date().toISOString(), __backendId: "mission_pomodoro_" + (ts + 2) }
+  ];
+
+  missions.forEach(m => createRecord(m));
+
+  showToast("✅ Bem-vinda! Missões padrão criadas.", "success", 3500);
+  loadMissions();
+}
+
+function updateUI() {
+  if (!currentModule || currentModule === "pomodoro") return;
+
   renderMissionTabs();
   updateMetrics();
   renderContent();
@@ -332,214 +1146,334 @@ function updateUI(){
 }
 
 /* =========================================================
-   MISSIONS
+   MISSION TABS + MODULE
 ========================================================= */
-function renderMissionTabs(){
+function renderMissionTabs() {
   const container = document.getElementById("mission-tabs-container");
-  const missions = allData.filter(d => d.type === "mission");
-  container.innerHTML = missions.map(m => {
-    const active = m.module_id === currentModule ? "bg-gray-900 text-white" : "text-gray-600 hover:text-gray-900";
-    return `<button onclick="setModule('${m.module_id}')" class="tab-btn px-8 py-4 rounded-lg text-sm font-bold transition-all ${active}">${m.icon||"🎯"} ${m.name}</button>`;
-  }).join("");
-}
+  allMissions = allData.filter(d => d.type === "mission");
 
-function setModule(module){
-  currentModule = module;
-  scheduleUI();
-}
+  const pomodoroMission = allMissions.find(m => m.module_id === "pomodoro");
+  const otherMissions = allMissions.filter(m => m.module_id !== "pomodoro");
 
-function openNewMissionModal(){
-  document.getElementById("new-mission-name").value = "";
-  const modal = document.getElementById("new-mission-modal");
-  modal.classList.remove("hidden"); modal.classList.add("flex");
-}
-function closeNewMissionModal(){
-  const modal = document.getElementById("new-mission-modal");
-  modal.classList.add("hidden"); modal.classList.remove("flex");
-}
-function saveNewMission(){
-  const name = document.getElementById("new-mission-name").value.trim();
-  if(!name){ showToast("⚠️ Digite o nome da missão", "error"); return; }
-  createRecord({ type:"mission", module_id: genId("mission"), name: name.toUpperCase(), icon:"🎯", created_at:new Date().toISOString() });
-  closeNewMissionModal();
-}
+  let html = "";
 
-/* =========================================================
-   DISCIPLINES
-========================================================= */
-function openDisciplineModal(){
-  document.getElementById("discipline-name").value = "";
-  document.getElementById("copy-to-other-mission").checked = false;
-  const modal = document.getElementById("discipline-modal");
-  modal.classList.remove("hidden"); modal.classList.add("flex");
-}
-function closeDisciplineModal(){
-  const modal = document.getElementById("discipline-modal");
-  modal.classList.add("hidden"); modal.classList.remove("flex");
-}
-function saveDiscipline(){
-  const name = document.getElementById("discipline-name").value.trim();
-  if(!name){ showToast("⚠️ Digite o nome da disciplina", "error"); return; }
-  const exists = allData.find(d => d.type==="discipline" && d.module===currentModule && normKey(d.name)===normKey(name));
-  if(exists){ showToast("⚠️ Já existe nesta missão", "error"); return; }
-
-  createRecord({ type:"discipline", name, color:"#1e3a8a", module: currentModule, created_at:new Date().toISOString() });
-  closeDisciplineModal();
-}
-
-/* =========================================================
-   CONTENT (COM TEMPO)
-========================================================= */
-function openContentModalForDiscipline(disciplineId){
-  currentDisciplineId = disciplineId;
-  document.getElementById("content-name").value = "";
-  document.getElementById("content-date").value = "";
-  document.getElementById("content-time-min").value = "0";
-
-  const modal = document.getElementById("content-modal");
-  modal.classList.remove("hidden"); modal.classList.add("flex");
-}
-function closeContentModal(){
-  const modal = document.getElementById("content-modal");
-  modal.classList.add("hidden"); modal.classList.remove("flex");
-  currentDisciplineId = null;
-}
-
-function saveContent(){
-  const name = document.getElementById("content-name").value.trim();
-  const date = document.getElementById("content-date").value;
-  const minutes = Math.max(0, parseInt(document.getElementById("content-time-min").value) || 0);
-
-  if(!name){ showToast("⚠️ Digite o nome do conteúdo", "error"); return; }
-  if(!currentDisciplineId){ showToast("⚠️ Selecione uma disciplina", "error"); return; }
-
-  createRecord({
-    type:"content",
-    module: currentModule,
-    discipline_id: currentDisciplineId,
-    content: name,
-    study_date: date,
-    study_minutes: minutes,   // <<<<<< AQUI ESTÁ O TEMPO SALVO
-    created_at: new Date().toISOString()
-  });
-
-  showToast("✅ Pasta salva (com tempo)!", "success");
-  closeContentModal();
-}
-
-function updateContentMinutes(contentId, value){
-  const content = allData.find(c => c.__backendId === contentId);
-  if(!content) return;
-  const minutes = Math.max(0, parseInt(value)||0);
-  updateRecord({ ...content, study_minutes: minutes });
-}
-
-function updateContentDate(contentId, value){
-  const content = allData.find(c => c.__backendId === contentId);
-  if(!content) return;
-  updateRecord({ ...content, study_date: value });
-}
-
-/* =========================================================
-   CONTENT RENDER (DATA + TEMPO)
-========================================================= */
-function renderContent(){
-  const container = document.getElementById("content-area");
-  const disciplines = allData.filter(d => d.type==="discipline" && d.module===currentModule);
-
-  if(disciplines.length===0){
-    container.innerHTML = `
-      <div class="text-center py-20">
-        <div class="text-7xl mb-4">📚</div>
-        <div class="text-xl font-bold text-gray-900 mb-2">Nenhuma disciplina cadastrada</div>
-        <button onclick="openDisciplineModal()" class="px-8 py-4 navy-gradient text-white rounded-xl font-bold">+ DISCIPLINA</button>
-      </div>`;
-    return;
-  }
-
-  let html = `<div class="space-y-4">`;
-
-  disciplines.forEach(disc => {
-    const contents = allData.filter(c => c.type==="content" && c.discipline_id===disc.__backendId && c.module===currentModule);
+  otherMissions.forEach(mission => {
+    const isActive = mission.module_id === currentModule;
+    const activeClasses = isActive ? "bg-gray-900 text-white" : "text-gray-600 hover:text-gray-900";
 
     html += `
-      <div class="bg-gray-50 rounded-xl p-6">
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center gap-3">
-            <div class="w-3 h-3 rounded-full" style="background:${disc.color||"#1e3a8a"}"></div>
-            <div class="font-bold text-gray-900 text-lg">${disc.name}</div>
-            <div class="text-sm text-gray-500">(${contents.length} pastas)</div>
-          </div>
-          <button onclick="openContentModalForDiscipline('${disc.__backendId}')" class="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold text-sm">+ Pasta</button>
-        </div>
-
-        ${contents.length===0 ? `<div class="text-gray-500 font-semibold py-6 text-center">Nenhuma pasta cadastrada.</div>` : `
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm bg-white rounded-xl overflow-hidden">
-              <thead class="bg-gray-100 border-b border-gray-200">
-                <tr>
-                  <th class="px-4 py-3 text-left font-bold text-gray-700">PASTA</th>
-                  <th class="px-4 py-3 text-center font-bold text-gray-700">DATA</th>
-                  <th class="px-4 py-3 text-center font-bold text-gray-700">TEMPO (min)</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${contents.map(c => `
-                  <tr class="border-t border-gray-100 hover:bg-gray-50">
-                    <td class="px-4 py-3 font-semibold text-gray-900">${c.content}</td>
-                    <td class="px-4 py-3 text-center">
-                      <input type="date" value="${c.study_date||""}" onchange="updateContentDate('${c.__backendId}', this.value)"
-                        class="w-36 bg-white border-2 border-gray-200 rounded-lg px-2 py-2 text-xs soft-ring">
-                    </td>
-                    <td class="px-4 py-3 text-center">
-                      <input type="number" min="0" value="${c.study_minutes||0}" onchange="updateContentMinutes('${c.__backendId}', this.value)"
-                        class="w-28 bg-white border-2 border-gray-200 rounded-lg px-2 py-2 text-xs soft-ring text-center font-bold">
-                    </td>
-                  </tr>
-                `).join("")}
-              </tbody>
-            </table>
-          </div>
-        `}
+      <div class="relative group">
+        <button onclick="setModule('${mission.module_id}')" id="module-${mission.module_id}" class="tab-btn px-8 py-4 rounded-lg text-sm font-bold transition-all ${activeClasses}">
+          ${mission.icon} ${mission.name}
+        </button>
+        <button onclick="deleteMission('${mission.__backendId}')" class="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white rounded-full text-xs opacity-0 group-hover:opacity-100 transition-all hover:bg-red-700 flex items-center justify-center">
+          ×
+        </button>
       </div>
     `;
   });
 
-  html += `</div>`;
+  if (pomodoroMission) {
+    const isActive = currentModule === "pomodoro";
+    const activeClasses = isActive ? "active bg-gray-900 text-white" : "text-gray-600 hover:text-gray-900";
+
+    html += `
+      <button onclick="setModule('pomodoro')" id="module-pomodoro" class="tab-btn px-8 py-4 rounded-lg text-sm font-bold transition-all ${activeClasses}">
+        🍅 POMODORO
+      </button>
+    `;
+  }
+
   container.innerHTML = html;
 }
 
-/* =========================================================
-   METRICS (usa study_minutes nos últimos 7 dias)
-========================================================= */
-function updateMetrics(){
-  const contents = allData.filter(d => d.type==="content" && d.module===currentModule);
+function setModule(module) {
+  currentModule = module;
 
-  const now = new Date();
-  const sevenDaysAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6);
-  sevenDaysAgo.setHours(0,0,0,0);
-
-  let totalMinutesWeek = 0;
-
-  contents.forEach(c => {
-    if (c.study_date) {
-      const d = new Date(c.study_date + "T12:00:00");
-      if (d >= sevenDaysAgo && d <= now) totalMinutesWeek += (c.study_minutes || 0);
-    }
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.classList.remove("active", "bg-gray-900", "text-white");
+    btn.classList.add("text-gray-600");
   });
 
-  const h = Math.floor(totalMinutesWeek / 60);
-  const m = totalMinutesWeek % 60;
-  document.getElementById("study-hours").textContent = totalMinutesWeek ? `${h}h${m ? String(m).padStart(2,"0") : ""}` : "0h";
+  const activeBtn = document.getElementById(`module-${module}`) || document.getElementById("module-pomodoro");
+  if (activeBtn) {
+    activeBtn.classList.add("active", "bg-gray-900", "text-white");
+    activeBtn.classList.remove("text-gray-600");
+  }
 
-  document.getElementById("success-rate").textContent = "0%";
-  document.getElementById("current-rank").textContent = "🎖️";
+  if (module === "pomodoro") {
+    document.getElementById("pomodoro-screen").classList.remove("hidden");
+    document.getElementById("pomodoro-screen").classList.add("flex");
+    document.querySelector("main > .flex-shrink-0").classList.add("hidden");
+    document.querySelector("main > .flex-1.flex.gap-6").classList.add("hidden");
+    updatePomodoroStats();
+  } else {
+    document.getElementById("pomodoro-screen").classList.add("hidden");
+    document.getElementById("pomodoro-screen").classList.remove("flex");
+    document.querySelector("main > .flex-shrink-0").classList.remove("hidden");
+    document.querySelector("main > .flex-1.flex.gap-6").classList.remove("hidden");
+
+    scheduleUI();
+
+    const missionData = allData.find(d => d.type === "mission" && d.module_id === module);
+    if (missionData) showToast(`🎯 ${missionData.name} ativada!`, "success", 2000);
+  }
 }
 
 /* =========================================================
-   CALENDAR (simples)
+   METRICS
 ========================================================= */
-function renderCalendar(){
+function updateMetrics() {
+  const contents = allData.filter(d => d.type === "content" && d.module === currentModule);
+
+  let totalQuestions = 0;
+  let totalCorrect = 0;
+
+  const studyMarks = allData.filter(d => d.type === "study_mark" && d.module === currentModule);
+  const totalStudyDays = studyMarks.length;
+
+  contents.forEach(c => {
+    if (c.study_done) {
+      totalQuestions += c.study_questions || 0;
+      totalCorrect += c.study_correct || 0;
+    }
+  });
+
+  const successRate = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+  const studyHours = totalStudyDays * 2;
+
+  document.getElementById("success-rate").textContent = `${successRate}%`;
+  document.getElementById("study-hours").textContent = `${studyHours}h`;
+
+  let rankEmoji = "🎖️";
+  let rankText = "RECRUTA";
+  let rankColor = "bg-gray-100 text-gray-700";
+
+  const daysScore = Math.min(totalStudyDays * 2, 50);
+  const successScore = totalQuestions > 0 ? (successRate * 0.5) : 0;
+  const rankScore = daysScore + successScore;
+
+  if (rankScore >= 80) { rankEmoji = "👑"; rankText = "COMANDANTE"; rankColor = "bg-purple-100 text-purple-700"; }
+  else if (rankScore >= 60) { rankEmoji = "⭐"; rankText = "INSPETOR"; rankColor = "bg-blue-100 text-blue-700"; }
+  else if (rankScore >= 40) { rankEmoji = "🏅"; rankText = "AGENTE"; rankColor = "bg-green-100 text-green-700"; }
+  else if (rankScore >= 20) { rankEmoji = "🎯"; rankText = "CADETE"; rankColor = "bg-yellow-100 text-yellow-700"; }
+
+  document.getElementById("current-rank").textContent = rankEmoji;
+  const rankBadge = document.getElementById("rank-badge");
+  rankBadge.textContent = rankText;
+  rankBadge.className = `px-3 py-1 rounded-full text-xs font-bold ${rankColor}`;
+
+  document.getElementById("pomodoro-count").textContent = pomodoroCyclesCompleted;
+}
+
+/* =========================================================
+   CONTENT RENDER
+========================================================= */
+function renderContent() {
+  const container = document.getElementById("content-area");
+  const disciplines = allData.filter(d => d.type === "discipline" && d.module === currentModule);
+
+  if (disciplines.length === 0) {
+    container.innerHTML = `
+      <div class="text-center py-20">
+        <div class="text-8xl mb-6">📚</div>
+        <h4 class="text-2xl font-heading font-bold mb-3 text-gray-900">Nenhuma Disciplina Cadastrada</h4>
+        <p class="text-gray-600 mb-8">Comece adicionando suas disciplinas de estudo</p>
+        <button onclick="openDisciplineModal()" class="px-8 py-4 navy-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">
+          + ADICIONAR DISCIPLINA
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '<div class="space-y-4">';
+
+  disciplines.forEach((disc, index) => {
+    const contents = allData.filter(c => c.type === "content" && c.discipline_id === disc.__backendId && c.module === currentModule);
+
+    let totalQuestions = 0;
+    let totalCorrect = 0;
+    contents.forEach(c => {
+      totalQuestions += c.study_questions || 0;
+      totalCorrect += c.study_correct || 0;
+    });
+
+    const successRate = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+
+    const studiedDates = new Set();
+    contents.forEach(c => { if (c.study_done && c.study_date) studiedDates.add(c.study_date); });
+    const hoursStudied = studiedDates.size * 2;
+
+    const syncBadge = disc.discipline_sync_id
+      ? `<span class="px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700">🔄 sincronizada</span>`
+      : `<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-700">local</span>`;
+
+    html += `
+      <div class="bg-gray-50 rounded-xl p-6 hover:bg-gray-100 transition-all" style="animation-delay: ${index * 0.1}s">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-4 cursor-pointer" onclick="toggleDiscipline('${disc.__backendId}')">
+            <div class="w-4 h-4 rounded-full" style="background: ${disc.color}"></div>
+            <span class="font-bold text-lg text-gray-900">${disc.name}</span>
+            <span class="text-sm text-gray-500">(${contents.length} pastas)</span>
+            ${syncBadge}
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">⏱️ ${hoursStudied}h</span>
+            <span class="px-3 py-1 rounded-full text-xs font-bold ${successRate >= 70 ? "bg-green-100 text-green-700" : successRate >= 50 ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"}">
+              ${successRate}% de acertos
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="event.stopPropagation(); openContentModalForDiscipline('${disc.__backendId}')" class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all text-sm">
+              + Pasta
+            </button>
+            <button onclick="event.stopPropagation(); deleteDiscipline('${disc.__backendId}')" class="p-2 hover:bg-red-100 rounded-lg text-red-600 transition-all" title="Excluir disciplina">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="discipline-${disc.__backendId}" class="hidden mt-6 pt-6 border-t border-gray-200">
+          ${renderDisciplineTable(disc.__backendId)}
+        </div>
+      </div>
+    `;
+  });
+
+  html += "</div>";
+  container.innerHTML = html;
+}
+
+function renderDisciplineTable(disciplineId) {
+  const contents = allData.filter(c => c.type === "content" && c.discipline_id === disciplineId && c.module === currentModule);
+
+  if (contents.length === 0) {
+    return `<p class="text-center text-gray-500 py-8">Nenhuma pasta cadastrada. Clique em "+ Pasta" acima para adicionar.</p>`;
+  }
+
+  let html = `
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-100 border-b-2 border-gray-300">
+          <tr>
+            <th class="px-4 py-3 text-left font-bold text-gray-700">PASTA (CONTEÚDO)</th>
+            <th class="px-3 py-3 text-center font-bold text-gray-700">DATA</th>
+            <th class="px-3 py-3 text-center font-bold text-gray-700">MÉTODOS</th>
+            <th class="px-3 py-3 text-center font-bold text-gray-700">Q</th>
+            <th class="px-3 py-3 text-center font-bold text-gray-700">A</th>
+            <th class="px-3 py-3 text-center font-bold text-gray-700">%</th>
+            <th class="px-3 py-3 text-center font-bold text-gray-700 bg-blue-50">REV 7</th>
+            <th class="px-3 py-3 text-center font-bold text-gray-700 bg-green-50">REV 15</th>
+            <th class="px-3 py-3 text-center font-bold text-gray-700 bg-purple-50">REV 30</th>
+            <th class="px-3 py-3 text-center font-bold text-gray-700">PASTA</th>
+            <th class="px-3 py-3 text-center font-bold text-gray-700">AÇÕES</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  contents.forEach(c => {
+    const percentage = c.study_questions > 0 ? Math.round((c.study_correct / c.study_questions) * 100) : 0;
+
+    const methods = [];
+    if (c.study_aula) methods.push("📺");
+    if (c.study_pdf) methods.push("📄");
+    if (c.study_lei) methods.push("⚖️");
+    if ((c.study_questions || 0) > 0) methods.push("❓");
+    const methodsText = methods.length > 0 ? methods.join(" ") : "-";
+
+    const rev7Icon = c.rev7_done ? "✅" : "⬜";
+    const rev7Percent = c.rev7_questions > 0 ? Math.round((c.rev7_correct / c.rev7_questions) * 100) : 0;
+    const rev7Color = c.rev7_done ? (rev7Percent >= 70 ? "text-green-600" : rev7Percent >= 50 ? "text-yellow-600" : "text-red-600") : "text-gray-400";
+    const rev7Text = c.rev7_done ? `${rev7Percent}%` : rev7Icon;
+
+    const rev15Icon = c.rev15_done ? "✅" : "⬜";
+    const rev15Percent = c.rev15_questions > 0 ? Math.round((c.rev15_correct / c.rev15_questions) * 100) : 0;
+    const rev15Color = c.rev15_done ? (rev15Percent >= 70 ? "text-green-600" : rev15Percent >= 50 ? "text-yellow-600" : "text-red-600") : "text-gray-400";
+    const rev15Text = c.rev15_done ? `${rev15Percent}%` : rev15Icon;
+
+    const rev30Icon = c.rev30_done ? "✅" : "⬜";
+    const rev30Percent = c.rev30_questions > 0 ? Math.round((c.rev30_correct / c.rev30_questions) * 100) : 0;
+    const rev30Color = c.rev30_done ? (rev30Percent >= 70 ? "text-green-600" : rev30Percent >= 50 ? "text-yellow-600" : "text-red-600") : "text-gray-400";
+    const rev30Text = c.rev30_done ? `${rev30Percent}%` : rev30Icon;
+
+    const itemCount = allData.filter(x => x.type === "content_item" && x.content_id === c.__backendId).length;
+
+    html += `
+      <tr class="border-t border-gray-200 hover:bg-gray-50 transition-all">
+        <td class="px-4 py-4 font-semibold text-gray-900">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">📁</span>
+            <span>${c.content || "-"}</span>
+            ${c.content_sync_id ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-purple-100 text-purple-700">sync</span>` : ""}
+          </div>
+        </td>
+
+        <td class="px-3 py-4 text-center">
+          <input type="date" value="${c.study_date || ""}" onchange="updateContentField('${c.__backendId}', 'study_date', this.value)" class="w-32 bg-white border-2 border-gray-200 rounded-lg px-2 py-2 text-xs soft-ring">
+        </td>
+
+        <td class="px-3 py-4 text-center">
+          <div class="text-lg mb-1">${methodsText}</div>
+          <button onclick="openMethodModal('${c.__backendId}')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold underline">Editar</button>
+        </td>
+
+        <td class="px-3 py-4 text-center font-bold text-gray-900">${c.study_questions || 0}</td>
+        <td class="px-3 py-4 text-center font-bold text-gray-900">${c.study_correct || 0}</td>
+
+        <td class="px-3 py-4 text-center">
+          <span class="px-3 py-1 rounded-full text-xs font-bold ${percentage >= 70 ? "bg-green-100 text-green-700" : percentage >= 50 ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"}">${percentage}%</span>
+        </td>
+
+        <td class="px-3 py-4 text-center revision-cell" onclick="openRevisionModal('${c.__backendId}', 'rev7')">
+          <div class="text-2xl font-bold ${rev7Color}" title="${c.rev7_date ? "Data: " + c.rev7_date : "Clique para revisar"}">${rev7Text}</div>
+        </td>
+        <td class="px-3 py-4 text-center revision-cell" onclick="openRevisionModal('${c.__backendId}', 'rev15')">
+          <div class="text-2xl font-bold ${rev15Color}" title="${c.rev15_date ? "Data: " + c.rev15_date : "Clique para revisar"}">${rev15Text}</div>
+        </td>
+        <td class="px-3 py-4 text-center revision-cell" onclick="openRevisionModal('${c.__backendId}', 'rev30')">
+          <div class="text-2xl font-bold ${rev30Color}" title="${c.rev30_date ? "Data: " + c.rev30_date : "Clique para revisar"}">${rev30Text}</div>
+        </td>
+
+        <td class="px-3 py-4 text-center">
+          <button onclick="openFolderModal('${c.__backendId}')" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-bold text-gray-800 transition-all text-xs">
+            📁 Abrir (${itemCount})
+          </button>
+        </td>
+
+        <td class="px-3 py-4 text-center">
+          <button onclick="deleteContent('${c.__backendId}')" class="p-2 hover:bg-red-100 rounded-lg text-red-600 transition-all" title="Excluir pasta/conteúdo">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+
+  html += `
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  return html;
+}
+
+function toggleDiscipline(id) {
+  const el = document.getElementById(`discipline-${id}`);
+  if (el) el.classList.toggle("hidden");
+}
+
+/* =========================================================
+   CALENDAR (fix operability)
+========================================================= */
+function renderCalendar() {
+  if (!currentModule) return;
+
   const monthNames = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
   document.getElementById("calendar-month-year").textContent = `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
 
@@ -548,36 +1482,1149 @@ function renderCalendar(){
   const daysInMonth = lastDay.getDate();
   const startingDayOfWeek = firstDay.getDay();
 
-  const grid = [];
-  for (let i=0; i<startingDayOfWeek; i++) grid.push(`<div class="aspect-square"></div>`);
-  for (let day=1; day<=daysInMonth; day++){
-    grid.push(`<div class="aspect-square bg-white border border-gray-200 rounded-lg flex items-center justify-center font-semibold text-gray-700">${day}</div>`);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const isCurrentMonth = today.getFullYear() === currentCalendarYear && today.getMonth() === currentCalendarMonth;
+  const todayDate = today.getDate();
+
+  // subtitle
+  const greenDays = allData.filter(d => d.type === "study_mark" && d.module === currentModule).length;
+  document.getElementById("calendar-subtitle").textContent = `Dias verdes: ${greenDays}`;
+
+  let html = "";
+
+  for (let i = 0; i < startingDayOfWeek; i++) {
+    html += `<div class="aspect-square"></div>`;
   }
-  document.getElementById("calendar-grid").innerHTML = grid.join("");
-  document.getElementById("calendar-subtitle").textContent = `Dias verdes: 0`;
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(currentCalendarYear, currentCalendarMonth, day);
+    date.setHours(0, 0, 0, 0);
+
+    const dayOfWeek = date.getDay();
+    const isSunday = dayOfWeek === 0;
+    const isSaturday = dayOfWeek === 6;
+    const isToday = isCurrentMonth && day === todayDate;
+
+    const dateStr = `${currentCalendarYear}-${String(currentCalendarMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+    const hasStudyMark = allData.some(d => d.type === "study_mark" && d.study_date === dateStr && d.module === currentModule);
+    const hasCheckbox = allData.some(d => d.type === "calendar_check" && d.check_date === dateStr && d.module === currentModule);
+
+    const isFuture = date > today;
+
+    let bgClass = "bg-white hover:bg-blue-50";
+    let textClass = "text-gray-700 font-semibold";
+    let cursorClass = "cursor-pointer";
+    let extraClass = "";
+
+    if (isFuture) {
+      bgClass = "bg-gray-100";
+      textClass = "text-gray-400";
+      cursorClass = "cursor-not-allowed";
+    } else if (hasStudyMark) {
+      bgClass = "bg-green-500 hover:bg-green-600";
+      textClass = "text-white font-black";
+      extraClass = "shadow-lg";
+    } else if (isToday) {
+      bgClass = "bg-blue-900 hover:bg-blue-800";
+      textClass = "text-white font-black";
+      extraClass = "ring-4 ring-blue-300";
+    } else if (isSunday || isSaturday) {
+      textClass = "text-red-500 font-semibold";
+    }
+
+    html += `
+      <div class="aspect-square flex flex-col gap-0.5">
+        <button
+          onclick="selectCalendarDate('${dateStr}')"
+          ${isFuture ? "disabled" : ""}
+          class="w-full flex-1 ${bgClass} ${textClass} ${cursorClass} ${extraClass} rounded-lg text-sm transition-all duration-200 flex items-center justify-center relative transform ${isFuture ? "" : "hover:scale-110 active:scale-95"}"
+        >
+          <span>${day}</span>
+          ${hasStudyMark ? '<span class="absolute top-0.5 right-0.5 text-xs leading-none">✅</span>' : ""}
+        </button>
+
+        ${!isFuture ? `
+          <div class="flex items-center justify-center">
+            <input
+              type="checkbox"
+              ${hasCheckbox ? "checked" : ""}
+              onchange="toggleCalendarCheck(event, '${dateStr}')"
+              class="w-4 h-4 rounded accent-green-600 cursor-pointer hover:scale-110 transition-transform"
+              aria-label="Checkbox do dia ${day}"
+            >
+          </div>
+        ` : ""}
+      </div>
+    `;
+  }
+
+  document.getElementById("calendar-grid").innerHTML = html;
 }
-function changeCalendarMonth(delta){
+
+function changeCalendarMonth(delta) {
   currentCalendarMonth += delta;
+
   if (currentCalendarMonth < 0) { currentCalendarMonth = 11; currentCalendarYear--; }
-  if (currentCalendarMonth > 11) { currentCalendarMonth = 0; currentCalendarYear++; }
+  else if (currentCalendarMonth > 11) { currentCalendarMonth = 0; currentCalendarYear++; }
+
   renderCalendar();
 }
-function goToToday(){
+
+function goToToday() {
   const today = new Date();
   currentCalendarYear = today.getFullYear();
   currentCalendarMonth = today.getMonth();
   renderCalendar();
+  showToast("📅 Voltou para hoje!", "info", 2000);
 }
-function quickToggleCalendarLegend(){ showToast("Legenda: calendário básico nesta versão.", "info", 2500); }
+
+function selectCalendarDate(dateStr) {
+  if (calendarMutationLock) return;
+
+  const clickedDate = new Date(dateStr + "T12:00:00");
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (clickedDate > today) {
+    showToast("⚠️ Não pode marcar dias futuros!", "error", 2000);
+    return;
+  }
+
+  calendarMutationLock = true;
+
+  const existingMark = allData.find(d => d.type === "study_mark" && d.study_date === dateStr && d.module === currentModule);
+
+  if (existingMark) {
+    deleteRecord(existingMark);
+    showToast("❌ Dia desmarcado!", "info", 2200);
+  } else {
+    createRecord({
+      type: "study_mark",
+      study_date: dateStr,
+      module: currentModule,
+      created_at: new Date().toISOString()
+    });
+    showToast("✅ Dia marcado e salvo!", "success", 2200);
+  }
+
+  setTimeout(() => { calendarMutationLock = false; }, 180);
+}
+
+function toggleCalendarCheck(ev, dateStr) {
+  ev.stopPropagation();
+  if (calendarMutationLock) return;
+
+  calendarMutationLock = true;
+
+  const existingCheck = allData.find(d => d.type === "calendar_check" && d.check_date === dateStr && d.module === currentModule);
+
+  // usa o estado real do input
+  const shouldBeChecked = !!ev.target.checked;
+
+  if (shouldBeChecked && !existingCheck) {
+    createRecord({
+      type: "calendar_check",
+      check_date: dateStr,
+      module: currentModule,
+      created_at: new Date().toISOString()
+    });
+    showToast("✅ Checkbox marcado!", "success", 1600);
+  } else if (!shouldBeChecked && existingCheck) {
+    deleteRecord(existingCheck);
+    showToast("☑️ Checkbox desmarcado!", "info", 1600);
+  }
+
+  setTimeout(() => { calendarMutationLock = false; }, 180);
+}
+
+function quickToggleCalendarLegend() {
+  showToast("✅ Dia verde = estudou. ☑️ Checkbox = tarefa/controle do dia.", "info", 3500);
+}
 
 /* =========================================================
-   TOAST
+   REVISION
 ========================================================= */
-function showToast(message, type="info", duration=3000){
+function openRevisionModal(contentId, revisionType) {
+  currentRevisionContentId = contentId;
+  currentRevisionType = revisionType;
+
+  const content = allData.find(c => c.__backendId === contentId);
+  if (!content) return;
+
+  const titles = { rev7: "Revisão de 7 Dias", rev15: "Revisão de 15 Dias", rev30: "Revisão de 30 Dias" };
+
+  document.getElementById("revision-modal-title").textContent = titles[revisionType] || "Revisão";
+  document.getElementById("revision-date").value = content[`${revisionType}_date`] || "";
+  document.getElementById("revision-questions-total").value = content[`${revisionType}_questions`] || 0;
+  document.getElementById("revision-questions-correct").value = content[`${revisionType}_correct`] || 0;
+
+  const modal = document.getElementById("revision-modal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closeRevisionModal() {
+  const modal = document.getElementById("revision-modal");
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+  currentRevisionContentId = null;
+  currentRevisionType = null;
+}
+
+function saveRevision() {
+  if (!currentRevisionContentId || !currentRevisionType) return;
+
+  const content = allData.find(c => c.__backendId === currentRevisionContentId);
+  if (!content) return;
+
+  const date = document.getElementById("revision-date").value;
+  const total = parseInt(document.getElementById("revision-questions-total").value) || 0;
+  const correct = parseInt(document.getElementById("revision-questions-correct").value) || 0;
+
+  const patch = {
+    [`${currentRevisionType}_done`]: true,
+    [`${currentRevisionType}_date`]: date,
+    [`${currentRevisionType}_questions`]: total,
+    [`${currentRevisionType}_correct`]: correct
+  };
+
+  if (content.content_sync_id) {
+    propagateContentPatch(content.content_sync_id, patch);
+  } else {
+    updateRecord({ ...content, ...patch });
+  }
+
+  showToast("✅ Revisão registrada!", "success");
+  closeRevisionModal();
+}
+
+/* =========================================================
+   POMODORO
+========================================================= */
+function adjustTimer(minutes) {
+  const newSeconds = Math.max(60, pomodoroSeconds + (minutes * 60));
+  pomodoroSeconds = newSeconds;
+  updatePomodoroDisplay();
+  showToast(`⏱️ Tempo ajustado: ${Math.floor(pomodoroSeconds / 60)} minutos`, "info", 2000);
+}
+
+function togglePomodoroSettings() {
+  const settings = document.getElementById("pomodoro-settings");
+  const arrow = document.getElementById("settings-arrow");
+
+  if (settings.classList.contains("hidden")) {
+    settings.classList.remove("hidden");
+    arrow.style.transform = "rotate(180deg)";
+  } else {
+    settings.classList.add("hidden");
+    arrow.style.transform = "rotate(0deg)";
+  }
+}
+
+function startPomodoro() {
+  if (pomodoroRunning) return;
+
+  pomodoroRunning = true;
+  document.getElementById("pomodoro-start-btn").classList.add("hidden");
+  document.getElementById("pomodoro-pause-btn").classList.remove("hidden");
+
+  if (pomodoroSeconds === 0) {
+    const focusDuration = parseInt(document.getElementById("pomodoro-focus-duration").value) || 25;
+    pomodoroSeconds = focusDuration * 60;
+  }
+
+  pomodoroInterval = setInterval(() => {
+    pomodoroSeconds--;
+    updatePomodoroDisplay();
+
+    if (pomodoroSeconds <= 0) completePomodoroPhase();
+  }, 1000);
+}
+
+function pausePomodoro() {
+  if (!pomodoroRunning) return;
+
+  pomodoroRunning = false;
+  clearInterval(pomodoroInterval);
+  document.getElementById("pomodoro-start-btn").classList.remove("hidden");
+  document.getElementById("pomodoro-pause-btn").classList.add("hidden");
+}
+
+function resetPomodoro() {
+  clearInterval(pomodoroInterval);
+  pomodoroRunning = false;
+  pomodoroPhase = "focus";
+
+  const focusDuration = parseInt(document.getElementById("pomodoro-focus-duration").value) || 25;
+  pomodoroSeconds = focusDuration * 60;
+
+  document.getElementById("pomodoro-start-btn").classList.remove("hidden");
+  document.getElementById("pomodoro-pause-btn").classList.add("hidden");
+
+  updatePomodoroDisplay();
+  document.getElementById("pomodoro-phase").textContent = "🍅 FOCO TOTAL";
+}
+
+function completePomodoroPhase() {
+  pomodoroRunning = false;
+  clearInterval(pomodoroInterval);
+
+  playAlarm();
+
+  if (pomodoroPhase === "focus") {
+    pomodoroCyclesCompleted++;
+    const focusDuration = parseInt(document.getElementById("pomodoro-focus-duration").value) || 25;
+    pomodoroTotalFocusTime += focusDuration;
+
+    if (pomodoroCyclesCompleted % 4 === 0) {
+      pomodoroPhase = "longBreak";
+      const longBreak = parseInt(document.getElementById("pomodoro-long-break").value) || 15;
+      pomodoroSeconds = longBreak * 60;
+      document.getElementById("pomodoro-phase").textContent = "🎯 PAUSA LONGA";
+      showToast("🎉 4 Pomodoros completos. Pausa longa!", "success", 5000);
+    } else {
+      pomodoroPhase = "break";
+      const breakDuration = parseInt(document.getElementById("pomodoro-break-duration").value) || 5;
+      pomodoroSeconds = breakDuration * 60;
+      document.getElementById("pomodoro-phase").textContent = "☕ PAUSA";
+      showToast("✅ Pomodoro completo. Hora da pausa!", "success", 5000);
+    }
+  } else {
+    const breakDuration = pomodoroPhase === "longBreak"
+      ? (parseInt(document.getElementById("pomodoro-long-break").value) || 15)
+      : (parseInt(document.getElementById("pomodoro-break-duration").value) || 5);
+    pomodoroTotalBreakTime += breakDuration;
+
+    pomodoroPhase = "focus";
+    const focusDuration = parseInt(document.getElementById("pomodoro-focus-duration").value) || 25;
+    pomodoroSeconds = focusDuration * 60;
+    document.getElementById("pomodoro-phase").textContent = "🍅 FOCO TOTAL";
+    showToast("💪 Pausa acabou. Bora focar!", "info", 5000);
+  }
+
+  document.getElementById("pomodoro-start-btn").classList.remove("hidden");
+  document.getElementById("pomodoro-pause-btn").classList.add("hidden");
+
+  updatePomodoroDisplay();
+  updatePomodoroStats();
+}
+
+function updatePomodoroDisplay() {
+  const minutes = Math.floor(pomodoroSeconds / 60);
+  const seconds = pomodoroSeconds % 60;
+
+  document.getElementById("pomodoro-display").textContent =
+    `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+function updatePomodoroStats() {
+  document.getElementById("pomodoro-cycles").textContent = pomodoroCyclesCompleted;
+  document.getElementById("pomodoro-focus-time").textContent = formatMinutesToHours(pomodoroTotalFocusTime);
+  document.getElementById("pomodoro-break-time").textContent = formatMinutesToHours(pomodoroTotalBreakTime);
+  document.getElementById("pomodoro-total-time").textContent = formatMinutesToHours(pomodoroTotalFocusTime + pomodoroTotalBreakTime);
+  document.getElementById("pomodoro-count").textContent = pomodoroCyclesCompleted;
+}
+
+function formatMinutesToHours(minutes) {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  if (hours > 0) return `${hours}h`;
+  return `${mins}min`;
+}
+
+function playAlarm() {
+  try {
+    if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.frequency.value = 800;
+        oscillator.type = "sine";
+
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+      }, i * 600);
+    }
+  } catch (e) {
+    // som indisponível
+  }
+}
+
+function editPomodoroPhrase() {
+  document.getElementById("phrase-input").value = pomodoroPhrase;
+  const modal = document.getElementById("phrase-modal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closePhraseModal() {
+  const modal = document.getElementById("phrase-modal");
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+}
+
+function setQuickPhrase(phrase) {
+  document.getElementById("phrase-input").value = phrase;
+}
+
+function savePomodoroPhrase() {
+  const newPhrase = document.getElementById("phrase-input").value.trim();
+  if (newPhrase) {
+    pomodoroPhrase = newPhrase;
+    document.getElementById("pomodoro-phrase-display").textContent = `"${pomodoroPhrase}"`;
+    showToast("✅ Frase atualizada!", "success");
+  }
+  closePhraseModal();
+}
+
+function editPomodoroTime() {
+  if (pomodoroRunning) pausePomodoro();
+
+  const minutes = Math.floor(pomodoroSeconds / 60);
+  const seconds = pomodoroSeconds % 60;
+
+  document.getElementById("time-edit-minutes").value = minutes;
+  document.getElementById("time-edit-seconds").value = seconds;
+
+  const modal = document.getElementById("time-edit-modal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closeTimeEditModal() {
+  const modal = document.getElementById("time-edit-modal");
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+}
+
+function setQuickTime(minutes, seconds) {
+  document.getElementById("time-edit-minutes").value = minutes;
+  document.getElementById("time-edit-seconds").value = seconds;
+}
+
+function savePomodoroTime() {
+  const minutes = parseInt(document.getElementById("time-edit-minutes").value) || 0;
+  const seconds = parseInt(document.getElementById("time-edit-seconds").value) || 0;
+
+  if (minutes < 0 || minutes > 120) { showToast("⚠️ Minutos entre 0 e 120", "error"); return; }
+  if (seconds < 0 || seconds > 59) { showToast("⚠️ Segundos entre 0 e 59", "error"); return; }
+  if (minutes === 0 && seconds === 0) { showToast("⚠️ Defina um tempo maior que zero", "error"); return; }
+
+  pomodoroSeconds = (minutes * 60) + seconds;
+  updatePomodoroDisplay();
+
+  showToast(`✅ Tempo ajustado para ${minutes}:${String(seconds).padStart(2, "0")}`, "success");
+  closeTimeEditModal();
+}
+
+/* =========================================================
+   MISSIONS CRUD
+========================================================= */
+function openNewMissionModal() {
+  document.getElementById("new-mission-name").value = "";
+  selectedMissionIcon = "🚔";
+  updateMissionIconSelection();
+
+  const modal = document.getElementById("new-mission-modal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+
+  setTimeout(() => document.getElementById("new-mission-name").focus(), 80);
+}
+
+function closeNewMissionModal() {
+  const modal = document.getElementById("new-mission-modal");
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+}
+
+function selectMissionIcon(icon) {
+  selectedMissionIcon = icon;
+  updateMissionIconSelection();
+}
+
+function updateMissionIconSelection() {
+  document.querySelectorAll(".mission-icon-btn").forEach(btn => {
+    if (btn.dataset.icon === selectedMissionIcon) btn.classList.add("bg-blue-100", "border-blue-900", "scale-110");
+    else btn.classList.remove("bg-blue-100", "border-blue-900", "scale-110");
+  });
+}
+
+function saveNewMission() {
+  const name = document.getElementById("new-mission-name").value.trim();
+  if (!name) { showToast("⚠️ Digite o nome da missão", "error"); return; }
+
+  const exists = allData.find(d => d.type === "mission" && normKey(d.name) === normKey(name));
+  if (exists) { showToast("⚠️ Já existe uma missão com este nome!", "error"); return; }
+
+  const missionId = genId("mission");
+
+  createRecord({
+    type: "mission",
+    module_id: missionId,
+    name: name.toUpperCase(),
+    icon: selectedMissionIcon,
+    created_at: new Date().toISOString()
+  });
+
+  showToast(`✅ Missão "${name}" criada!`, "success", 2800);
+  closeNewMissionModal();
+
+  setTimeout(() => setModule(missionId), 400);
+}
+
+function deleteMission(missionBackendId) {
+  const mission = allData.find(d => d.__backendId === missionBackendId);
+  if (!mission) return;
+
+  const overlay = document.createElement("div");
+  overlay.className = "fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4";
+  overlay.innerHTML = `
+    <div class="bg-white rounded-2xl p-8 max-w-md scale-in">
+      <h3 class="text-2xl font-heading font-bold text-gray-900 mb-4">⚠️ Excluir Missão?</h3>
+      <p class="text-gray-700 mb-2">Tem certeza que deseja excluir <strong>"${mission.name}"</strong>?</p>
+      <p class="text-sm text-red-600 mb-6">Todas as disciplinas, pastas e itens desta missão serão perdidos.</p>
+      <div class="flex gap-4">
+        <button class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all text-gray-700" id="cancel-del-mission">CANCELAR</button>
+        <button class="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition-all" id="confirm-del-mission">EXCLUIR</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  overlay.querySelector("#cancel-del-mission").onclick = () => overlay.remove();
+  overlay.querySelector("#confirm-del-mission").onclick = () => {
+    overlay.remove();
+
+    const disciplines = allData.filter(d => d.type === "discipline" && d.module === mission.module_id);
+    const contents = allData.filter(d => d.type === "content" && d.module === mission.module_id);
+    const contentIds = new Set(contents.map(c => c.__backendId));
+    const items = allData.filter(d => d.type === "content_item" && contentIds.has(d.content_id));
+
+    items.forEach(i => deleteRecord(i));
+    contents.forEach(c => deleteRecord(c));
+    disciplines.forEach(d => deleteRecord(d));
+    deleteRecord(mission);
+
+    showToast(`✅ Missão "${mission.name}" excluída`, "success");
+
+    if (currentModule === mission.module_id) {
+      const remaining = allData.filter(d => d.type === "mission" && d.module_id !== "pomodoro");
+      if (remaining.length > 0) setModule(remaining[0].module_id);
+      else setModule("pomodoro");
+    }
+  };
+}
+
+/* =========================================================
+   DISCIPLINES CRUD (com sincronização)
+========================================================= */
+function openDisciplineModal() {
+  document.getElementById("discipline-name").value = "";
+  selectedColor = "#1e3a8a";
+  updateColorSelection();
+  document.getElementById("copy-to-other-mission").checked = false;
+
+  const modal = document.getElementById("discipline-modal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closeDisciplineModal() {
+  const modal = document.getElementById("discipline-modal");
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+}
+
+function selectColor(color) {
+  selectedColor = color;
+  updateColorSelection();
+}
+
+function updateColorSelection() {
+  document.querySelectorAll(".color-btn").forEach(btn => {
+    if (btn.dataset.color === selectedColor) btn.classList.add("ring-4", "ring-blue-900", "scale-110");
+    else btn.classList.remove("ring-4", "ring-blue-900", "scale-110");
+  });
+}
+
+function saveDiscipline() {
+  const name = document.getElementById("discipline-name").value.trim();
+  const syncAll = document.getElementById("copy-to-other-mission").checked;
+
+  if (!name) { showToast("⚠️ Digite o nome da disciplina", "error"); return; }
+  if (!currentModule || currentModule === "pomodoro") { showToast("⚠️ Selecione uma missão válida", "error"); return; }
+
+  // evita duplicar no mesmo módulo
+  const existsHere = allData.find(d => d.type === "discipline" && d.module === currentModule && normKey(d.name) === normKey(name));
+  if (existsHere) { showToast("⚠️ Já existe esta disciplina nesta missão!", "error"); return; }
+
+  const disciplineSyncId = syncAll ? genId("dsync") : null;
+
+  const base = createRecord({
+    type: "discipline",
+    name: name,
+    color: selectedColor,
+    module: currentModule,
+    discipline_sync_id: disciplineSyncId,
+    created_at: new Date().toISOString()
+  });
+
+  if (syncAll) {
+    const missions = getAllNonPomodoroMissionIds();
+    ensureSyncedDisciplineEverywhere(base, missions);
+    showToast("✅ Disciplina criada e sincronizada entre missões!", "success");
+  } else {
+    showToast("✅ Disciplina criada com sucesso!", "success");
+  }
+
+  closeDisciplineModal();
+}
+
+function deleteDiscipline(id) {
+  const discipline = allData.find(d => d.__backendId === id);
+  if (!discipline) return;
+
+  // remove conteúdos e itens
+  const contents = allData.filter(c => c.type === "content" && c.discipline_id === id);
+  const contentIds = new Set(contents.map(c => c.__backendId));
+  const items = allData.filter(i => i.type === "content_item" && contentIds.has(i.content_id));
+
+  items.forEach(i => deleteRecord(i));
+  contents.forEach(c => deleteRecord(c));
+  deleteRecord(discipline);
+
+  showToast("✅ Disciplina excluída", "success");
+}
+
+/* =========================================================
+   CONTENT (PASTAS) CRUD + SYNC
+========================================================= */
+function openContentModalForDiscipline(disciplineId) {
+  currentDisciplineId = disciplineId;
+  document.getElementById("content-name").value = "";
+  document.getElementById("content-date").value = "";
+
+  document.getElementById("content-method-aula").checked = false;
+  document.getElementById("content-method-pdf").checked = false;
+  document.getElementById("content-method-lei").checked = false;
+  document.getElementById("content-method-quest").checked = false;
+  document.getElementById("content-questions-total").value = "0";
+  document.getElementById("content-questions-correct").value = "0";
+  document.getElementById("content-questions-fields").classList.add("hidden");
+
+  updateContentMethodCheckboxes();
+
+  ["aula","pdf","lei","quest"].forEach(method => {
+    const cb = document.getElementById(`content-method-${method}`);
+    if (cb) {
+      cb.removeEventListener("change", updateContentMethodCheckboxes);
+      cb.addEventListener("change", updateContentMethodCheckboxes);
+    }
+  });
+
+  const modal = document.getElementById("content-modal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closeContentModal() {
+  const modal = document.getElementById("content-modal");
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+  currentDisciplineId = null;
+}
+
+function toggleContentQuestionsFields() {
+  const checked = document.getElementById("content-method-quest").checked;
+  const fields = document.getElementById("content-questions-fields");
+  if (checked) fields.classList.remove("hidden");
+  else fields.classList.add("hidden");
+  updateContentMethodCheckboxes();
+}
+
+function updateContentMethodCheckboxes() {
+  ["aula","pdf","lei","quest"].forEach(method => {
+    const checkbox = document.getElementById(`content-method-${method}`);
+    const label = document.getElementById(`content-method-${method}-label`);
+    if (checkbox && label) {
+      if (checkbox.checked) label.classList.add("checked");
+      else label.classList.remove("checked");
+    }
+  });
+}
+
+function saveContent() {
+  const name = document.getElementById("content-name").value.trim();
+  const date = document.getElementById("content-date").value;
+
+  if (!name) { showToast("⚠️ Digite o nome do conteúdo", "error"); return; }
+  if (!currentDisciplineId) { showToast("⚠️ Erro: disciplina não identificada", "error"); return; }
+
+  const discipline = allData.find(d => d.__backendId === currentDisciplineId);
+  if (!discipline) { showToast("⚠️ Disciplina não encontrada", "error"); return; }
+
+  const aula = document.getElementById("content-method-aula").checked;
+  const pdf = document.getElementById("content-method-pdf").checked;
+  const lei = document.getElementById("content-method-lei").checked;
+
+  const hasQuestions = document.getElementById("content-method-quest").checked;
+  const questions = hasQuestions ? (parseInt(document.getElementById("content-questions-total").value) || 0) : 0;
+  const correct = hasQuestions ? (parseInt(document.getElementById("content-questions-correct").value) || 0) : 0;
+
+  const basePayload = {
+    type: "content",
+    content: name,
+    date: date,
+    week_number: currentWeek,
+
+    study_date: date,
+    study_aula: aula,
+    study_pdf: pdf,
+    study_lei: lei,
+    study_done: aula || pdf || lei || hasQuestions,
+    study_questions: questions,
+    study_correct: correct,
+
+    bizu_notes: "",
+
+    rev7_done: false, rev7_date: "", rev7_questions: 0, rev7_correct: 0,
+    rev15_done: false, rev15_date: "", rev15_questions: 0, rev15_correct: 0,
+    rev30_done: false, rev30_date: "", rev30_questions: 0, rev30_correct: 0,
+
+    created_at: new Date().toISOString()
+  };
+
+  // Se a disciplina não é sincronizada
+  if (!discipline.discipline_sync_id) {
+    // evita duplicar a mesma pasta na disciplina
+    const exists = allData.find(c => c.type === "content" && c.module === currentModule && c.discipline_id === currentDisciplineId && normKey(c.content) === normKey(name));
+    if (exists) { showToast("⚠️ Esta pasta já existe nesta disciplina", "error"); return; }
+
+    createRecord({
+      ...basePayload,
+      discipline_id: currentDisciplineId,
+      module: currentModule,
+      discipline_sync_id: null,
+      content_sync_id: null
+    });
+
+    showToast("✅ Pasta adicionada!", "success");
+    closeContentModal();
+    return;
+  }
+
+  // Disciplina sincronizada: conteúdo também sincroniza
+  const disciplineSyncId = discipline.discipline_sync_id;
+  const isSyncedDiscipline = true;
+
+  // Reutiliza content_sync_id se já existir em alguma missão do grupo, por nome
+  const existingAny = allData.find(c =>
+    c.type === "content" &&
+    c.discipline_sync_id === disciplineSyncId &&
+    normKey(c.content) === normKey(name)
+  );
+
+  const contentSyncId = existingAny ? existingAny.content_sync_id : genId("csync");
+  const missions = getAllNonPomodoroMissionIds();
+
+  // Garante disciplina em todas as missões
+  ensureSyncedDisciplineEverywhere(discipline, missions);
+
+  const template = {
+    ...basePayload,
+    discipline_sync_id: disciplineSyncId,
+    content_sync_id: contentSyncId
+  };
+
+  ensureSyncedContentEverywhere(template, missions);
+
+  showToast("✅ Pasta criada e sincronizada entre missões!", "success");
+  closeContentModal();
+}
+
+function updateContentField(id, field, value) {
+  const content = allData.find(c => c.__backendId === id);
+  if (!content) return;
+
+  let parsedValue = value;
+  if (["study_questions","study_correct"].includes(field)) parsedValue = parseInt(value) || 0;
+
+  if (content.content_sync_id) {
+    propagateContentPatch(content.content_sync_id, { [field]: parsedValue });
+    showToast("🔄 Atualização sincronizada", "info", 1400);
+    return;
+  }
+
+  updateRecord({ ...content, [field]: parsedValue });
+}
+
+function deleteContent(id) {
+  const content = allData.find(c => c.__backendId === id);
+  if (!content) return;
+
+  if (content.content_sync_id) {
+    propagateContentDelete(content.content_sync_id);
+    showToast("✅ Pasta excluída em todas as missões sincronizadas", "success");
+    return;
+  }
+
+  // remove itens locais
+  const items = allData.filter(i => i.type === "content_item" && i.content_id === content.__backendId);
+  items.forEach(i => deleteRecord(i));
+
+  deleteRecord(content);
+  showToast("✅ Pasta excluída", "success");
+}
+
+/* =========================================================
+   METHOD MODAL (com sync)
+========================================================= */
+function openMethodModal(contentId) {
+  currentMethodContentId = contentId;
+  const content = allData.find(c => c.__backendId === contentId);
+  if (!content) return;
+
+  document.getElementById("method-aula").checked = content.study_aula || false;
+  document.getElementById("method-pdf").checked = content.study_pdf || false;
+  document.getElementById("method-lei").checked = content.study_lei || false;
+  document.getElementById("method-quest").checked = (content.study_questions || 0) > 0;
+  document.getElementById("method-questions-total").value = content.study_questions || 0;
+  document.getElementById("method-questions-correct").value = content.study_correct || 0;
+
+  updateMethodCheckboxes();
+  toggleQuestionsFields();
+
+  const modal = document.getElementById("method-modal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closeMethodModal() {
+  const modal = document.getElementById("method-modal");
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+  currentMethodContentId = null;
+}
+
+function toggleQuestionsFields() {
+  const checked = document.getElementById("method-quest").checked;
+  const fields = document.getElementById("questions-fields");
+  if (checked) fields.classList.remove("hidden");
+  else fields.classList.add("hidden");
+}
+
+function updateMethodCheckboxes() {
+  ["aula","pdf","lei","quest"].forEach(method => {
+    const checkbox = document.getElementById(`method-${method}`);
+    const label = document.getElementById(`method-${method}-label`);
+    if (checkbox && label) {
+      if (checkbox.checked) label.classList.add("checked");
+      else label.classList.remove("checked");
+    }
+  });
+
+  document.querySelectorAll(".method-checkbox input[type='checkbox']").forEach(cb => {
+    cb.removeEventListener("change", updateMethodCheckboxes);
+    cb.addEventListener("change", () => updateMethodCheckboxes());
+  });
+}
+
+function saveMethod() {
+  if (!currentMethodContentId) return;
+
+  const content = allData.find(c => c.__backendId === currentMethodContentId);
+  if (!content) return;
+
+  const aula = document.getElementById("method-aula").checked;
+  const pdf = document.getElementById("method-pdf").checked;
+  const lei = document.getElementById("method-lei").checked;
+
+  const hasQuestions = document.getElementById("method-quest").checked;
+  const questions = hasQuestions ? (parseInt(document.getElementById("method-questions-total").value) || 0) : 0;
+  const correct = hasQuestions ? (parseInt(document.getElementById("method-questions-correct").value) || 0) : 0;
+
+  const patch = {
+    study_aula: aula,
+    study_pdf: pdf,
+    study_lei: lei,
+    study_questions: questions,
+    study_correct: correct,
+    study_done: aula || pdf || lei || hasQuestions
+  };
+
+  if (content.content_sync_id) {
+    propagateContentPatch(content.content_sync_id, patch);
+    showToast("✅ Métodos atualizados e sincronizados!", "success");
+  } else {
+    updateRecord({ ...content, ...patch });
+    showToast("✅ Métodos atualizados!", "success");
+  }
+
+  closeMethodModal();
+}
+
+/* =========================================================
+   FOLDER MODAL (Conteúdo como Pasta + Caderno de Bizu)
+========================================================= */
+function openFolderModal(contentId) {
+  const content = allData.find(c => c.__backendId === contentId);
+  if (!content) return;
+
+  currentFolderContentId = contentId;
+  folderTab = "items";
+
+  document.getElementById("folder-modal-title").textContent = content.content || "Pasta";
+  const mission = allData.find(m => m.type === "mission" && m.module_id === content.module);
+  const disc = allData.find(d => d.type === "discipline" && d.__backendId === content.discipline_id);
+
+  document.getElementById("folder-modal-subtitle").textContent = `${mission ? mission.name : content.module} • ${disc ? disc.name : "Disciplina"} • Pasta`;
+  document.getElementById("folder-sync-badge").textContent = content.content_sync_id ? "Sincronização: sim" : "Sincronização: não";
+
+  // carregar bizu
+  const bizu = content.bizu_notes || "";
+  const textarea = document.getElementById("folder-bizu-text");
+  textarea.value = bizu;
+  updateBizuCounter();
+
+  // reset input
+  document.getElementById("folder-new-item-title").value = "";
+
+  // render
+  setFolderTab("items");
+  renderFolderItems();
+
+  const modal = document.getElementById("folder-modal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+
+  textarea.oninput = () => {
+    updateBizuCounter();
+    document.getElementById("folder-bizu-status").textContent = "Digitando...";
+    if (bizuDebounceTimer) clearTimeout(bizuDebounceTimer);
+    bizuDebounceTimer = setTimeout(() => {
+      saveBizuNow(true);
+    }, 650);
+  };
+}
+
+function closeFolderModal() {
+  const modal = document.getElementById("folder-modal");
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+  currentFolderContentId = null;
+  folderTab = "items";
+}
+
+function setFolderTab(tab) {
+  folderTab = tab;
+
+  const tabItems = document.getElementById("folder-tab-items");
+  const tabBizu = document.getElementById("folder-tab-bizu");
+  const panelItems = document.getElementById("folder-panel-items");
+  const panelBizu = document.getElementById("folder-panel-bizu");
+
+  if (tab === "items") {
+    tabItems.classList.add("active");
+    tabBizu.classList.remove("active");
+    panelItems.classList.remove("hidden");
+    panelBizu.classList.add("hidden");
+  } else {
+    tabBizu.classList.add("active");
+    tabItems.classList.remove("active");
+    panelBizu.classList.remove("hidden");
+    panelItems.classList.add("hidden");
+  }
+}
+
+function renderFolderItems() {
+  if (!currentFolderContentId) return;
+
+  const content = allData.find(c => c.__backendId === currentFolderContentId);
+  if (!content) return;
+
+  const items = allData
+    .filter(i => i.type === "content_item" && i.content_id === content.__backendId)
+    .sort((a,b) => (a.created_at || "").localeCompare(b.created_at || ""));
+
+  document.getElementById("folder-items-count").textContent = `${items.length} item(ns)`;
+
+  const list = document.getElementById("folder-items-list");
+  if (items.length === 0) {
+    list.innerHTML = `
+      <div class="p-6 text-center text-gray-500 font-semibold">
+        Nenhum item nesta pasta. Adicione acima para organizar.
+      </div>
+    `;
+    return;
+  }
+
+  let html = "";
+  items.forEach(item => {
+    const checked = item.done ? "checked" : "";
+    const strike = item.done ? "line-through text-gray-400" : "text-gray-900";
+    html += `
+      <div class="folder-item-row p-4 flex items-center gap-3">
+        <input type="checkbox" ${checked} onchange="toggleFolderItemDone('${item.__backendId}', this.checked)" class="w-5 h-5 rounded accent-green-600">
+        <input
+          type="text"
+          value="${escapeHtmlAttr(item.title || "")}"
+          oninput="editFolderItemTitle('${item.__backendId}', this.value)"
+          class="flex-1 px-3 py-2 bg-white border-2 border-gray-200 rounded-lg soft-ring font-semibold ${strike}"
+          placeholder="Título do item"
+        >
+        <button onclick="deleteFolderItem('${item.__backendId}')" class="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg font-bold transition-all text-sm">Excluir</button>
+      </div>
+    `;
+  });
+
+  list.innerHTML = html;
+}
+
+function addFolderItem() {
+  if (!currentFolderContentId) return;
+
+  const title = document.getElementById("folder-new-item-title").value.trim();
+  if (!title) { showToast("⚠️ Digite o título do item", "error"); return; }
+
+  const content = allData.find(c => c.__backendId === currentFolderContentId);
+  if (!content) return;
+
+  createFolderItemForContent(content, title);
+
+  document.getElementById("folder-new-item-title").value = "";
+  renderFolderItems();
+  showToast("✅ Item adicionado!", "success", 1800);
+}
+
+function toggleFolderItemDone(itemId, done) {
+  const item = allData.find(i => i.__backendId === itemId);
+  if (!item) return;
+
+  if (item.item_sync_id) {
+    propagateItemPatch(item.item_sync_id, { done: !!done });
+  } else {
+    updateRecord({ ...item, done: !!done });
+  }
+
+  renderFolderItems();
+}
+
+function editFolderItemTitle(itemId, title) {
+  const item = allData.find(i => i.__backendId === itemId);
+  if (!item) return;
+
+  const patch = { title: title };
+
+  if (item.item_sync_id) propagateItemPatch(item.item_sync_id, patch);
+  else updateRecord({ ...item, ...patch });
+}
+
+function deleteFolderItem(itemId) {
+  const item = allData.find(i => i.__backendId === itemId);
+  if (!item) return;
+
+  if (item.item_sync_id) propagateItemDelete(item.item_sync_id);
+  else deleteRecord(item);
+
+  renderFolderItems();
+  showToast("✅ Item excluído", "success", 1600);
+}
+
+function bizuInsert(left, right) {
+  const ta = document.getElementById("folder-bizu-text");
+  if (!ta) return;
+
+  const start = ta.selectionStart || 0;
+  const end = ta.selectionEnd || 0;
+  const value = ta.value;
+
+  const selected = value.substring(start, end);
+  const insertion = `${left}${selected}${right}`;
+
+  ta.value = value.substring(0, start) + insertion + value.substring(end);
+  ta.focus();
+  ta.selectionStart = start + left.length;
+  ta.selectionEnd = start + left.length + selected.length;
+
+  updateBizuCounter();
+}
+
+function updateBizuCounter() {
+  const ta = document.getElementById("folder-bizu-text");
+  const count = (ta.value || "").length;
+  document.getElementById("folder-bizu-count").textContent = `${count} caracteres`;
+}
+
+function saveBizuNow(fromAutosave = false) {
+  if (!currentFolderContentId) return;
+
+  const content = allData.find(c => c.__backendId === currentFolderContentId);
+  if (!content) return;
+
+  const text = document.getElementById("folder-bizu-text").value || "";
+
+  if (content.content_sync_id) {
+    propagateContentPatch(content.content_sync_id, { bizu_notes: text });
+  } else {
+    updateRecord({ ...content, bizu_notes: text });
+  }
+
+  document.getElementById("folder-bizu-status").textContent = fromAutosave ? "Salvo automaticamente" : "Salvo";
+  if (!fromAutosave) showToast("✅ Bizu salvo!", "success", 1600);
+}
+
+/* =========================================================
+   HEADER EDIT
+========================================================= */
+function openHeaderEditModal() {
+  document.getElementById("header-title-input").value = document.getElementById("mission-title").textContent;
+  document.getElementById("header-motto-input").value = document.getElementById("mission-motto").textContent.replace("🎯 ", "");
+
+  const modal = document.getElementById("header-edit-modal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closeHeaderEditModal() {
+  const modal = document.getElementById("header-edit-modal");
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+}
+
+function saveHeaderEdit() {
+  const newTitle = document.getElementById("header-title-input").value.trim();
+  const newMotto = document.getElementById("header-motto-input").value.trim();
+
+  if (!newTitle) { showToast("⚠️ Digite um título", "error"); return; }
+
+  document.getElementById("mission-title").textContent = newTitle;
+  document.getElementById("mission-motto").textContent = "🎯 " + (newMotto || "");
+
+  showToast("✅ Cabeçalho atualizado!", "success");
+  closeHeaderEditModal();
+}
+
+/* =========================================================
+   TOAST + ESCAPE
+========================================================= */
+function showToast(message, type = "info", duration = 4000) {
   const container = document.getElementById("toast-container");
   const toast = document.createElement("div");
-  const colors = { success:"bg-green-600", error:"bg-red-600", info:"bg-blue-900" };
-  toast.className = `${colors[type]||colors.info} px-6 py-4 rounded-xl shadow-xl text-white font-bold scale-in`;
+
+  const colors = { success: "bg-green-600", error: "bg-red-600", info: "bg-blue-900" };
+  toast.className = `${colors[type] || colors.info} px-6 py-4 rounded-xl shadow-xl text-white font-bold scale-in`;
   toast.textContent = message;
   container.appendChild(toast);
 
@@ -588,11 +2635,33 @@ function showToast(message, type="info", duration=3000){
   }, duration);
 }
 
+function escapeHtmlAttr(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
+/* =========================================================
+   METHOD MODAL HELPERS
+========================================================= */
+function toggleQuestionsFields() {
+  const checked = document.getElementById("method-quest").checked;
+  const fields = document.getElementById("questions-fields");
+  if (checked) fields.classList.remove("hidden");
+  else fields.classList.add("hidden");
+}
+
 /* =========================================================
    START
 ========================================================= */
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
-else init();
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
 </script>
 
 </body>
