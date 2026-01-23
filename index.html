@@ -631,349 +631,7 @@
       </div>
     </div>
 
-    <!-- Content Folder Modal (Pasta + Caderno de Bizu) -->
-   <style>
-  /* =========================
-     BIZU MODULE (escopado)
-  ========================= */
-
-  .bizuApp{
-    --bg: rgba(255,255,255,.05);
-    --card: rgba(255,255,255,.06);
-    --stroke: rgba(255,255,255,.12);
-    --stroke2: rgba(255,255,255,.18);
-    --txt: rgba(255,255,255,.92);
-    --muted: rgba(255,255,255,.68);
-    --muted2: rgba(255,255,255,.52);
-    --shadow: 0 18px 60px rgba(0,0,0,.25);
-    --shadow2: 0 12px 30px rgba(0,0,0,.22);
-    --radius: 18px;
-    --radius2: 14px;
-    --ring: 0 0 0 3px rgba(120,168,255,.22);
-
-    --accent:#78a8ff;
-    --ok:#6ee7b7;
-    --warn:#fbbf24;
-    --danger:#fb7185;
-
-    --note-yellow:#fff3a8;
-    --note-pink:#ffd0e2;
-    --note-blue:#cfe8ff;
-    --note-green:#d7ffe0;
-    --note-purple:#e8d7ff;
-    --note-gray:#e7e7ea;
-
-    --note-ink:#1a1a1d;
-
-    color: var(--txt);
-    width: 100%;
-  }
-
-  .bizuApp *{ box-sizing:border-box; }
-  .bizuLayout{
-    display:grid;
-    grid-template-columns: 360px 1fr;
-    gap: 16px;
-  }
-
-  @media (max-width: 1100px){
-    .bizuLayout{ grid-template-columns: 1fr; }
-  }
-
-  .bizuPanel{
-    background: var(--card);
-    border: 1px solid var(--stroke);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    overflow:hidden;
-    display:flex;
-    flex-direction:column;
-    min-width:0;
-  }
-
-  .bizuHeader{
-    padding: 14px 14px 12px;
-    border-bottom: 1px solid var(--stroke);
-    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap: 10px;
-  }
-
-  .bizuTitle{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-weight: 800;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
-
-  .bizuPill{
-    padding: 6px 10px;
-    background: rgba(255,255,255,.08);
-    border: 1px solid var(--stroke);
-    border-radius: 999px;
-    font-size: 12px;
-    color: var(--muted);
-    white-space:nowrap;
-  }
-
-  .bizuBody{
-    padding: 14px;
-    overflow:auto;
-    min-height:0;
-  }
-
-  .bizuRow{ display:flex; gap:10px; align-items:center; }
-  .bizuCol{ display:flex; flex-direction:column; gap:10px; }
-  .bizuDivider{ height:1px; background: var(--stroke); margin: 10px 0; }
-
-  .bizuInput{
-    width:100%;
-    padding: 11px 12px;
-    border-radius: 12px;
-    border: 1px solid var(--stroke);
-    background: rgba(0,0,0,.18);
-    color: var(--txt);
-    outline:none;
-  }
-  .bizuInput:focus{ box-shadow: var(--ring); border-color: rgba(120,168,255,.35); }
-
-  .bizuBtn{
-    padding: 10px 12px;
-    border-radius: 12px;
-    border: 1px solid var(--stroke);
-    background: rgba(255,255,255,.06);
-    cursor:pointer;
-    transition: transform .12s ease, background .12s ease, border-color .12s ease;
-    user-select:none;
-    white-space:nowrap;
-    color: var(--txt);
-  }
-  .bizuBtn:hover{ background: rgba(255,255,255,.10); border-color: var(--stroke2); }
-  .bizuBtn:active{ transform: translateY(1px); }
-  .bizuBtn:focus{ outline:none; box-shadow: var(--ring); }
-
-  .bizuBtnPrimary{
-    background: rgba(120,168,255,.18);
-    border-color: rgba(120,168,255,.30);
-  }
-  .bizuBtnPrimary:hover{ background: rgba(120,168,255,.24); }
-
-  .bizuBtnDanger{
-    background: rgba(251,113,133,.14);
-    border-color: rgba(251,113,133,.24);
-  }
-  .bizuBtnDanger:hover{ background: rgba(251,113,133,.18); border-color: rgba(251,113,133,.30); }
-
-  .bizuBtnIcon{
-    width: 42px;
-    padding: 10px 10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-
-  .bizuItemList{ display:flex; flex-direction:column; gap:10px; }
-  .bizuItem{
-    border: 1px solid var(--stroke);
-    background: rgba(255,255,255,.05);
-    border-radius: 14px;
-    padding: 12px;
-    display:flex;
-    gap: 10px;
-    align-items:flex-start;
-    cursor:pointer;
-    transition: background .12s ease, border-color .12s ease;
-  }
-  .bizuItem:hover{ background: rgba(255,255,255,.08); border-color: var(--stroke2); }
-  .bizuItem.active{
-    background: rgba(120,168,255,.15);
-    border-color: rgba(120,168,255,.30);
-    box-shadow: 0 0 0 2px rgba(120,168,255,.10) inset;
-  }
-  .bizuItemIcon{
-    width: 36px;
-    height: 36px;
-    border-radius: 12px;
-    background: rgba(255,255,255,.08);
-    border: 1px solid var(--stroke);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex: 0 0 auto;
-  }
-  .bizuItemMeta{ min-width:0; flex:1; }
-  .bizuItemName{
-    font-weight: 800;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    margin-bottom: 4px;
-  }
-  .bizuItemSub{
-    font-size: 12px;
-    color: var(--muted);
-    display:flex;
-    gap: 10px;
-    align-items:center;
-    flex-wrap:wrap;
-  }
-
-  .bizuToolbar{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    align-items:center;
-    padding: 10px;
-    border: 1px solid var(--stroke);
-    border-radius: 14px;
-    background: rgba(255,255,255,.04);
-  }
-  .bizuToolBtn{
-    padding: 9px 10px;
-    border-radius: 12px;
-    border: 1px solid var(--stroke);
-    background: rgba(255,255,255,.05);
-    cursor:pointer;
-    font-size: 13px;
-    color: var(--txt);
-  }
-  .bizuToolBtn:hover{ background: rgba(255,255,255,.10); border-color: var(--stroke2); }
-  .bizuToolBtn:focus{ outline:none; box-shadow: var(--ring); }
-
-  .bizuNotesGrid{
-    display:grid;
-    grid-template-columns: repeat(3, minmax(220px, 1fr));
-    gap: 14px;
-    align-items:start;
-  }
-  @media (max-width: 1200px){
-    .bizuNotesGrid{ grid-template-columns: repeat(2, minmax(220px, 1fr)); }
-  }
-  @media (max-width: 900px){
-    .bizuNotesGrid{ grid-template-columns: 1fr; }
-  }
-
-  .bizuEmpty{
-    padding: 16px;
-    border: 1px dashed var(--stroke);
-    border-radius: 16px;
-    background: rgba(255,255,255,.03);
-    color: var(--muted);
-  }
-
-  .bizuNote{
-    border-radius: 16px;
-    padding: 12px;
-    box-shadow: var(--shadow2);
-    border: 1px solid rgba(0,0,0,.12);
-    color: var(--note-ink);
-    position:relative;
-  }
-  .bizuNoteTop{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  .bizuNoteTitle{
-    width:100%;
-    padding: 10px 10px;
-    border-radius: 12px;
-    border: 1px solid rgba(0,0,0,.14);
-    background: rgba(255,255,255,.35);
-    outline:none;
-    font-weight: 900;
-    letter-spacing: .2px;
-  }
-  .bizuNoteEditor{
-    min-height: 220px;
-    max-height: 360px;
-    overflow:auto;
-    padding: 10px 10px;
-    border-radius: 12px;
-    border: 1px solid rgba(0,0,0,.14);
-    background: rgba(255,255,255,.34);
-    outline:none;
-    line-height: 1.45;
-    font-size: 14px;
-  }
-  .bizuNoteEditor blockquote{
-    margin: 10px 0;
-    padding: 8px 10px;
-    border-left: 4px solid rgba(0,0,0,.18);
-    background: rgba(0,0,0,.05);
-    border-radius: 10px;
-  }
-  .bizuNoteEditor ul{
-    margin: 10px 0 10px 18px;
-    padding: 0;
-  }
-
-  .bizuNoteActions{ display:flex; gap:8px; align-items:center; }
-  .bizuMiniBtn{
-    padding: 9px 10px;
-    border-radius: 12px;
-    border: 1px solid rgba(0,0,0,.14);
-    background: rgba(255,255,255,.30);
-    cursor:pointer;
-  }
-  .bizuMiniBtn:hover{ background: rgba(255,255,255,.42); }
-  .bizuSelect{
-    padding: 9px 10px;
-    border-radius: 12px;
-    border: 1px solid rgba(0,0,0,.14);
-    background: rgba(255,255,255,.30);
-    cursor:pointer;
-    outline:none;
-  }
-
-  .bizuToast{
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    z-index: 9999;
-    background: rgba(0,0,0,.55);
-    border: 1px solid rgba(255,255,255,.14);
-    border-radius: 14px;
-    padding: 12px 14px;
-    box-shadow: var(--shadow);
-    color: rgba(255,255,255,.92);
-    backdrop-filter: blur(10px);
-    display:flex;
-    gap: 10px;
-    align-items:center;
-    transform: translateY(10px);
-    opacity: 0;
-    pointer-events:none;
-    transition: opacity .18s ease, transform .18s ease;
-    max-width: min(520px, calc(100vw - 32px));
-  }
-  .bizuToast.show{ opacity:1; transform: translateY(0); }
-  .bizuToastDot{
-    width:10px; height:10px; border-radius:999px;
-    background: var(--ok);
-    box-shadow: 0 0 0 4px rgba(110,231,183,.12);
-    flex: 0 0 auto;
-  }
-</style>
-
-    <!-- Loading Overlay -->
-    <div id="loading-overlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[100] hidden items-center justify-center">
-      <div class="bg-white rounded-2xl p-6 shadow-2xl">
-        <div class="w-12 h-12 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto"></div>
-      </div>
-    </div>
-
-    <!-- Toast Container -->
-    <div id="toast-container" class="fixed bottom-6 right-6 z-[100] space-y-3"></div>
-
-  </div>
+    
 
 <script>
 "use strict";
@@ -1715,7 +1373,349 @@ function renderDisciplineTable(disciplineId) {
     `;
   });
 
-  html += `
+<!-- Content Folder Modal (Pasta + Caderno de Bizu) -->
+   <style>
+  /* =========================
+     BIZU MODULE (escopado)
+  ========================= */
+
+  .bizuApp{
+    --bg: rgba(255,255,255,.05);
+    --card: rgba(255,255,255,.06);
+    --stroke: rgba(255,255,255,.12);
+    --stroke2: rgba(255,255,255,.18);
+    --txt: rgba(255,255,255,.92);
+    --muted: rgba(255,255,255,.68);
+    --muted2: rgba(255,255,255,.52);
+    --shadow: 0 18px 60px rgba(0,0,0,.25);
+    --shadow2: 0 12px 30px rgba(0,0,0,.22);
+    --radius: 18px;
+    --radius2: 14px;
+    --ring: 0 0 0 3px rgba(120,168,255,.22);
+
+    --accent:#78a8ff;
+    --ok:#6ee7b7;
+    --warn:#fbbf24;
+    --danger:#fb7185;
+
+    --note-yellow:#fff3a8;
+    --note-pink:#ffd0e2;
+    --note-blue:#cfe8ff;
+    --note-green:#d7ffe0;
+    --note-purple:#e8d7ff;
+    --note-gray:#e7e7ea;
+
+    --note-ink:#1a1a1d;
+
+    color: var(--txt);
+    width: 100%;
+  }
+
+  .bizuApp *{ box-sizing:border-box; }
+  .bizuLayout{
+    display:grid;
+    grid-template-columns: 360px 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 1100px){
+    .bizuLayout{ grid-template-columns: 1fr; }
+  }
+
+  .bizuPanel{
+    background: var(--card);
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+  }
+
+  .bizuHeader{
+    padding: 14px 14px 12px;
+    border-bottom: 1px solid var(--stroke);
+    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+  }
+
+  .bizuTitle{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight: 800;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .bizuPill{
+    padding: 6px 10px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid var(--stroke);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--muted);
+    white-space:nowrap;
+  }
+
+  .bizuBody{
+    padding: 14px;
+    overflow:auto;
+    min-height:0;
+  }
+
+  .bizuRow{ display:flex; gap:10px; align-items:center; }
+  .bizuCol{ display:flex; flex-direction:column; gap:10px; }
+  .bizuDivider{ height:1px; background: var(--stroke); margin: 10px 0; }
+
+  .bizuInput{
+    width:100%;
+    padding: 11px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--stroke);
+    background: rgba(0,0,0,.18);
+    color: var(--txt);
+    outline:none;
+  }
+  .bizuInput:focus{ box-shadow: var(--ring); border-color: rgba(120,168,255,.35); }
+
+  .bizuBtn{
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--stroke);
+    background: rgba(255,255,255,.06);
+    cursor:pointer;
+    transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    user-select:none;
+    white-space:nowrap;
+    color: var(--txt);
+  }
+  .bizuBtn:hover{ background: rgba(255,255,255,.10); border-color: var(--stroke2); }
+  .bizuBtn:active{ transform: translateY(1px); }
+  .bizuBtn:focus{ outline:none; box-shadow: var(--ring); }
+
+  .bizuBtnPrimary{
+    background: rgba(120,168,255,.18);
+    border-color: rgba(120,168,255,.30);
+  }
+  .bizuBtnPrimary:hover{ background: rgba(120,168,255,.24); }
+
+  .bizuBtnDanger{
+    background: rgba(251,113,133,.14);
+    border-color: rgba(251,113,133,.24);
+  }
+  .bizuBtnDanger:hover{ background: rgba(251,113,133,.18); border-color: rgba(251,113,133,.30); }
+
+  .bizuBtnIcon{
+    width: 42px;
+    padding: 10px 10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .bizuItemList{ display:flex; flex-direction:column; gap:10px; }
+  .bizuItem{
+    border: 1px solid var(--stroke);
+    background: rgba(255,255,255,.05);
+    border-radius: 14px;
+    padding: 12px;
+    display:flex;
+    gap: 10px;
+    align-items:flex-start;
+    cursor:pointer;
+    transition: background .12s ease, border-color .12s ease;
+  }
+  .bizuItem:hover{ background: rgba(255,255,255,.08); border-color: var(--stroke2); }
+  .bizuItem.active{
+    background: rgba(120,168,255,.15);
+    border-color: rgba(120,168,255,.30);
+    box-shadow: 0 0 0 2px rgba(120,168,255,.10) inset;
+  }
+  .bizuItemIcon{
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid var(--stroke);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex: 0 0 auto;
+  }
+  .bizuItemMeta{ min-width:0; flex:1; }
+  .bizuItemName{
+    font-weight: 800;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    margin-bottom: 4px;
+  }
+  .bizuItemSub{
+    font-size: 12px;
+    color: var(--muted);
+    display:flex;
+    gap: 10px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  .bizuToolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+    padding: 10px;
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    background: rgba(255,255,255,.04);
+  }
+  .bizuToolBtn{
+    padding: 9px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--stroke);
+    background: rgba(255,255,255,.05);
+    cursor:pointer;
+    font-size: 13px;
+    color: var(--txt);
+  }
+  .bizuToolBtn:hover{ background: rgba(255,255,255,.10); border-color: var(--stroke2); }
+  .bizuToolBtn:focus{ outline:none; box-shadow: var(--ring); }
+
+  .bizuNotesGrid{
+    display:grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 14px;
+    align-items:start;
+  }
+  @media (max-width: 1200px){
+    .bizuNotesGrid{ grid-template-columns: repeat(2, minmax(220px, 1fr)); }
+  }
+  @media (max-width: 900px){
+    .bizuNotesGrid{ grid-template-columns: 1fr; }
+  }
+
+  .bizuEmpty{
+    padding: 16px;
+    border: 1px dashed var(--stroke);
+    border-radius: 16px;
+    background: rgba(255,255,255,.03);
+    color: var(--muted);
+  }
+
+  .bizuNote{
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: var(--shadow2);
+    border: 1px solid rgba(0,0,0,.12);
+    color: var(--note-ink);
+    position:relative;
+  }
+  .bizuNoteTop{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .bizuNoteTitle{
+    width:100%;
+    padding: 10px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.14);
+    background: rgba(255,255,255,.35);
+    outline:none;
+    font-weight: 900;
+    letter-spacing: .2px;
+  }
+  .bizuNoteEditor{
+    min-height: 220px;
+    max-height: 360px;
+    overflow:auto;
+    padding: 10px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.14);
+    background: rgba(255,255,255,.34);
+    outline:none;
+    line-height: 1.45;
+    font-size: 14px;
+  }
+  .bizuNoteEditor blockquote{
+    margin: 10px 0;
+    padding: 8px 10px;
+    border-left: 4px solid rgba(0,0,0,.18);
+    background: rgba(0,0,0,.05);
+    border-radius: 10px;
+  }
+  .bizuNoteEditor ul{
+    margin: 10px 0 10px 18px;
+    padding: 0;
+  }
+
+  .bizuNoteActions{ display:flex; gap:8px; align-items:center; }
+  .bizuMiniBtn{
+    padding: 9px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.14);
+    background: rgba(255,255,255,.30);
+    cursor:pointer;
+  }
+  .bizuMiniBtn:hover{ background: rgba(255,255,255,.42); }
+  .bizuSelect{
+    padding: 9px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.14);
+    background: rgba(255,255,255,.30);
+    cursor:pointer;
+    outline:none;
+  }
+
+  .bizuToast{
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 9999;
+    background: rgba(0,0,0,.55);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow);
+    color: rgba(255,255,255,.92);
+    backdrop-filter: blur(10px);
+    display:flex;
+    gap: 10px;
+    align-items:center;
+    transform: translateY(10px);
+    opacity: 0;
+    pointer-events:none;
+    transition: opacity .18s ease, transform .18s ease;
+    max-width: min(520px, calc(100vw - 32px));
+  }
+  .bizuToast.show{ opacity:1; transform: translateY(0); }
+  .bizuToastDot{
+    width:10px; height:10px; border-radius:999px;
+    background: var(--ok);
+    box-shadow: 0 0 0 4px rgba(110,231,183,.12);
+    flex: 0 0 auto;
+  }
+</style>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[100] hidden items-center justify-center">
+      <div class="bg-white rounded-2xl p-6 shadow-2xl">
+        <div class="w-12 h-12 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto"></div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[100] space-y-3"></div>
+
+  </div>
         </tbody>
       </table>
     </div>
@@ -2927,4 +2927,5 @@ if (document.readyState === "loading") {
 
 </body>
 </html>
+
 
