@@ -394,39 +394,24 @@
           </button>
         </div>
 
-       <div class="grid grid-cols-2 gap-5 mb-6">
-  <div class="col-span-2">
-    <label class="block text-sm text-gray-700 mb-2 font-semibold">Conteúdo/Pasta</label>
-    <input type="text" id="content-name" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" placeholder="Ex: Controle de Constitucionalidade">
-  </div>
+        <div class="grid grid-cols-2 gap-5 mb-6">
+          <div class="col-span-2">
+            <label class="block text-sm text-gray-700 mb-2 font-semibold">Conteúdo/Pasta</label>
+            <input type="text" id="content-name" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900" placeholder="Ex: Controle de Constitucionalidade">
+          </div>
 
-  <div>
-    <label class="block text-sm text-gray-700 mb-2 font-semibold">Data do Estudo</label>
-    <input type="date" id="content-date" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900">
-  </div>
+          <div>
+            <label class="block text-sm text-gray-700 mb-2 font-semibold">Data do Estudo</label>
+            <input type="date" id="content-date" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900">
+          </div>
 
-  <div>
-    <label class="block text-sm text-gray-700 mb-2 font-semibold">Tempo de Estudo</label>
-    <div class="grid grid-cols-2 gap-3">
-      <div>
-        <input type="number" id="content-study-hours" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900 font-bold text-center" min="0" max="24" value="0">
-        <span class="text-xs text-gray-500 mt-1 block font-semibold">horas</span>
-      </div>
-      <div>
-        <input type="number" id="content-study-minutes" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring transition-all text-gray-900 font-bold text-center" min="0" max="59" value="0">
-        <span class="text-xs text-gray-500 mt-1 block font-semibold">min</span>
-      </div>
-    </div>
-    <div class="text-xs text-gray-500 mt-2 font-semibold">Alimenta o painel de horas de estudo.</div>
-  </div>
-
-  <div class="col-span-2">
-    <div class="w-full p-3 bg-blue-50 rounded-xl">
-      <div class="text-xs text-blue-900 font-semibold">📁 Este conteúdo vira uma pasta com:</div>
-      <div class="text-xs text-blue-900">Itens internos + Caderno de Bizu</div>
-    </div>
-  </div>
- </div>
+          <div class="flex items-end">
+            <div class="w-full p-3 bg-blue-50 rounded-xl">
+              <div class="text-xs text-blue-900 font-semibold">📁 Este conteúdo vira uma pasta com:</div>
+              <div class="text-xs text-blue-900">Itens internos + Caderno de Bizu</div>
+            </div>
+          </div>
+        </div>
 
         <div class="mb-6 p-5 bg-gray-50 rounded-xl">
           <h4 class="text-lg font-bold text-gray-900 mb-4">📚 Métodos de Estudo Utilizados</h4>
@@ -646,88 +631,7 @@
       </div>
     </div>
 
-    <!-- Content Folder Modal (Pasta + Caderno de Bizu) -->
-    <div id="folder-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-      <div class="bg-white rounded-2xl w-full max-w-4xl scale-in max-h-[92%] overflow-hidden flex flex-col">
-        <div class="p-6 border-b border-gray-200 flex items-center justify-between">
-          <div>
-            <div class="text-xs text-gray-500 font-semibold" id="folder-modal-subtitle">Pasta</div>
-            <h3 class="text-2xl font-heading font-black text-gray-900" id="folder-modal-title">Conteúdo</h3>
-          </div>
-
-          <button onclick="closeFolderModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-all" aria-label="Fechar">
-            <svg class="w-7 h-7 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
-        </div>
-
-        <div class="px-6 pt-4">
-          <div class="flex gap-2 bg-gray-100 rounded-xl p-2 w-fit">
-            <button id="folder-tab-items" class="folder-tab active px-5 py-2 rounded-lg font-bold text-sm" onclick="setFolderTab('items')">📁 Itens</button>
-            <button id="folder-tab-bizu" class="folder-tab px-5 py-2 rounded-lg font-bold text-sm text-gray-700" onclick="setFolderTab('bizu')">📓 Bizu</button>
-          </div>
-        </div>
-
-        <!-- Items Tab -->
-        <div id="folder-panel-items" class="flex-1 overflow-auto scrollbar-thin p-6">
-          <div class="flex items-center gap-3 mb-5">
-            <input id="folder-new-item-title" type="text" class="flex-1 px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl soft-ring font-semibold text-gray-900" placeholder="Novo item dentro desta pasta (ex: mapa mental, artigo, resumo, jurisprudência)">
-            <button onclick="addFolderItem()" class="px-5 py-3 bg-blue-900 hover:bg-blue-800 text-white rounded-xl font-bold transition-all">+ ADICIONAR</button>
-          </div>
-
-          <div class="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden">
-            <div class="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
-              <div class="text-sm font-bold text-gray-900">Itens da Pasta</div>
-              <div class="text-xs text-gray-600 font-semibold" id="folder-items-count">0 itens</div>
-            </div>
-
-            <div id="folder-items-list" class="divide-y divide-gray-200"></div>
-          </div>
-
-          <div class="mt-5 p-4 bg-blue-50 rounded-xl text-sm text-blue-900">
-            Dica: você pode usar itens para organizar subassuntos, tarefas, resumos, jurisprudências e o que quiser. Se esta disciplina estiver sincronizada, os itens também são sincronizados.
-          </div>
-        </div>
-
-        <!-- Bizu Tab -->
-        <div id="folder-panel-bizu" class="hidden flex-1 overflow-auto scrollbar-thin p-6">
-          <div class="flex flex-wrap gap-2 mb-4">
-            <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-bold text-gray-700 text-sm transition-all" onclick="bizuInsert('**', '**')">Negrito</button>
-            <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-bold text-gray-700 text-sm transition-all" onclick="bizuInsert('*', '*')">Itálico</button>
-            <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-bold text-gray-700 text-sm transition-all" onclick="bizuInsert('\n- ', '')">Lista</button>
-            <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-bold text-gray-700 text-sm transition-all" onclick="bizuInsert('\n> ', '')">Citação</button>
-            <button class="px-4 py-2 bg-green-100 hover:bg-green-200 rounded-lg font-bold text-green-800 text-sm transition-all" onclick="saveBizuNow()">Salvar</button>
-          </div>
-
-          <textarea id="folder-bizu-text" rows="14" class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-200 rounded-2xl soft-ring text-gray-900 font-semibold" placeholder="Escreva aqui seus bizus e pontos principais. Isto fica salvo dentro desta pasta e, se sincronizado, aparece nas outras missões também."></textarea>
-
-          <div class="mt-3 flex items-center justify-between text-xs text-gray-500 font-semibold">
-            <div id="folder-bizu-status">Pronto</div>
-            <div id="folder-bizu-count">0 caracteres</div>
-          </div>
-
-          <div class="mt-5 p-4 bg-purple-50 rounded-xl text-sm text-purple-900">
-            Sugestão de estrutura: conceito, pegadinhas, artigos-chave, exceções, jurisprudência, mapa mental em texto, perguntas que você errou e como não errar de novo.
-          </div>
-        </div>
-
-        <div class="p-5 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
-          <div class="text-xs text-gray-600 font-semibold" id="folder-sync-badge">Sincronização: não</div>
-          <button onclick="closeFolderModal()" class="px-5 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-bold text-gray-700 transition-all">FECHAR</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Loading Overlay -->
-    <div id="loading-overlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[100] hidden items-center justify-center">
-      <div class="bg-white rounded-2xl p-6 shadow-2xl">
-        <div class="w-12 h-12 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto"></div>
-      </div>
-    </div>
-
-    <!-- Toast Container -->
-    <div id="toast-container" class="fixed bottom-6 right-6 z-[100] space-y-3"></div>
-
-  </div>
+    
 
 <script>
 "use strict";
@@ -776,59 +680,22 @@ let uiScheduled = false;
 /* =========================================================
    UTIL
 ========================================================= */
-function toInt(v, fallback = 0) {
-  const n = parseInt(v, 10);
-  return Number.isFinite(n) ? n : fallback;
+function genId(prefix) {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
-function clamp(n, min, max) {
-  return Math.min(max, Math.max(min, n));
+function normKey(s) {
+  return (s || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
 }
 
-function hmToMinutes(h, m) {
-  const hh = clamp(toInt(h, 0), 0, 24);
-  const mm = clamp(toInt(m, 0), 0, 59);
-  return (hh * 60) + mm;
-}
-
-function formatMinutesBadge(mins) {
-  const m = Math.max(0, toInt(mins, 0));
-  if (m === 0) return "0min";
-  const h = Math.floor(m / 60);
-  const r = m % 60;
-  if (h > 0 && r > 0) return `${h}h ${r}min`;
-  if (h > 0) return `${h}h`;
-  return `${r}min`;
-}
-
-function formatMinutesCompact(mins) {
-  const m = Math.max(0, toInt(mins, 0));
-  if (m < 60) return `${m}min`;
-  const h = Math.floor(m / 60);
-  const r = m % 60;
-  return r ? `${h}h ${r}m` : `${h}h`;
-}
-
-function isWithinLastNDays(dateStr, days) {
-  if (!dateStr) return false;
-  const d = new Date(dateStr + "T12:00:00");
-  if (Number.isNaN(d.getTime())) return false;
-
-  const today = new Date();
-  today.setHours(0,0,0,0);
-
-  const start = new Date(today);
-  start.setDate(start.getDate() - (days - 1));
-  start.setHours(0,0,0,0);
-
-  d.setHours(0,0,0,0);
-  return d >= start && d <= today;
-}
-
-function computeStudyDone(contentLike) {
-  const q = toInt(contentLike.study_questions, 0);
-  const t = toInt(contentLike.study_time_minutes, 0);
-  return !!(contentLike.study_aula || contentLike.study_pdf || contentLike.study_lei || q > 0 || t > 0);
+function safeISODate(d = new Date()) {
+  const x = new Date(d);
+  const tzOff = x.getTimezoneOffset() * 60000;
+  return new Date(x.getTime() - tzOff).toISOString().slice(0, 10);
 }
 
 /* =========================================================
@@ -1281,29 +1148,21 @@ function updateMetrics() {
   let totalQuestions = 0;
   let totalCorrect = 0;
 
-  // Tempo na janela de 7 dias (painel)
-  let minutesLast7Days = 0;
+  const studyMarks = allData.filter(d => d.type === "study_mark" && d.module === currentModule);
+  const totalStudyDays = studyMarks.length;
 
   contents.forEach(c => {
     if (c.study_done) {
       totalQuestions += c.study_questions || 0;
       totalCorrect += c.study_correct || 0;
     }
-
-    const mins = toInt(c.study_time_minutes, 0);
-    if (mins > 0 && isWithinLastNDays(c.study_date || c.date, 7)) {
-      minutesLast7Days += mins;
-    }
   });
 
   const successRate = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+  const studyHours = totalStudyDays * 2;
 
   document.getElementById("success-rate").textContent = `${successRate}%`;
-  document.getElementById("study-hours").textContent = formatMinutesCompact(minutesLast7Days);
-
-  // Mantém “dias verdes” como base para patente (se quiser, depois ajustamos para tempo)
-  const studyMarks = allData.filter(d => d.type === "study_mark" && d.module === currentModule);
-  const totalStudyDays = studyMarks.length;
+  document.getElementById("study-hours").textContent = `${studyHours}h`;
 
   let rankEmoji = "🎖️";
   let rankText = "RECRUTA";
@@ -1361,12 +1220,13 @@ function renderContent() {
 
     const successRate = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
 
-    let minutesStudied = 0;
-contents.forEach(c => { minutesStudied += toInt(c.study_time_minutes, 0); });
+    const studiedDates = new Set();
+    contents.forEach(c => { if (c.study_done && c.study_date) studiedDates.add(c.study_date); });
+    const hoursStudied = studiedDates.size * 2;
 
     const syncBadge = disc.discipline_sync_id
-     <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">⏱️ ${formatMinutesBadge(minutesStudied)}</span>
-
+      ? `<span class="px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700">🔄 sincronizada</span>`
+      : `<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-700">local</span>`;
 
     html += `
       <div class="bg-gray-50 rounded-xl p-6 hover:bg-gray-100 transition-all" style="animation-delay: ${index * 0.1}s">
@@ -1513,7 +1373,349 @@ function renderDisciplineTable(disciplineId) {
     `;
   });
 
-  html += `
+<!-- Content Folder Modal (Pasta + Caderno de Bizu) -->
+   <style>
+  /* =========================
+     BIZU MODULE (escopado)
+  ========================= */
+
+  .bizuApp{
+    --bg: rgba(255,255,255,.05);
+    --card: rgba(255,255,255,.06);
+    --stroke: rgba(255,255,255,.12);
+    --stroke2: rgba(255,255,255,.18);
+    --txt: rgba(255,255,255,.92);
+    --muted: rgba(255,255,255,.68);
+    --muted2: rgba(255,255,255,.52);
+    --shadow: 0 18px 60px rgba(0,0,0,.25);
+    --shadow2: 0 12px 30px rgba(0,0,0,.22);
+    --radius: 18px;
+    --radius2: 14px;
+    --ring: 0 0 0 3px rgba(120,168,255,.22);
+
+    --accent:#78a8ff;
+    --ok:#6ee7b7;
+    --warn:#fbbf24;
+    --danger:#fb7185;
+
+    --note-yellow:#fff3a8;
+    --note-pink:#ffd0e2;
+    --note-blue:#cfe8ff;
+    --note-green:#d7ffe0;
+    --note-purple:#e8d7ff;
+    --note-gray:#e7e7ea;
+
+    --note-ink:#1a1a1d;
+
+    color: var(--txt);
+    width: 100%;
+  }
+
+  .bizuApp *{ box-sizing:border-box; }
+  .bizuLayout{
+    display:grid;
+    grid-template-columns: 360px 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 1100px){
+    .bizuLayout{ grid-template-columns: 1fr; }
+  }
+
+  .bizuPanel{
+    background: var(--card);
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+  }
+
+  .bizuHeader{
+    padding: 14px 14px 12px;
+    border-bottom: 1px solid var(--stroke);
+    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+  }
+
+  .bizuTitle{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight: 800;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .bizuPill{
+    padding: 6px 10px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid var(--stroke);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--muted);
+    white-space:nowrap;
+  }
+
+  .bizuBody{
+    padding: 14px;
+    overflow:auto;
+    min-height:0;
+  }
+
+  .bizuRow{ display:flex; gap:10px; align-items:center; }
+  .bizuCol{ display:flex; flex-direction:column; gap:10px; }
+  .bizuDivider{ height:1px; background: var(--stroke); margin: 10px 0; }
+
+  .bizuInput{
+    width:100%;
+    padding: 11px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--stroke);
+    background: rgba(0,0,0,.18);
+    color: var(--txt);
+    outline:none;
+  }
+  .bizuInput:focus{ box-shadow: var(--ring); border-color: rgba(120,168,255,.35); }
+
+  .bizuBtn{
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--stroke);
+    background: rgba(255,255,255,.06);
+    cursor:pointer;
+    transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    user-select:none;
+    white-space:nowrap;
+    color: var(--txt);
+  }
+  .bizuBtn:hover{ background: rgba(255,255,255,.10); border-color: var(--stroke2); }
+  .bizuBtn:active{ transform: translateY(1px); }
+  .bizuBtn:focus{ outline:none; box-shadow: var(--ring); }
+
+  .bizuBtnPrimary{
+    background: rgba(120,168,255,.18);
+    border-color: rgba(120,168,255,.30);
+  }
+  .bizuBtnPrimary:hover{ background: rgba(120,168,255,.24); }
+
+  .bizuBtnDanger{
+    background: rgba(251,113,133,.14);
+    border-color: rgba(251,113,133,.24);
+  }
+  .bizuBtnDanger:hover{ background: rgba(251,113,133,.18); border-color: rgba(251,113,133,.30); }
+
+  .bizuBtnIcon{
+    width: 42px;
+    padding: 10px 10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .bizuItemList{ display:flex; flex-direction:column; gap:10px; }
+  .bizuItem{
+    border: 1px solid var(--stroke);
+    background: rgba(255,255,255,.05);
+    border-radius: 14px;
+    padding: 12px;
+    display:flex;
+    gap: 10px;
+    align-items:flex-start;
+    cursor:pointer;
+    transition: background .12s ease, border-color .12s ease;
+  }
+  .bizuItem:hover{ background: rgba(255,255,255,.08); border-color: var(--stroke2); }
+  .bizuItem.active{
+    background: rgba(120,168,255,.15);
+    border-color: rgba(120,168,255,.30);
+    box-shadow: 0 0 0 2px rgba(120,168,255,.10) inset;
+  }
+  .bizuItemIcon{
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid var(--stroke);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex: 0 0 auto;
+  }
+  .bizuItemMeta{ min-width:0; flex:1; }
+  .bizuItemName{
+    font-weight: 800;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    margin-bottom: 4px;
+  }
+  .bizuItemSub{
+    font-size: 12px;
+    color: var(--muted);
+    display:flex;
+    gap: 10px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  .bizuToolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+    padding: 10px;
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    background: rgba(255,255,255,.04);
+  }
+  .bizuToolBtn{
+    padding: 9px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--stroke);
+    background: rgba(255,255,255,.05);
+    cursor:pointer;
+    font-size: 13px;
+    color: var(--txt);
+  }
+  .bizuToolBtn:hover{ background: rgba(255,255,255,.10); border-color: var(--stroke2); }
+  .bizuToolBtn:focus{ outline:none; box-shadow: var(--ring); }
+
+  .bizuNotesGrid{
+    display:grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 14px;
+    align-items:start;
+  }
+  @media (max-width: 1200px){
+    .bizuNotesGrid{ grid-template-columns: repeat(2, minmax(220px, 1fr)); }
+  }
+  @media (max-width: 900px){
+    .bizuNotesGrid{ grid-template-columns: 1fr; }
+  }
+
+  .bizuEmpty{
+    padding: 16px;
+    border: 1px dashed var(--stroke);
+    border-radius: 16px;
+    background: rgba(255,255,255,.03);
+    color: var(--muted);
+  }
+
+  .bizuNote{
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: var(--shadow2);
+    border: 1px solid rgba(0,0,0,.12);
+    color: var(--note-ink);
+    position:relative;
+  }
+  .bizuNoteTop{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .bizuNoteTitle{
+    width:100%;
+    padding: 10px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.14);
+    background: rgba(255,255,255,.35);
+    outline:none;
+    font-weight: 900;
+    letter-spacing: .2px;
+  }
+  .bizuNoteEditor{
+    min-height: 220px;
+    max-height: 360px;
+    overflow:auto;
+    padding: 10px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.14);
+    background: rgba(255,255,255,.34);
+    outline:none;
+    line-height: 1.45;
+    font-size: 14px;
+  }
+  .bizuNoteEditor blockquote{
+    margin: 10px 0;
+    padding: 8px 10px;
+    border-left: 4px solid rgba(0,0,0,.18);
+    background: rgba(0,0,0,.05);
+    border-radius: 10px;
+  }
+  .bizuNoteEditor ul{
+    margin: 10px 0 10px 18px;
+    padding: 0;
+  }
+
+  .bizuNoteActions{ display:flex; gap:8px; align-items:center; }
+  .bizuMiniBtn{
+    padding: 9px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.14);
+    background: rgba(255,255,255,.30);
+    cursor:pointer;
+  }
+  .bizuMiniBtn:hover{ background: rgba(255,255,255,.42); }
+  .bizuSelect{
+    padding: 9px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.14);
+    background: rgba(255,255,255,.30);
+    cursor:pointer;
+    outline:none;
+  }
+
+  .bizuToast{
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 9999;
+    background: rgba(0,0,0,.55);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow);
+    color: rgba(255,255,255,.92);
+    backdrop-filter: blur(10px);
+    display:flex;
+    gap: 10px;
+    align-items:center;
+    transform: translateY(10px);
+    opacity: 0;
+    pointer-events:none;
+    transition: opacity .18s ease, transform .18s ease;
+    max-width: min(520px, calc(100vw - 32px));
+  }
+  .bizuToast.show{ opacity:1; transform: translateY(0); }
+  .bizuToastDot{
+    width:10px; height:10px; border-radius:999px;
+    background: var(--ok);
+    box-shadow: 0 0 0 4px rgba(110,231,183,.12);
+    flex: 0 0 auto;
+  }
+</style>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[100] hidden items-center justify-center">
+      <div class="bg-white rounded-2xl p-6 shadow-2xl">
+        <div class="w-12 h-12 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto"></div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[100] space-y-3"></div>
+
+  </div>
         </tbody>
       </table>
     </div>
@@ -2228,10 +2430,6 @@ function saveContent() {
   const name = document.getElementById("content-name").value.trim();
   const date = document.getElementById("content-date").value;
 
-  const h = document.getElementById("content-study-hours")?.value ?? "0";
-  const m = document.getElementById("content-study-minutes")?.value ?? "0";
-  const studyTimeMinutes = hmToMinutes(h, m);
-
   if (!name) { showToast("⚠️ Digite o nome do conteúdo", "error"); return; }
   if (!currentDisciplineId) { showToast("⚠️ Erro: disciplina não identificada", "error"); return; }
 
@@ -2256,11 +2454,9 @@ function saveContent() {
     study_aula: aula,
     study_pdf: pdf,
     study_lei: lei,
+    study_done: aula || pdf || lei || hasQuestions,
     study_questions: questions,
     study_correct: correct,
-
-    // NOVO
-    study_time_minutes: studyTimeMinutes,
 
     bizu_notes: "",
 
@@ -2270,57 +2466,6 @@ function saveContent() {
 
     created_at: new Date().toISOString()
   };
-
-  basePayload.study_done = computeStudyDone(basePayload);
-
-  // Se a disciplina não é sincronizada
-  if (!discipline.discipline_sync_id) {
-    const exists = allData.find(c =>
-      c.type === "content" &&
-      c.module === currentModule &&
-      c.discipline_id === currentDisciplineId &&
-      normKey(c.content) === normKey(name)
-    );
-    if (exists) { showToast("⚠️ Esta pasta já existe nesta disciplina", "error"); return; }
-
-    createRecord({
-      ...basePayload,
-      discipline_id: currentDisciplineId,
-      module: currentModule,
-      discipline_sync_id: null,
-      content_sync_id: null
-    });
-
-    showToast("✅ Pasta adicionada!", "success");
-    closeContentModal();
-    return;
-  }
-
-  // Disciplina sincronizada: conteúdo também sincroniza
-  const disciplineSyncId = discipline.discipline_sync_id;
-
-  const existingAny = allData.find(c =>
-    c.type === "content" &&
-    c.discipline_sync_id === disciplineSyncId &&
-    normKey(c.content) === normKey(name)
-  );
-
-  const contentSyncId = existingAny ? existingAny.content_sync_id : genId("csync");
-  const missions = getAllNonPomodoroMissionIds();
-
-  ensureSyncedDisciplineEverywhere(discipline, missions);
-
-  const template = {
-    ...basePayload,
-    discipline_sync_id: disciplineSyncId,
-    content_sync_id: contentSyncId
-  };
-
-  ensureSyncedContentEverywhere(template, missions);
-
-  showToast("✅ Pasta criada e sincronizada entre missões!", "success");
-  closeContentModal();
-}
 
   // Se a disciplina não é sincronizada
   if (!discipline.discipline_sync_id) {
